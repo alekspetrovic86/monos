@@ -3,13 +3,13 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xmlns:xi="http://www.w3.org/2001/XInclude"
           xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
-    <key>default</key>
-    <view>pages/default</view>
+    <key>homepage</key>
+    <view>pages/homepage</view>
     <controller>Sulu\Bundle\WebsiteBundle\Controller\DefaultController::indexAction</controller>
     <cacheLifetime>86400</cacheLifetime>
     <meta>
-        <title lang="sr">Default</title>
-        <title lang="en">Default</title>
+        <title lang="sr">Homepage</title>
+        <title lang="en">Homepage</title>
     </meta>
     <properties>
         <property name="title" type="text_line" mandatory="true">

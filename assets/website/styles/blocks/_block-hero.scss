@@ -1,0 +1,19 @@
+/* --------------------------------------------------------------------
+  BLOCK: HERO
+-------------------------------------------------------------------- */
+.section-hero {
+    .hero {
+        display: flex;
+        justify-content: center;
+        padding-top: 80px;
+    }
+}
+.hero__media-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+.hero__media-image-wrapper {
+    max-width: 70%;
+    max-height: 40%;
+}

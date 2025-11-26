@@ -3,23 +3,38 @@
     <div class="container-fluid">
         <div class="footer-wrapper">
             <div class="footer-left">
-                {% if footerInfo.logo|default %}
+                {# {% if footerInfo.logo|default %}
                     <div class="footer-logo">
                         <img src="{{ footerInfo.logo.url }}" alt="Monos">
                     </div>
-                {% endif %}
-                {% if footerInfo.footerLeftItems|default([])|length > 0 %}
+                {% endif %} #}
+                <div class="locales">
+                    {% for localization in localizations %}
+                        {% set label = '' %}
+
+                        {% if app.request.locale == 'en' %}
+                            {% set label = localization.locale == 'en' ? 'EN' : 'srb' %}
+                        {% elseif app.request.locale == 'sr' %}
+                            {% set label = localization.locale == 'sr' ? 'SR' : 'eng' %}
+                        {% endif %}
+
+                        <a href="{{ localization.url }}" class="footer__lang-link {{ localization.locale == app.request.locale ? 'footer__lang-link--active' : '' }}">
+                            {{ label }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="footer-right">
+                {# {% if footerInfo.footerLinks|default([])|length > 0 %}
                     <div class="footer-links">
-                        {% for item in footerInfo.footerLeftItems %}
+                        {% for item in footerInfo.footerLinks %}
                             <a {% if loop.first %}class="footer-link-first"{% endif %} href="{{ item.link }}">{{ item.title }}</a>
                         {% endfor %}
                     </div>
-                {% endif %}
-            </div>
-            <div class="footer-right">
-                {% if footerInfo.footerRightItems|default([])|length > 0 %}
+                {% endif %} #}
+                {% if footerInfo.footerItems|default([])|length > 0 %}
                     <div class="footer-items">
-                        {% for item in footerInfo.footerRightItems %}
+                        {% for item in footerInfo.footerItems %}
                             <a href="{{ item.link }}">{{ item.title }}</a>
                         {% endfor %}
                     </div>
@@ -28,7 +43,7 @@
                     <div class="footer-text">{{ footerInfo.text }}</div>
                 {% endif %}
                 <div class="footer-credentials">
-                    {{ 'app.site.by'|trans }} <a href="mailto:alekspatrovic86@gmail.com">{{ 'app.alex'|trans }}</a>
+                    {{ 'app.site.by'|trans }} <a href="mailto:alekspetrovic86@gmail.com">{{ 'app.alex'|trans }}</a>
                 </div>
             </div>
         </div>

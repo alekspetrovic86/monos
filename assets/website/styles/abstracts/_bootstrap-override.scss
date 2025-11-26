@@ -1,0 +1,165 @@
+@use "sass:color";
+@use './variables' as *;
+
+/* --------------------------------------------------------------------
+   BOOTSTRAP OVERRIDE
+-------------------------------------------------------------------- */
+:root {
+    --default-dark-color: #{$color-terciary};
+    --bs-primary: #{$color-primary};
+    --bs-primary-rgb: #{color.channel($color-primary, 'red')}, #{color.channel($color-primary, 'green')}, #{color.channel($color-primary, 'blue')};
+    --bs-body-font-size: 14px;
+    --bs-link-color: var(--bs-primary);
+    --bs-link-color-rgb: var(--bs-primary-rgb);
+    --bs-link-hover-color: color-mix(in srgb, var(--bs-primary) 85%, #000);
+    --bs-link-hover-color-rgb: #{color.channel(color.mix($color-primary, #000, 85%), 'red')}, #{color.channel(color.mix($color-primary, #000, 85%), 'green')}, #{color.channel(color.mix($color-primary, #000, 85%), 'blue')};
+    --bs-focus-ring-color: rgba(var(--bs-primary-rgb), 0.25);
+    --bs-primary-text-emphasis: color-mix(in srgb, var(--bs-primary) 55%, #000);
+    --bs-primary-bg-subtle: color-mix(in srgb, var(--bs-primary) 15%, #fff);
+    --bs-primary-border-subtle: color-mix(in srgb, var(--bs-primary) 35%, #fff);
+    --bs-dark: #{$color-terciary};
+    --bs-dark-rgb: #{color.channel($color-terciary, 'red')}, #{color.channel($color-terciary, 'green')}, #{color.channel($color-terciary, 'blue')};
+}
+
+/* --------------------------------------------------------------------
+   FONT SIZES
+-------------------------------------------------------------------- */
+.nav {
+    --bs-nav-link-font-size: 1rem;
+}
+.btn {
+    --bs-btn-font-size: 1rem;
+}
+.dropdown-menu {
+    --bs-dropdown-font-size: 1rem;
+}
+
+/* --------------------------------------------------------------------
+   LINKS
+-------------------------------------------------------------------- */
+a {
+    color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+    text-decoration: underline;
+}
+a:hover {
+    --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+}
+
+/* --------------------------------------------------------------------
+   NAVBAR
+-------------------------------------------------------------------- */
+.navbar {
+    --bs-navbar-hover-color: var(--bs-primary);
+    --bs-navbar-active-color: var(--bs-primary);
+    --bs-navbar-brand-color: var(--bs-primary);
+    --bs-navbar-brand-hover-color: var(--bs-primary);
+}
+
+/* --------------------------------------------------------------------
+   BUTTONS
+-------------------------------------------------------------------- */
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--bs-primary) 90%, #fff);
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--bs-primary) 85%, #fff);
+    --bs-btn-active-bg: color-mix(in srgb, var(--bs-primary) 80%, #fff);
+    --bs-btn-active-border-color: color-mix(in srgb, var(--bs-primary) 75%, #fff);
+    --bs-btn-disabled-bg: var(--bs-primary);
+    --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+
+.btn-dark {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--bs-dark);
+    --bs-btn-border-color: var(--bs-dark);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--bs-dark) 92%, #fff);
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--bs-dark) 88%, #fff);
+    --bs-btn-active-bg: color-mix(in srgb, var(--bs-dark) 84%, #fff);
+    --bs-btn-active-border-color: color-mix(in srgb, var(--bs-dark) 80%, #fff);
+    --bs-btn-disabled-bg: var(--bs-dark);
+    --bs-btn-disabled-border-color: var(--bs-dark);
+}
+
+.btn-outline-dark {
+    --bs-btn-color: var(--bs-dark);
+    --bs-btn-border-color: var(--bs-dark);
+    --bs-btn-hover-bg: var(--bs-dark);
+    --bs-btn-hover-border-color: var(--bs-dark);
+    --bs-btn-active-bg: var(--bs-dark);
+    --bs-btn-active-border-color: var(--bs-dark);
+}
+
+/* --------------------------------------------------------------------
+   NAV
+-------------------------------------------------------------------- */
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--bs-primary);
+}
+.nav-tabs {
+    --bs-nav-tabs-link-active-border-color: var(--bs-primary);
+}
+
+/* --------------------------------------------------------------------
+   PAGINATION
+-------------------------------------------------------------------- */
+.pagination {
+    --bs-pagination-active-bg: var(--bs-primary);
+    --bs-pagination-active-border-color: var(--bs-primary);
+    --bs-pagination-focus-color: var(--bs-primary);
+}
+
+/* --------------------------------------------------------------------
+   DROPDOWNS & LIST GROUP
+-------------------------------------------------------------------- */
+.dropdown-menu {
+    --bs-dropdown-link-active-bg: var(--bs-primary);
+    --bs-dropdown-link-active-color: #fff;
+}
+
+.list-group {
+    --bs-list-group-active-bg: var(--bs-primary);
+    --bs-list-group-active-border-color: var(--bs-primary);
+}
+
+/* --------------------------------------------------------------------
+   FORM CONTROLS
+-------------------------------------------------------------------- */
+.form-check-input {
+    --bs-form-check-input-checked-bg-color: var(--bs-primary);
+    --bs-form-check-input-checked-border-color: var(--bs-primary);
+}
+.form-range {
+    --bs-form-range-thumb-bg: var(--bs-primary);
+}
+.form-control {
+    --bs-focus-ring-color: rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* --------------------------------------------------------------------
+   PROGRESS & ACCORDION
+-------------------------------------------------------------------- */
+.progress {
+    --bs-progress-bar-bg: var(--bs-primary);
+}
+.accordion {
+    --bs-accordion-btn-active-color: var(--bs-primary);
+    --bs-accordion-btn-active-bg: color-mix(in srgb, var(--bs-primary) 12%, transparent);
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* --------------------------------------------------------------------
+   CLOSE BUTTON
+-------------------------------------------------------------------- */
+.btn-close {
+    --bs-btn-close-focus-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}

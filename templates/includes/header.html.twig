@@ -1,14 +1,15 @@
 {# HEADER #}
 <header class="header" id="site-header">
+    <div class="nav-logo">
+        <a href="{{ sulu_content_root_path('/') }}">Monos.</a>
+    </div>
     <nav class="header__nav" aria-label="Primary">
         <ul>
             {% for item in sulu_navigation_root_tree('main', 1, true) %}
                 {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
                 {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) ? true : false %}
                 <li class="nav-item">
-                    <div class="d-flex align-items-center justify-content-between justify-content-xl-center nav-item-border">
-                        <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">{{ item.title|default }}</a>
-                    </div>
+                    <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">{{ item.title|default }}</a>
                 </li>
             {% endfor %}
         </ul>

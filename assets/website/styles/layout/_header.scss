@@ -1,0 +1,71 @@
+@use '../abstracts/variables' as *;
+
+/* --------------------------------------------------------------------
+   HEADER
+-------------------------------------------------------------------- */
+.header {
+    position: fixed;
+    height: 140px;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 80px 80px 0px 80px;
+    color: $color-primary;
+    font-size: 14px;
+    line-height: normal;
+    display: flex;
+    justify-content: space-between;
+    background-color: $color-bg-primary;
+
+    .nav-logo {
+        a {
+            text-decoration: none;
+            color: $color-secondary;
+        }
+    }
+
+    &__nav {
+        ul {
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-item {
+            display: block;
+            padding-left: 20px;
+            padding-right: 20px;
+            &:last-of-type {
+                padding-right: 0;
+            }
+
+            a {
+                color: $color-primary;
+                text-decoration: none;
+            }
+            &:hover {
+                a {
+                    color: $color-secondary;
+                }
+            }
+            .nav-item-active {
+                color: $color-secondary;
+            }
+            .active {
+                color: $color-secondary;
+            }
+        }
+    }
+
+    // &::after {
+    //     content: '';
+    //     position: absolute;
+    //     bottom: 0;
+    //     left: 0;
+    //     right: 0;
+    //     height: 1px;
+    //     background-color: #000;
+    //     transform: scaleY(0.2);
+    //     transform-origin: bottom;
+    // }
+}

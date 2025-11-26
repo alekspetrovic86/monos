@@ -48,9 +48,9 @@
                     </meta>
                 </property>
 
-                <block name="footerLeftItems" default-type="item">
+                <block name="footerLinks" default-type="item">
                     <meta>
-                        <title lang="en">Footer Left</title>
+                        <title lang="en">Footer links</title>
                     </meta>
 
                     <types>
@@ -75,9 +75,9 @@
                     </types>
                 </block>
 
-                <block name="footerRightItems" default-type="item">
+                <block name="footerItems" default-type="item">
                     <meta>
-                        <title lang="en">Footer right</title>
+                        <title lang="en">Footer items</title>
                     </meta>
 
                     <types>
