@@ -62,6 +62,10 @@ Encore
     // enables Sass/SCSS support
     .enableSassLoader()
 
+    .enableTypeScriptLoader(tsConfig => {
+        tsConfig.transpileOnly = true; // faster builds
+    })
+
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 

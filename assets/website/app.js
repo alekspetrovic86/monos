@@ -14,9 +14,16 @@ import './styles/app.scss';
 
 // Bootstrap JS (optional – keep only if needed)
 import 'bootstrap';
+import "./stimulus/bootstrap";
 
 // Stimulus auto-loader
-import './stimulus/bootstrap';
+import * as Turbo from "@hotwired/turbo";
+
+// Optional debugging
+window.Turbo = Turbo;
+
+// Enable Turbo navigation
+Turbo.session.drive = true;
 
 // Your custom JS (site-specific logic)
 import './main.js';

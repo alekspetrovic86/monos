@@ -31,6 +31,9 @@
 		{# <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
 			async defer>
 		</script> #}
+		{% block javascripts %}
+            {{ encore_entry_script_tags('website') }}
+        {% endblock %}
 
 	</head>
 	<body>
@@ -46,9 +49,7 @@
 			} %}
 		{% endblock %}
 
-		{% block javascripts %}
-            {{ encore_entry_script_tags('website') }}
-        {% endblock %}
+		<div class="global-loader" data-controller="loader"></div>
 	</body>
 </html>
 
