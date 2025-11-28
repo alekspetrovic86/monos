@@ -5,8 +5,10 @@
 
 @use './layout/header';
 @use './layout/footer';
+@use './layout/sidebar';
 
 @use './components/buttons';
 @use './components/nav';
 
 @use './blocks/block-hero';
+@use './blocks/block-projects';

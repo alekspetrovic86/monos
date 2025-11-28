@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <aside class="sidebar">
+        <nav class="sidebar__nav">
+            <ul>
+                {% for parent in sulu_navigation_root_tree('main', 2, true) %}
+                    {% for item in parent.children %}
+                        {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
+                        {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) %}
+                        <li class="sidebar-nav-item">
+                            {% if loop.last %}
+                                <div>.</div>
+                            {% endif %}
+                            <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">
+                                {{ item.title|default }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </nav>
+    </aside>
+
+    {# MAIN CONTENT #}
+    <main class="site-main">
+        {% include 'includes/blocks.html.twig' %}
+    </main>
+
+{% endblock %}

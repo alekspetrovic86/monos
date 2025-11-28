@@ -1,0 +1,61 @@
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <block name="blocks" default-type="projects">
+        <types>
+            <type name="projects">
+                <meta>
+                    <title lang="en">Projects</title>
+                </meta>
+
+                <properties>
+                    <property name="title" type="text_line">
+                        <meta>
+                            <title lang="en">Title</title>
+                        </meta>
+                    </property>
+
+                    <block name="projects" default-type="item" >
+                        <meta>
+                            <title lang="en">Projects</title>
+                        </meta>
+
+                        <types>
+                            <type name="item">
+                                <meta>
+                                    <title lang="en">Item block</title>
+                                </meta>
+
+                                <properties>
+                                    <property name="image" type="single_media_selection" mandatory="true">
+                                        <meta>
+                                            <title lang="en">Image</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="date" type="text_line" colspan="3">
+                                        <meta>
+                                            <title lang="en">Date</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="title" type="text_line" mandatory="true">
+                                        <meta>
+                                            <title lang="en">Title</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="link" type="link" colspan="6" mandatory="true">
+                                        <meta>
+                                            <title lang="en">Link</title>
+                                        </meta>
+                                    </property>
+                                </properties>
+                            </type>
+                        </types>
+                    </block>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>

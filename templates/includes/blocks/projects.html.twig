@@ -1,0 +1,22 @@
+{# BLOCK: Projects #}
+<section class="section section-projects">
+    {% for item in content.projects|default([]) %}
+        <div class="section-projects--container">
+            <div class="section-projects--image-container">
+                <a class="section-projects--image-link" href="{{ item.link }}">
+                    <img class="img-fluid" src="{{ item.image.url }}" alt="Img">
+                </a>
+            </div>
+
+            <div class="section-projects--title-container">
+                <div class="section-projects--title">
+                    <a href="{{ item.link }}">{{ item.title }}</a>
+                </div>
+
+                {% if item.date|default %}
+                    <div class="section-projects--date">{{ item.date }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</section>

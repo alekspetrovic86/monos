@@ -7,6 +7,11 @@ body {
     line-height: normal;
     color: $color-primary;
     background-color: $color-bg-primary;
+    @media (max-width: 767.98px ) {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
 }
 
 .global-loader {
@@ -18,6 +23,9 @@ body {
     background: #000;
     z-index: 9999;
     transition: width 0.4s ease;
+    @media (max-width: 767.98px ) {
+        top: 2px;
+    }
 }
 
 h1,
@@ -65,41 +73,37 @@ h6,
 
 a {
     text-decoration: none;
+    color: $color-primary;
 }
 a:hover {
     text-decoration: none;
-}
-
-.main-sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 280px;
-    z-index: 1001;
-    background: transparent;
-    pointer-events: none;
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 1px;
-        background-color: #000;
-        transform: scaleX(0.2);
-        transform-origin: right;
-    }
+    color: $color-secondary;
 }
 
 .site-main {
     min-height: calc(100vh - 220px);
     margin-top: 140px;
+    padding-left: 280px;
+    padding-right: 80px;
+    @media (max-width: 767.98px ) {
+        margin-top: 0px;
+        padding-left: 80px;
+        padding-right: 80px;
+        min-height: auto;
+    }
+    @media (max-width: 575.98px ) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
 .site-main-homepage {
     min-height: calc(100vh - 220px);
     margin-top: 140px;
+    @media (max-width: 767.98px ) {
+        margin-top: 0px;
+        min-height: auto;
+    }
     position: relative;
     &::before {
         content: '';

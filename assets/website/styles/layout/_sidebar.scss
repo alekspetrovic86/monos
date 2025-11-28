@@ -1,0 +1,75 @@
+@use '../abstracts/variables' as *;
+
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 140px;
+    bottom: 80px;
+    width: 280px;
+    z-index: 1001;
+    background: transparent;
+    @media (max-width: 767.98px ) {
+        display: none;
+    }
+    &__nav {
+        padding-left: 80px;
+        padding-right: 20px;
+        ul {
+            padding: 0;
+        }
+
+        .sidebar-nav-item {
+            padding-bottom: 5px;
+            display: block;
+            &:first-of-type {
+                padding-top: 5px;
+            }
+            &:last-of-type {
+                padding-top: 5px;
+                padding-bottom: 0px;
+            }
+
+            a {
+                color: $color-primary;
+                text-decoration: none;
+            }
+            &:hover {
+                a {
+                    color: $color-secondary;
+                }
+            }
+            .nav-item-active {
+                color: $color-secondary;
+            }
+            .active {
+                color: $color-secondary;
+            }
+        }
+    }
+}
+
+.main-sidebar {
+    @media (max-width: 767.98px ) {
+        display: none;
+    }
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 1001;
+    background: transparent;
+    pointer-events: none;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 1px;
+        background-color: #000;
+        transform: scaleX(0.2);
+        transform-origin: right;
+    }
+}

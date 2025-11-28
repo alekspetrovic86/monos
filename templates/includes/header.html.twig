@@ -3,15 +3,118 @@
     <div class="nav-logo">
         <a href="{{ sulu_content_root_path('/') }}">Monos.</a>
     </div>
+
     <nav class="header__nav" aria-label="Primary">
-        <ul>
-            {% for item in sulu_navigation_root_tree('main', 1, true) %}
-                {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
-                {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) ? true : false %}
-                <li class="nav-item">
-                    <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">{{ item.title|default }}</a>
-                </li>
+        <div class="d-block d-md-none text-end">
+            <div class="locales">
+                {% for localization in localizations %}
+                    {% set label = '' %}
+
+                    {% if app.request.locale == 'en' %}
+                        {% set label = localization.locale == 'en' ? 'EN' : 'srb' %}
+                    {% elseif app.request.locale == 'sr' %}
+                        {% set label = localization.locale == 'sr' ? 'SR' : 'eng' %}
+                    {% endif %}
+
+                    <a href="{{ localization.url }}" class="footer__lang-link {{ localization.locale == app.request.locale ? 'footer__lang-link--active' : '' }}">
+                        {{ label }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# ------------------- #}
+        {# Navigation tree      #}
+        {# ------------------- #}
+        {% set navTree = sulu_navigation_root_tree('main', 2, true) %}
+        {% set activeParent = null %}
+        {% set activeSecondLevel = null %}
+
+        {# ------------------- #}
+        {# Detect active child or grandchild #}
+        {# ------------------- #}
+        {% for parent in navTree %}
+            {% for child in parent.children %}
+                {% if sulu_navigation_is_active(request.resourceLocator, child.url) %}
+                    {% set activeParent = parent %}
+                    {% set activeSecondLevel = child %}
+                {% endif %}
+
+                {% if child.children is defined %}
+                    {% for grandchild in child.children %}
+                        {% if sulu_navigation_is_active(request.resourceLocator, grandchild.url) %}
+                            {% set activeParent = parent %}
+                            {% set activeSecondLevel = child %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
-        </ul>
+        {% endfor %}
+
+        <div class="menu-wrapper">
+
+            {# ------------------- #}
+            {# MOBILE: Show second-level menu if child/grandchild active #}
+            {# ------------------- #}
+            {% if activeSecondLevel %}
+                <ul class="nav-mob-second d-block d-md-none">
+                    {% for item in activeParent.children %}
+                        {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
+                        {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) %}
+                        <li class="nav-item-mob">
+                            <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">
+                                {{ item.title|default }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {# ------------------- #}
+            {# MOBILE: Main nav always visible, mark parent active if any child/grandchild is active #}
+            {# ------------------- #}
+            <ul class="nav-mob-main d-block d-md-none">
+                {% for parent in navTree %}
+                    {% set parentUrl = sulu_content_path(parent.url, parent.webspaceKey) %}
+                    {% set isActiveParent = sulu_navigation_is_active(request.resourceLocator, parent.url) %}
+
+                    {# If any child or grandchild is active, parent becomes active #}
+                    {% for child in parent.children %}
+                        {% if sulu_navigation_is_active(request.resourceLocator, child.url) %}
+                            {% set isActiveParent = true %}
+                        {% endif %}
+                        {% if child.children is defined %}
+                            {% for grandchild in child.children %}
+                                {% if sulu_navigation_is_active(request.resourceLocator, grandchild.url) %}
+                                    {% set isActiveParent = true %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="nav-item-mob">
+                        <a href="{{ parentUrl }}" class="{{ isActiveParent ? 'active nav-item-active' : '' }}">
+                            {{ parent.title|default }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {# ------------------- #}
+            {# DESKTOP #}
+            {# ------------------- #}
+            <ul class="nav-desk d-none d-md-flex">
+                {% for item in sulu_navigation_root_tree('main', 1, true) %}
+                    {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
+                    {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) %}
+                    <li class="nav-item">
+                        <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">
+                            {{ item.title|default }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
     </nav>
 </header>
