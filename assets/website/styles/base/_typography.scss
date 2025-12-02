@@ -80,6 +80,21 @@ a:hover {
     color: $color-secondary;
 }
 
+.site-default {
+    min-height: calc(100vh - 220px);
+    margin-top: 140px;
+    @media (max-width: 767.98px ) {
+        margin-top: 0px;
+        padding-left: 80px;
+        padding-right: 80px;
+        min-height: auto;
+    }
+    @media (max-width: 575.98px ) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
 .site-main {
     min-height: calc(100vh - 220px);
     margin-top: 140px;
@@ -103,6 +118,7 @@ a:hover {
     @media (max-width: 767.98px ) {
         margin-top: 0px;
         min-height: auto;
+        height: 100%;
     }
     position: relative;
     &::before {

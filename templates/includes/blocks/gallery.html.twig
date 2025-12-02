@@ -1,37 +1,59 @@
 {# BLOCK: GALLERY #}
-<section class="section section-gallery" {% if content.sectionId|default %}id="{{ content.sectionId }}"{% endif %}>
-    <div class="container">
-        {% if content.title|default %}
-            <h2 class="gallery__heading">{{ content.title }}</h2>
+<section class="section section-gallery">
+    <div class="gallery-sidebar">
+        {% if content.description|default %}
+            <div class="gallery-sidebar-description">
+                {{ content.description|raw }}
+            </div>
         {% endif %}
-
-        <div class="gallery__slider swiper">
+        {% if content.link|default %}
+            <a class="gallery-sidebar-link" href="{{ content.link }}">
+                {{ view.link.title|default }}
+            </a>
+        {% endif %}
+    </div>
+    <div class="gallery__slider-wrapper" data-controller="gallery-slider">
+        <div class="gallery__slider swiper" data-gallery-slider-target="container">
             <div class="swiper-wrapper">
                 {% for key, item in content.images|default([]) %}
-                    <a
-                        href="{{ item.url }}"
-                        class="swiper-slide gallery__tile gallery__tile--view gallery__lightbox"
-                        data-gallery="{{ content.sectionId|default('gallery-' ~ loop.index) }}"
-                        aria-label="Open image {{ key + 1 }}">
-                        <img class="gallery__img" src="{{ item.url }}" alt="Gallery image {{ key }}" loading="lazy" decoding="async" />
-                        <span class="gallery__overlay">
-                            <i class="bi bi-camera"></i>
-                            <em>{{ content.overlayText|default }}</em>
-                        </span>
-                    </a>
+                    <div class="gallery__img-wrapper swiper-slide">
+                            <img 
+                                class="gallery__img glightbox-item"
+                                src="{{ item.url }}"
+                                loading="lazy"
+                                decoding="async"
+                                data-gallery="gallery"
+                            />
+                    </div>
                 {% endfor %}
             </div>
+            <div class="gallery__nav">
+                <button 
+                    class="gallery__arrow gallery__prev"
+                    type="button"
+                    aria-label="Previous"
+                    data-gallery-slider-target="prev"
+                >
+                </button>
+
+                <button 
+                    class="gallery__arrow gallery__next"
+                    type="button"
+                    aria-label="Next"
+                    data-gallery-slider-target="next"
+                >
+                </button>
+            </div>
+
+            <a href="#" class="open-gallery" data-gallery-slider-target="open">+</a>
         </div>
 
-        <div class="gallery__nav">
-            <button class="gallery__arrow gallery__prev" type="button" aria-label="Previous">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-            <button class="gallery__arrow gallery__next" type="button" aria-label="Next">
-                <i class="bi bi-chevron-right"></i>
-            </button>
-        </div>
+        {% if content.parrentPage|default %}
+            <a class="back-button" href="{{ content.parrentPage }}" data-controller="scroll-memory"
+                 data-scroll-memory-key-value="projects">
+                x
+            </a>
+        {% endif %}
 
-        {# <a href="#gallery" class="gallery__more">View All <i class="bi bi-arrow-right-short"></i></a> #}
     </div>
 </section>

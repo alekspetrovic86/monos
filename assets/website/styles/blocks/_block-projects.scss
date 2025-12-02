@@ -2,9 +2,6 @@
 
 .section-projects {
     .section-projects--container {
-        &:first-of-type {
-            padding-top: 5px;
-        }
         @media (min-width: 768px ) {
             &:last-of-type {
                 margin-bottom: 130px;

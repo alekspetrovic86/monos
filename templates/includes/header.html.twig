@@ -8,17 +8,19 @@
         <div class="d-block d-md-none text-end">
             <div class="locales">
                 {% for localization in localizations %}
-                    {% set label = '' %}
+                    {% if localization.locale != app.request.locale %}
 
-                    {% if app.request.locale == 'en' %}
-                        {% set label = localization.locale == 'en' ? 'EN' : 'srb' %}
-                    {% elseif app.request.locale == 'sr' %}
-                        {% set label = localization.locale == 'sr' ? 'SR' : 'eng' %}
+                        {% if localization.locale == 'en' %}
+                            {% set label = 'en' %}
+                        {% elseif localization.locale == 'sr' %}
+                            {% set label = 'sr' %}
+                        {% endif %}
+
+                        <a href="{{ localization.url }}" class="footer__lang-link">
+                            {{ label }}
+                        </a>
+
                     {% endif %}
-
-                    <a href="{{ localization.url }}" class="footer__lang-link {{ localization.locale == app.request.locale ? 'footer__lang-link--active' : '' }}">
-                        {{ label }}
-                    </a>
                 {% endfor %}
             </div>
         </div>

@@ -18,17 +18,17 @@
     }
     @media (max-width: 767.98px ) {
         margin-top: auto;
-        &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background-color: #000;
-            transform: scaleY(0.2);
-            transform-origin: top;
-        }
+        // &::before {
+        //     content: '';
+        //     position: absolute;
+        //     top: 0px;
+        //     left: 0;
+        //     right: 0;
+        //     height: 1px;
+        //     background-color: #000;
+        //     transform: scaleY(0.2);
+        //     transform-origin: top;
+        // }
     }
 
     .container-fluid {

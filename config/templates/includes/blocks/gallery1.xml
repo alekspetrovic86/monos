@@ -1,0 +1,39 @@
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <block name="blocks" default-type="gallery-1">
+        <types>
+            <type name="gallery-1">
+                <meta>
+                    <title lang="en">Gallery 1</title>
+                </meta>
+
+                <properties>
+                    <property name="title" type="text_line">
+                        <meta>
+                            <title lang="en">Title</title>
+                        </meta>
+                    </property>
+
+                    <property name="images" type="media_selection" mandatory="true">
+                        <meta>
+                            <title lang="en">Images</title>
+                        </meta>
+                    </property>
+
+                    <property name="overlayText" type="text_line">
+                        <meta>
+                            <title lang="en">Overlay Text</title>
+                        </meta>
+                    </property>
+
+                    <property name="sectionId" type="text_line" colspan="3">
+                        <meta>
+                            <title lang="en">Section Id</title>
+                        </meta>
+                    </property>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>

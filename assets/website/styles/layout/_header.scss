@@ -20,12 +20,12 @@
     @media (max-width: 575.98px ) {
         height: auto;
         padding: 30px 20px 30px 20px;
-        position: static;
+        position: relative;
     }
     @media (min-width: 575.98px ) and (max-width: 767.98px ) {
         height: auto;
         padding: 50px 80px 25px 80px;
-        position: static;
+        position: relative;
     }
 
     .nav-logo {
@@ -95,7 +95,7 @@
                 .nav-item-mob {
                     display: block;
                     text-align: right;
-                    margin-bottom: 10px;
+                    margin-bottom: 5px;
                     &:last-of-type {
                         margin-bottom: 0;
                     }
