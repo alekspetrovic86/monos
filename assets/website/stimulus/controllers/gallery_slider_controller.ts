@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import Swiper from "swiper";
 import { Navigation } from "swiper/modules";
 import GLightbox from "glightbox";
+import Panzoom from "@panzoom/panzoom";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -111,6 +112,67 @@ export default class extends Controller {
             el.style.opacity = "0";
         });
 
+        this.lightbox.on("slide_after_load", () => {
+            this.addCustomCloseButton();
+            this.disableLightboxNav();
+            this.enableDeepZoom();
+        });
+
         this.lightbox.open();
     }
+
+    private disableLightboxNav() {
+        document.querySelectorAll(".gprev, .gnext").forEach((btn) => {
+            const el = btn as HTMLElement;
+            el.style.display = "none";
+            el.style.pointerEvents = "none";
+            el.style.opacity = "0";
+        });
+    }
+
+    private enableDeepZoom() {
+        const img = document.querySelector(".gslide-image img") as HTMLElement;
+        if (!img) return;
+
+        // image container must allow overflow
+        const wrapper = img.parentElement as HTMLElement;
+        wrapper.style.overflow = "hidden";
+
+        // initialize Panzoom on the IMAGE
+        const panzoom = Panzoom(img, {
+            maxScale: 6,         // deep zoom
+            minScale: 1,
+            contain: "outside",
+        });
+
+        wrapper.addEventListener("wheel", panzoom.zoomWithWheel, { passive: false });
+    }
+
+    private addCustomCloseButton() {
+        if (document.querySelector(".custom-glightbox-close")) return;
+
+        const btn = document.createElement("button");
+        btn.className = "custom-glightbox-close";
+        btn.innerHTML = "&times;"; // or your SVG icon
+
+        Object.assign(btn.style, {
+            position: "absolute",
+            top: "30px",
+            right: "20px",
+            zIndex: "9999",
+            border: "none",
+            fontSize: "20px",
+            width: "30px",
+            height: "30px",
+            cursor: "pointer",
+        });
+
+        btn.addEventListener("click", () => {
+            this.lightbox?.close();
+        });
+
+        const container = document.querySelector(".gcontainer") as HTMLElement;
+        if (container) container.appendChild(btn);
+    }
+
 }

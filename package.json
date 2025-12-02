@@ -30,6 +30,7 @@
     },
     "dependencies": {
         "@hotwired/turbo-rails": "^8.0.20",
+        "@panzoom/panzoom": "^4.6.0",
         "@popperjs/core": "^2.11.8",
         "boostrap": "^2.0.0",
         "bootstrap": "^5.3.8",

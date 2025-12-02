@@ -113,3 +113,29 @@
     opacity: 0 !important;
     pointer-events: none !important;
 }
+
+.glightbox-clean .gclose {
+    display: none !important;
+}
+
+.goverlay {
+    background-color: rgba($color-bg-primary, 0.5);
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.custom-glightbox-close {
+    color: $color-primary;
+    background: transparent;
+    &:hover {
+        color: $color-secondary;
+        background: transparent;
+    }
+}
+
+.glightbox-container .gcontainer {
+    padding: 40px 80px 40px 40px;
+}
