@@ -1,18 +1,24 @@
 @use '../abstracts/variables' as *;
 
 .section-gallery {
-    display: flex;
-    min-height: calc(100vh - 220px);
-    @media (max-width: 767.98px ) {
-        min-height: auto;
+    display: block;
+    padding-top: 30px;
+    @media (min-width: 768px ) {
+        display: flex;
+        min-height: calc(100vh - 220px);
+        padding-top: 0px;
     }
     .gallery-sidebar {
-        width: 280px;
-        padding-left: 80px;
-        padding-right: 20px;
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
+        padding-right: 50px;
+        display: block;
+        @media (min-width: 768px ) {
+            width: 280px;
+            padding-left: 80px;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
         .gallery-sidebar-description {
             p {
                 color: $color-secondary;
@@ -24,28 +30,49 @@
         .gallery-sidebar-link {
             display: block;
             color: $color-primary;
-            margin-top: auto;
+            margin-top: 40px;
+            padding-left: 50px;
+            text-align: center;
             &:hover {
                 color: $color-secondary;
             }
-            margin-bottom: 60px;
+            margin-bottom: 30px;
+            @media (min-width: 768px ) {
+                margin-top: auto;
+                padding-left: 0px;
+                text-align: left;
+                margin-bottom: 60px;
+            }
         }
     }
     .gallery__slider-wrapper {
-        max-height: calc(100vh - 220px);
-        max-width: calc(100vw - 280px);
         width: 100%;
-        margin: auto;
+        margin: 0;
         display: flex;
         position: relative;
+        padding-bottom: 30px;
+        @media (min-width: 768px ) {
+            max-height: calc(100vh - 220px);
+            max-width: calc(100vw - 280px);
+            padding-bottom: 60px;
+        }
         .gallery__img-wrapper {
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 140px 80px;
             box-sizing: border-box;
             position: relative;
+            padding-left: 0px;
+            max-height: 360px;
+            @media (min-width: 768px ) {
+                padding-right: 130px;
+                max-height: none;
+            }
+            @media (min-width: 1400px ) {
+                padding-right: 130px;
+                padding-left: 130px;
+            }
 
             .gallery__img {
                 max-width: 100%;
@@ -56,8 +83,8 @@
         }
         .back-button {
             position: absolute;
-            right: 68px;
-            top: 0px;
+            right: -10px;
+            top: -30px;
             z-index: 2;
             width: 30px;
             height: 30px;
@@ -65,6 +92,10 @@
             justify-content: center;
             :hover {
                 color: $color-secondary;
+            }
+            @media (min-width: 768px ) {
+                right: 70px;
+                top: 0px;
             }
         }
         .gallery__nav {
@@ -74,7 +105,10 @@
             right: 0;
             top: 0;
             bottom: 0;
-            display: flex;
+            display: none;
+            @media (min-width: 768px ) {
+                display: flex;
+            }
             .gallery__prev {
                 width: 50%;
                 height: 100%;
@@ -93,8 +127,8 @@
 
         .open-gallery {
             position: absolute;
-            right: 95px;
-            top: 0;
+            right: 15px;
+            top: -30px;
             width: 30px;
             height: 30px;
             z-index: 2;
@@ -102,6 +136,21 @@
             justify-content: center;
             align-items: flex-start;
             font-size: 16px;
+            @media (min-width: 768px ) {
+                right: 95px;
+                top: 0px;
+            }
+        }
+    }
+    
+    .slide-counter {
+        position: absolute;
+        bottom: -18px;
+        right: 0px;
+        z-index: 2;
+        @media (min-width: 768px ) {
+            bottom: 60px;
+            right: 80px;
         }
     }
 }
@@ -119,12 +168,12 @@
 }
 
 .goverlay {
-    background-color: rgba($color-bg-primary, 0.5);
+    background-color: rgba($color-bg-primary, 0.5)!important;
 
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px)!important;
+    -webkit-backdrop-filter: blur(5px)!important;
 
-    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease!important;
 }
 
 .custom-glightbox-close {
@@ -134,8 +183,24 @@
         color: $color-secondary;
         background: transparent;
     }
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 9999;
+    border: none;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    @media (min-width: 768px ) {
+        top: 30px;
+        right: 20px;
+    }
 }
 
 .glightbox-container .gcontainer {
-    padding: 40px 80px 40px 40px;
+    padding: 20px 20px 20px 20px!important;
+    @media (min-width: 768px ) {
+        padding: 40px 80px 40px 40px!important;
+    }
 }

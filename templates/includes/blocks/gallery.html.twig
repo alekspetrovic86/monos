@@ -1,18 +1,6 @@
 {# BLOCK: GALLERY #}
 <section class="section section-gallery">
-    <div class="gallery-sidebar">
-        {% if content.description|default %}
-            <div class="gallery-sidebar-description">
-                {{ content.description|raw }}
-            </div>
-        {% endif %}
-        {% if content.link|default %}
-            <a class="gallery-sidebar-link" href="{{ content.link }}">
-                {{ view.link.title|default }}
-            </a>
-        {% endif %}
-    </div>
-    <div class="gallery__slider-wrapper" data-controller="gallery-slider">
+    <div class="gallery__slider-wrapper order-2" data-controller="gallery-slider">
         <div class="gallery__slider swiper" data-gallery-slider-target="container">
             <div class="swiper-wrapper">
                 {% for key, item in content.images|default([]) %}
@@ -45,8 +33,15 @@
                 </button>
             </div>
 
-            <a href="#" class="open-gallery" data-gallery-slider-target="open">+</a>
         </div>
+
+        <a href="#" class="open-gallery" data-gallery-slider-target="open">+</a>
+
+        {% if content.images|length > 0 %}
+            <div class="slide-counter" data-gallery-slider-target="counter">
+                1/{{ content.images|length }}
+            </div>
+        {% endif %}
 
         {% if content.parrentPage|default %}
             <a class="back-button" href="{{ content.parrentPage }}" data-controller="scroll-memory"
@@ -54,6 +49,17 @@
                 x
             </a>
         {% endif %}
-
+    </div>
+    <div class="gallery-sidebar order-1">
+        {% if content.description|default %}
+            <div class="gallery-sidebar-description">
+                {{ content.description|raw }}
+            </div>
+        {% endif %}
+        {% if content.link|default %}
+            <a class="gallery-sidebar-link" href="{{ content.link }}">
+                {{ view.link.title|default }}
+            </a>
+        {% endif %}
     </div>
 </section>

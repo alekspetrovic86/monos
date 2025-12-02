@@ -10,12 +10,14 @@ import "glightbox/dist/css/glightbox.css";
 
 // data-controller="gallery-slider"
 export default class extends Controller {
-    static targets = ["container", "prev", "next", "open"];
+    static targets = ["container", "prev", "next", "open", "counter"];
 
     declare readonly containerTarget: HTMLElement;
     declare readonly prevTarget: HTMLElement;
     declare readonly nextTarget: HTMLElement;
     declare readonly openTarget: HTMLElement;
+    declare readonly counterTarget: HTMLElement;
+    declare readonly hasCounterTarget: boolean;
 
     swiper: Swiper | null = null;
     lightbox: ReturnType<typeof GLightbox> | null = null;
@@ -70,6 +72,11 @@ export default class extends Controller {
             // Make sure wrapper layout stays correct
             observer: true,
             observeParents: true,
+            on: {
+                slideChange: () => {
+                    this.updateCounter();
+                }
+            }
         });
     }
 
@@ -153,19 +160,7 @@ export default class extends Controller {
 
         const btn = document.createElement("button");
         btn.className = "custom-glightbox-close";
-        btn.innerHTML = "&times;"; // or your SVG icon
-
-        Object.assign(btn.style, {
-            position: "absolute",
-            top: "30px",
-            right: "20px",
-            zIndex: "9999",
-            border: "none",
-            fontSize: "20px",
-            width: "30px",
-            height: "30px",
-            cursor: "pointer",
-        });
+        btn.innerHTML = "&times;";
 
         btn.addEventListener("click", () => {
             this.lightbox?.close();
@@ -175,4 +170,12 @@ export default class extends Controller {
         if (container) container.appendChild(btn);
     }
 
+    updateCounter() {
+        if (!this.swiper || !this.hasCounterTarget) return;
+
+        const current = this.swiper.activeIndex + 1;
+        const total = this.containerTarget.querySelectorAll('.swiper-slide').length;
+
+        this.counterTarget.textContent = `${current}/${total}`;
+    }
 }

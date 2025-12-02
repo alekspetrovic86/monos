@@ -10,7 +10,7 @@
 
             <div class="section-projects--title-container">
                 <div class="section-projects--title">
-                    <a href="{{ item.link }}">{{ item.title }}</a>
+                    <a href="{{ item.link }}" data-action="click->scroll-memory#store">{{ item.title }}</a>
                 </div>
 
                 {% if item.date|default %}

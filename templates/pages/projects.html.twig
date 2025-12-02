@@ -12,7 +12,7 @@
                             {% if loop.last %}
                                 <div>.</div>
                             {% endif %}
-                            <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">
+                            <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}" data-action="click->remove-scroll-memory#clear">
                                 {{ item.title|default }}
                             </a>
                         </li>

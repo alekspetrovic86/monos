@@ -18,7 +18,7 @@
                             {% set label = localization.locale == 'sr' ? 'SR' : 'eng' %}
                         {% endif %}
 
-                        <a href="{{ localization.url }}" class="footer__lang-link {{ localization.locale == app.request.locale ? 'footer__lang-link--active' : '' }}">
+                        <a href="{{ localization.url }}" class="footer__lang-link {{ localization.locale == app.request.locale ? 'footer__lang-link--active' : '' }}" data-action="click->remove-scroll-memory#clear">
                             {{ label }}
                         </a>
                     {% endfor %}
@@ -35,7 +35,7 @@
                 {% if footerInfo.footerItems|default([])|length > 0 %}
                     <div class="footer-items">
                         {% for item in footerInfo.footerItems %}
-                            <a href="{{ item.link }}">{{ item.title }}</a>
+                            <a href="{{ item.link }}" data-action="click->remove-scroll-memory#clear">{{ item.title }}</a>
                         {% endfor %}
                     </div>
                 {% endif %}

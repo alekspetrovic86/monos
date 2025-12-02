@@ -1,7 +1,7 @@
 {# HEADER #}
 <header class="header" id="site-header">
     <div class="nav-logo">
-        <a href="{{ sulu_content_root_path('/') }}">Monos.</a>
+        <a href="{{ sulu_content_root_path('/') }}" data-action="click->remove-scroll-memory#clear">Monos.</a>
     </div>
 
     <nav class="header__nav" aria-label="Primary">
@@ -64,7 +64,7 @@
                         {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
                         {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) %}
                         <li class="nav-item-mob">
-                            <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">
+                            <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}" data-action="click->remove-scroll-memory#clear">
                                 {{ item.title|default }}
                             </a>
                         </li>
@@ -95,7 +95,7 @@
                     {% endfor %}
 
                     <li class="nav-item-mob">
-                        <a href="{{ parentUrl }}" class="{{ isActiveParent ? 'active nav-item-active' : '' }}">
+                        <a href="{{ parentUrl }}" class="{{ isActiveParent ? 'active nav-item-active' : '' }}" data-action="click->remove-scroll-memory#clear">
                             {{ parent.title|default }}
                         </a>
                     </li>
@@ -106,17 +106,34 @@
             {# DESKTOP #}
             {# ------------------- #}
             <ul class="nav-desk d-none d-md-flex">
-                {% for item in sulu_navigation_root_tree('main', 1, true) %}
-                    {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
-                    {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) %}
+                {% for parent in sulu_navigation_root_tree('main', 2, true) %}
+                    {% set parentUrl = sulu_content_path(parent.url, parent.webspaceKey) %}
+
+                    {# Detect if parent itself is active #}
+                    {% set isActiveParent = sulu_navigation_is_active(request.resourceLocator, parent.url) %}
+
+                    {# Detect active child or grandchild #}
+                    {% for child in parent.children %}
+                        {% if sulu_navigation_is_active(request.resourceLocator, child.url) %}
+                            {% set isActiveParent = true %}
+                        {% endif %}
+
+                        {% if child.children is defined %}
+                            {% for grandchild in child.children %}
+                                {% if sulu_navigation_is_active(request.resourceLocator, grandchild.url) %}
+                                    {% set isActiveParent = true %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+
                     <li class="nav-item">
-                        <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}">
-                            {{ item.title|default }}
+                        <a href="{{ parentUrl }}" class="{{ isActiveParent ? 'active nav-item-active' : '' }}" data-action="click->remove-scroll-memory#clear">
+                            {{ parent.title|default }}
                         </a>
                     </li>
                 {% endfor %}
             </ul>
-
         </div>
     </nav>
 </header>
