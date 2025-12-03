@@ -16,7 +16,7 @@
                             {% set label = 'sr' %}
                         {% endif %}
 
-                        <a href="{{ localization.url }}" class="footer__lang-link">
+                        <a href="{{ localization.url }}" class="footer__lang-link" data-action="click->remove-scroll-memory#clear">
                             {{ label }}
                         </a>
 

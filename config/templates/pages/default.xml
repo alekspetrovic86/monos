@@ -36,14 +36,12 @@
 				<title lang="en">Content</title>
 			</meta>
 			<properties>
-				<block name="blocks" default-type="hero" minOccurs="0">
+				<block name="blocks" default-type="gallery" minOccurs="0">
 					<meta>
 						<title lang="sr">Blocks</title>
 						<title lang="en">Blocks</title>
 					</meta>
 					<types>
-                        <xi:include href="../includes/blocks/hero.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
                         <xi:include href="../includes/blocks/gallery.xml"
                                             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
                         <xi:include href="../includes/blocks/contact.xml"

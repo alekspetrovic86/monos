@@ -51,7 +51,7 @@
     {% else %}
         <input
             type="text"
-            class="contact__input"
+            class="form-control"
             placeholder="{{ form.vars.label|striptags }}"
             {{ block('widget_attributes') }}
             value="{{ form.vars.value }}"
@@ -62,52 +62,27 @@
 {% block email_widget %}
     <input
         type="email"
-        class="contact__input"
+        class="contact__input form-control"
         placeholder="{{ form.vars.label|striptags }}"
         {{ block('widget_attributes') }}
         value="{{ value }}"
     />
 {% endblock %}
 
-{# {% block date_widget %}
-    <div class="contact__field contact__field--icon">
-        <i class="bi bi-calendar-event contact__icon" aria-hidden="true"></i>
-        <input
-            type="date"
-            class="contact__input contact__input--icon"
-            placeholder="{{ form.vars.label|striptags }}"
-            {{ block('widget_attributes') }}
-            {% if form.vars.value is not null and form.vars.value is not iterable %}
-                value="{{ form.vars.value|date('Y-m-d') }}"
-            {% endif %}
-        />
-    </div>
-{% endblock %} #}
-
-
-{# {% block time_widget %}
-    <div class="contact__field contact__field--icon">
-        <i class="bi bi-clock contact__icon" aria-hidden="true"></i>
-        <input
-            type="time"
-            class="contact__input contact__input--icon"
-            placeholder="{{ form.vars.label|striptags }}"
-            {{ block('widget_attributes') }}
-            value="{% if form.vars.value is iterable %}
-                       {{ '' }}
-                   {% elseif form.vars.value %}
-                       {{ form.vars.value|date('H:i') }}
-                   {% else %}
-                       ''
-                   {% endif %}"
-        />
-    </div>
-{% endblock %} #}
+{% block tel_widget %}
+    <input
+        type="tel"
+        class="contact__input form-control"
+        placeholder="{{ form.vars.label|striptags }}"
+        {{ block('widget_attributes') }}
+        value="{{ value }}"
+    />
+{% endblock %}
 
 {% block textarea_widget %}
     <textarea
         rows="5"
-        class="contact__textarea"
+        class="contact__textarea form-control"
         placeholder="{{ form.vars.label|striptags }}"
         {{ block('widget_attributes') }}
     >{{ value }}</textarea>
@@ -122,7 +97,7 @@
 {% endblock %}
 
 {# Select dropdown (choice field) #}
-{% block choice_widget %}
+{# {% block choice_widget %}
     <div class="contact__field contact__field--icon">
         <i class="bi bi-chevron-down contact__icon" aria-hidden="true"></i>
         <select id="{{ id }}" name="{{ full_name }}" class="contact__input contact__input--icon">
@@ -134,11 +109,11 @@
             {% endfor %}
         </select>
     </div>
-{% endblock %}
+{% endblock %} #}
 
 {# Submit button #}
 {% block button_widget %}
-    <button type="{{ type|default('submit') }}" class="contact__submit">
+    <button type="{{ type|default('submit') }}" class="contact__submit form-control">
         {{ label|default('Send Message') }}
     </button>
 {% endblock %}

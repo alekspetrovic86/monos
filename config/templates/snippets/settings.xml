@@ -36,11 +36,11 @@
 			</meta>
             
 			<properties>
-				<property name="logo" type="single_media_selection">
+				<!-- <property name="logo" type="single_media_selection">
                     <meta>
                         <title lang="en">Logo</title>
                     </meta>
-                </property>
+                </property> -->
                 
 				<property name="text" type="text_line">
                     <meta>
@@ -48,7 +48,7 @@
                     </meta>
                 </property>
 
-                <block name="footerLinks" default-type="item">
+                <!-- <block name="footerLinks" default-type="item">
                     <meta>
                         <title lang="en">Footer links</title>
                     </meta>
@@ -73,7 +73,7 @@
                             </properties>
                         </type>
                     </types>
-                </block>
+                </block> -->
 
                 <block name="footerItems" default-type="item">
                     <meta>

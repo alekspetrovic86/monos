@@ -20,6 +20,10 @@
         <scale x="400" y="245"/>
     </format>
 
+    <format key="1080x">
+        <scale x="1080"/>
+    </format>
+
     <!--
     Render an image from the media_selection in a specific format the following way:
 

@@ -1,0 +1,65 @@
+@use '../abstracts/variables' as *;
+
+.section-contact {
+    display: block;
+    padding-top: 30px;
+    @media (min-width: 768px ) {
+        display: flex;
+        min-height: calc(100vh - 220px);
+        padding-top: 0px;
+    }
+    .contact-sidebar {
+        padding-right: 50px;
+        display: block;
+        @media (min-width: 768px ) {
+            width: 280px;
+            padding-left: 80px;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .contact__heading {
+            font-size: 14px;
+            line-height: normal;
+            color: $color-secondary;
+            margin-bottom: 60px;
+        }
+        .contact__description {
+            p, h1, h2, h3, h4, h5, h6 {
+                color: $color-secondary;
+                font-size: 14px;
+                line-height: normal;
+                margin-bottom: 0;
+            }
+        }
+    }
+    .contact {
+        width: 100%;
+        @media (min-width: 768px ) {
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .form-success-message {
+            max-width: 700px;
+            margin: auto;
+            margin-bottom: 30px;
+        }
+        .contact__form {
+            max-width: 700px;
+            margin: auto;
+            ul {
+                list-style-type: none;
+                padding-left: 0;
+                padding-top: 10px;
+                li {
+                    color: red;
+                }
+            }
+        }
+    }
+}
+#rc-anchor-container {
+    border: none!important;
+    background-color: transparent!important;
+}

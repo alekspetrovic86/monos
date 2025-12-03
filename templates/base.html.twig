@@ -13,7 +13,7 @@
 			/>
 		<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
-		<title>Monos</title>
+		<title>{{ extension.seo.title|default ?: content.title|default ?: 'Monos.' }}</title>
 
 		{% block meta %}
 			{% include "@SuluWebsite/Extension/seo.html.twig" with {

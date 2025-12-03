@@ -15,15 +15,9 @@
                         </meta>
                     </property>
 
-                    <property name="subtitle" type="text_editor">
+                    <property name="description" type="text_editor">
                         <meta>
-                            <title lang="en">Subtitle</title>
-                        </meta>
-                    </property>
-
-                    <property name="location" type="location">
-                        <meta>
-                            <title lang="en">Location</title>
+                            <title lang="en">Description</title>
                         </meta>
                     </property>
 
@@ -34,12 +28,6 @@
                         <params>
                             <param name="resourceKey" value="page"/>
                         </params>
-                    </property>
-
-                    <property name="sectionId" type="text_line" colspan="3">
-                        <meta>
-                            <title lang="en">Section Id</title>
-                        </meta>
                     </property>
                 </properties>
             </type>

@@ -1,126 +1,50 @@
 {# BLOCK: CONTACT #}
-<section class="section section-contact" {% if content.sectionId|default %}id="{{ content.sectionId }}"{% endif %}>
-    <div class="container">
-        <div class="row justify-content-between g-4 g-lg-5 align-items-center">
-            <div class="col-12 col-lg-5">
-                <div class="contact">
-                    {% if content.title|default %}
-                        <h2 class="contact__heading">{{ content.title }}</h2>
-                    {% endif %}
-                    {% if content.subtitle|default %}
-                        <p class="contact__lead">{{ content.subtitle|raw }}</p>
-                    {% endif %}
-
-                    {# <form class="contact__form" action="#" method="post" novalidate>
-                        <div class="mb-3">
-                            <label for="c-name" class="visually-hidden">Your Name</label>
-                            <input id="c-name" name="name" type="text" class="contact__input" placeholder="Your Name" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="c-email" class="visually-hidden">Email</label>
-                            <input id="c-email" name="email" type="email" class="contact__input" placeholder="Email" required />
-                        </div>
-
-                        <div class="row g-3">
-                            <div class="col-12 col-md-6">
-                                <label for="c-date" class="visually-hidden">Date</label>
-                                <div class="contact__field contact__field--icon">
-                                    <i class="bi bi-calendar-event contact__icon" aria-hidden="true"></i>
-                                    <input id="c-date" name="date" type="date" class="contact__input contact__input--icon" placeholder="Date" />
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="c-time" class="visually-hidden">Time</label>
-                                <div class="contact__field contact__field--icon">
-                                    <i class="bi bi-clock contact__icon" aria-hidden="true"></i>
-                                    <input id="c-time" name="time" type="time" class="contact__input contact__input--icon" placeholder="Time" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-3">
-                            <label for="c-msg" class="visually-hidden">Submit Request</label>
-                            <textarea id="c-msg" name="message" rows="5" class="contact__textarea" placeholder="Submit Request"></textarea>
-                        </div>
-
-                        <button type="submit" class="contact__submit">Send Message</button>
-                    </form> #}
-
-                    {% if content.form|default %}                
-                        {% if app.request.get('send') == 'true' %}
-                            <div id="form-success-message" class="form-success-message mb-3">
-                                {{ view.form.entity.successText|raw }}
-                            </div>
-
-                           <script>
-                                window.addEventListener('load', () => {
-                                    const section = document.querySelector('.section-contact');
-                                    const header = document.querySelector('.header');
-
-                                    if (section) {
-                                        const headerHeight = header ? header.offsetHeight + 20 : 20;
-
-                                        const html = document.documentElement;
-                                        const prevBehavior = html.style.scrollBehavior;
-                                        html.style.scrollBehavior = 'auto';
-
-                                        const rect = section.getBoundingClientRect();
-                                        const absoluteY = window.scrollY + rect.top - headerHeight;
-
-                                        window.scrollTo(0, absoluteY);
-
-                                        html.style.scrollBehavior = prevBehavior;
-                                    }
-                                });
-                            </script>
-                        {% endif %}
-                        
-                        {% form_theme content.form 'form/theme.html.twig' %}
-                        
-                        {{ form_start(content.form, { attr: { class: 'contact__form row g-3', novalidate: 'novalidate' } }) }}
-                            {% for child in content.form %}
-                                {{ form_row(child) }}
-                            {% endfor %}
-                        {{ form_end(content.form) }}
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-6">
-                <div class="contact__map">
-                    {% if content.location|default %}
-                        {# Build full address from available fields #}
-                        {% set address_parts = [
-                            content.location.street,
-                            content.location.number,
-                            content.location.code,
-                            content.location.town,
-                            content.location.country
-                        ] %}
-                        {% set full_address = address_parts|filter(v => v)|join(', ') %}
-
-                        {% if full_address %}
-                            {# Use full address if at least one part exists #}
-                            <iframe
-                                class="contact__map-frame"
-                                src="https://maps.google.com/maps?q={{ full_address|url_encode }}&z={{ content.location.zoom }}&output=embed"
-                                frameborder="0">
-                            </iframe>
-                        {% else %}
-                            {# Fallback to coordinates if no address parts #}
-                            <iframe
-                                class="contact__map-frame"
-                                src="https://maps.google.com/maps?q={{ content.location.lat }},{{ content.location.long }}&z={{ content.location.zoom }}&output=embed"
-                                frameborder="0">
-                            </iframe>
-                        {% endif %}
-                    {% endif %}
-                    {# <span class="contact__pin" aria-hidden="true">
-                        <i class="bi bi-geo-alt-fill"></i>
-                    </span> #}
-                </div>
-            </div>
-        </div>
+<section class="section section-contact">
+    <div class="contact-sidebar">
+        {# {% if content.title|default %}
+            <h2 class="contact__heading">{{ content.title }}</h2>
+        {% endif %} #}
+        {% if content.description|default %}
+            <div class="contact__description">{{ content.description|raw }}</div>
+        {% endif %}
     </div>
+    {% if content.form|default %}                
+        <div class="contact">
+            {% if app.request.get('send') == 'true' %}
+                <div id="form-success-message" class="form-success-message mb-3">
+                    {{ view.form.entity.successText|raw }}
+                </div>
+
+                {# <script>
+                    window.addEventListener('load', () => {
+                        const section = document.querySelector('.section-contact');
+                        const header = document.querySelector('.header');
+
+                        if (section) {
+                            const headerHeight = header ? header.offsetHeight + 20 : 20;
+
+                            const html = document.documentElement;
+                            const prevBehavior = html.style.scrollBehavior;
+                            html.style.scrollBehavior = 'auto';
+
+                            const rect = section.getBoundingClientRect();
+                            const absoluteY = window.scrollY + rect.top - headerHeight;
+
+                            window.scrollTo(0, absoluteY);
+
+                            html.style.scrollBehavior = prevBehavior;
+                        }
+                    });
+                </script> #}
+            {% endif %}
+            
+            {% form_theme content.form 'form/theme.html.twig' %}
+            
+            {{ form_start(content.form, { attr: { class: 'contact__form row g-3', novalidate: 'novalidate' } }) }}
+                {% for child in content.form %}
+                    {{ form_row(child) }}
+                {% endfor %}
+            {{ form_end(content.form) }}
+        </div>
+    {% endif %}
 </section>
