@@ -2,3 +2,9 @@ app.button.prev: Prethodni
 app.button.next: Sledeci
 app.alex: 'ALEKSANDAR'
 app.site.by: 'Site by'
+app.error: "Greška"
+app.return_home: "Povratak na početnu stranu"
+app.http_403: "Pristup zabranjen"
+app.http_404: "Stranica nije pronađena"
+app.http_500: "Interna greška servera"
+app.http_default: "Došlo je do neočekivane greške"

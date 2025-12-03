@@ -1,5 +1,38 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <h1>Error {{ status_code }}: {{ status_text }}</h1>
+    <section class="section-error">
+        <div class="section__title">
+            <h2>
+                {{ 'app.error'|trans }} {{ status_code }}
+            </h2>
+
+            {# Determine translation key based on status code with fallback #}
+            {% set key = 'app.http_' ~ status_code %}
+            {% set translated = key|trans({}, 'messages', app.request.locale) %}
+            {% if translated == key %}
+                {% set translated = 'app.http_default'|trans({}, 'messages', app.request.locale) %}
+            {% endif %}
+
+            {# <div class="subtitle">{{ translated }}</div> #}
+            <h2 class="change-font-conthrax">
+                {{ translated }}
+            </h2>
+
+            {# Show technical message only in dev/debug mode #}
+            {# {% if app.debug and exception is defined %}
+                <div class="description">
+                    {{ exception.message }}
+                </div>
+            {% endif %} #}
+
+            <div class="error-button">
+                <button type="button" class="btn btn-primary">
+                    <a href="{{ sulu_content_root_path('/') }}">
+                        <span>{{ 'app.return_home'|trans }}</span>
+                    </a>
+                </button>
+            </div>
+        </div>
+    </section>
 {% endblock %}

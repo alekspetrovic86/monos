@@ -2,3 +2,9 @@ app.button.prev: Previous
 app.button.next: Next
 app.alex: 'ALEX'
 app.site.by: 'Site by'
+app.error: Error
+app.return_home: "Return to homepage"
+app.http_403: "Access denied"
+app.http_404: "Page not found"
+app.http_500: "Internal server error"
+app.http_default: "An unexpected error occurred"

@@ -12,6 +12,8 @@
     }
     .comming-soon__title {
         font-size: 30px;
+        color: $color-primary;
+        font-weight: 300;
         @media (min-width: 768px ) {
             font-size: 52px;
         }

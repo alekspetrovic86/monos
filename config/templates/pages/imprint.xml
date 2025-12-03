@@ -33,15 +33,5 @@
                 <title lang="en">Description</title>
             </meta>
         </property>
-        <property name="navTitle" type="text_line" colspan="6">
-            <meta>
-                <title lang="en">Nav Title</title>
-            </meta>
-        </property>
-        <property name="navLink" type="link" colspan="6">
-            <meta>
-                <title lang="en"> Nav Link</title>
-            </meta>
-        </property>
     </properties>
 </template>

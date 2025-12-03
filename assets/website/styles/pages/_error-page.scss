@@ -1,0 +1,45 @@
+@use '../abstracts/variables' as *;
+
+.section-error {
+    padding-top: 100px;
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    @media (min-width: 575.98px ) and (max-width: 767.98px ) {
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+    @media (min-width: 768px ) {
+        display: flex;
+        min-height: calc(100vh - 220px);
+        justify-content: center;
+        align-items: center;
+        padding-top: 0px;
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+    .section__title {
+        h2 {
+            font-size: 30px;
+            font-weight: 300;
+            @media (min-width: 768px ) {
+                font-size: 52px;
+            }
+        }
+        .error-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            button {
+                padding: 10px 20px!important;
+                background-color: transparent!important;
+                a {
+                    font-size: 14px;
+                    &:hover {
+                        color: $color-primary;
+                    }
+                }
+            }
+        }
+    }
+}
