@@ -14,28 +14,6 @@
                 <div id="form-success-message" class="form-success-message mb-3">
                     {{ view.form.entity.successText|raw }}
                 </div>
-
-                {# <script>
-                    window.addEventListener('load', () => {
-                        const section = document.querySelector('.section-contact');
-                        const header = document.querySelector('.header');
-
-                        if (section) {
-                            const headerHeight = header ? header.offsetHeight + 20 : 20;
-
-                            const html = document.documentElement;
-                            const prevBehavior = html.style.scrollBehavior;
-                            html.style.scrollBehavior = 'auto';
-
-                            const rect = section.getBoundingClientRect();
-                            const absoluteY = window.scrollY + rect.top - headerHeight;
-
-                            window.scrollTo(0, absoluteY);
-
-                            html.style.scrollBehavior = prevBehavior;
-                        }
-                    });
-                </script> #}
             {% endif %}
             
             {% form_theme content.form 'form/theme.html.twig' %}

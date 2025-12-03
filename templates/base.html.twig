@@ -7,12 +7,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="{{ asset('website/img/favicon.png') }}" rel="icon"/>
 
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
-			/>
-		<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-
 		<title>{{ extension.seo.title|default ?: content.title|default ?: 'Monos.' }}</title>
 
 		{% block meta %}
@@ -28,9 +22,6 @@
             {{ encore_entry_link_tags('website') }}
         {% endblock %}
 
-		{# <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-			async defer>
-		</script> #}
 		{% block javascripts %}
             {{ encore_entry_script_tags('website') }}
         {% endblock %}
