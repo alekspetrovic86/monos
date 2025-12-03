@@ -48,6 +48,8 @@
                                             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
                         <xi:include href="../includes/blocks/contact.xml"
                                             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/comming-soon.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
                     </types>
 				</block>
 			</properties>

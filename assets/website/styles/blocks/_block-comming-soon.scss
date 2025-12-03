@@ -1,0 +1,19 @@
+@use '../abstracts/variables' as *;
+
+.section-comming-soon {
+    padding-top: 100px;
+    text-align: center;
+    @media (min-width: 768px ) {
+        display: flex;
+        min-height: calc(100vh - 220px);
+        justify-content: center;
+        align-items: center;
+        padding-top: 0px;
+    }
+    .comming-soon__title {
+        font-size: 30px;
+        @media (min-width: 768px ) {
+            font-size: 52px;
+        }
+    }
+}
