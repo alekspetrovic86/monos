@@ -3,7 +3,6 @@
     <head>
         {% set webspaceSettings = sulu_snippet_load_by_area('webspace_settings') %}
         <meta charset="utf-8">
-        {% if webspaceSettings.content.show_theme_toggle|default(false) or webspaceSettings.content.auto_theme_by_time|default(false) %}<script>(function(){var cfg='{{ webspaceSettings.content.auto_theme_by_time|default(false) ? "1" : "0" }}';if(sessionStorage.getItem('theme_cfg')!==cfg){sessionStorage.removeItem('auto_theme');localStorage.removeItem('user_theme');sessionStorage.setItem('theme_cfg',cfg);return;}var t=localStorage.getItem('user_theme');if(t==='dark'||t==='light'){document.documentElement.dataset.userTheme=t;return;}if(cfg==='1'){var a=sessionStorage.getItem('auto_theme');if(a==='dark'||a==='light'){document.documentElement.dataset.userTheme=a;}}})();</script>{% endif %}
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block meta %}
@@ -74,24 +73,12 @@
             {{ encore_entry_script_tags('website') }}
         {% endblock %}
     </head>
-    <body data-controller="theme"
-          data-theme-header-mode-value="{{ webspaceSettings.content.header_mode|default('light') }}"
-          data-theme-toggle-enabled-value="{{ webspaceSettings.content.show_theme_toggle|default(false) ? 'true' : 'false' }}"
-          data-theme-auto-by-time-value="{{ webspaceSettings.content.auto_theme_by_time|default(false) ? 'true' : 'false' }}">
+    <body>
         {% block header %}
-			{% include 'includes/header.html.twig' with {
-				"headerInfo": webspaceSettings.content ?? '',
-			} %}
-		{% endblock %}
+            {% include 'includes/header.html.twig' %}
+        {% endblock %}
 
-		{% block content %}{% endblock %}
-
-		{% block footer %}
-			{% include 'includes/footer.html.twig' with {
-				"footerInfo": webspaceSettings.content ?? '',
-                "account": webspaceSettings.content.account.entity|default,
-			} %}
-		{% endblock %}
+        {% block content %}{% endblock %}
 
         <div class="global-loader" data-controller="loader"></div>
         {% if webspaceSettings.content.show_locale_suggestion|default(false) %}
