@@ -61,3 +61,6 @@ phpstan.neon
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+# figma visual diff
+/var/figma/
