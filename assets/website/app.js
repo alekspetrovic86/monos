@@ -7,7 +7,6 @@
 // Vendor CSS
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'swiper/css/bundle';
 
 // Tailwind with CSS Variables
 import './styles/tailwind.css';
