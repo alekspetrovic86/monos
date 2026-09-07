@@ -56,8 +56,11 @@ if (version) {
 } else {
     // Figma nedostupna (429, mreža, timeout). Uzmi najnoviju poznatu referencu.
     // Ustajalo poređenje nikad nije tiho — upozorenje ide pri svakom takvom pokretanju.
+    // Egzaktan regex, ne prefiks: `figma-22-75` bi kao prefiks uhvatio i `figma-22-750*.png`
+    // — referencu DRUGOG frame-a iste veličine, i merio bi tuđi dizajn.
+    const re = new RegExp(`^figma-${safeId}(-v\\d+)?\\.png$`);
     const cached = readdirSync(outDir)
-        .filter((f) => f.startsWith(`figma-${safeId}`) && f.endsWith('.png'))
+        .filter((f) => re.test(f))
         .map((f) => ({ f, t: statSync(`${outDir}/${f}`).mtimeMs }))
         .sort((a, b) => b.t - a.t)[0];
 
@@ -74,13 +77,13 @@ const diffPng = `${outDir}/diff-${safeId}.png`;
 // 1b. Figma referenca (keširana na disku, po verziji fajla)
 if (!existsSync(figmaPng)) {
     const api = `https://api.figma.com/v1/images/${FILE_KEY}?ids=${encodeURIComponent(nodeId)}&format=png&scale=1`;
-    const meta = await fetch(api, { headers: { 'X-Figma-Token': token } }).then((r) => r.json());
+    const meta = await fetch(api, { headers: { 'X-Figma-Token': token }, signal: AbortSignal.timeout(30000) }).then((r) => r.json());
     const imgUrl = meta.images?.[nodeId];
     if (!imgUrl) {
         console.error('Figma nije vratila sliku:', JSON.stringify(meta));
         process.exit(2);
     }
-    const buf = Buffer.from(await fetch(imgUrl).then((r) => r.arrayBuffer()));
+    const buf = Buffer.from(await fetch(imgUrl, { signal: AbortSignal.timeout(30000) }).then((r) => r.arrayBuffer()));
     writeFileSync(figmaPng, buf);
     console.log(`referenca skinuta → ${figmaPng}`);
 }
@@ -99,12 +102,12 @@ if (!res || res.status() !== 200) {
 // Oprema koje nema u Figma frame-u ne sme da ulazi u meru.
 await page.evaluate(() => {
     // Symfony web profiler toolbar — dev artefakt, nije deo dizajna
-    document.querySelector('.sf-toolbar')?.remove();
-    document.querySelector('.sf-minitoolbar')?.remove();
+    document.querySelectorAll('.sf-toolbar').forEach((el) => el.remove());
+    document.querySelectorAll('.sf-minitoolbar').forEach((el) => el.remove());
     // Cookie consent banner — nije u Figma frame-u
-    document.querySelector('[data-controller~="cookie-consent"]')?.remove();
+    document.querySelectorAll('[data-controller~="cookie-consent"]').forEach((el) => el.remove());
     // Turbo progress bar — animiran, pravi šum između pokretanja
-    document.querySelector('.turbo-progress-bar')?.remove();
+    document.querySelectorAll('.turbo-progress-bar').forEach((el) => el.remove());
 });
 await page.screenshot({ path: shotPng, animations: 'disabled' });
 await browser.close();
