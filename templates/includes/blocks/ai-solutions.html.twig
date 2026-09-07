@@ -1,0 +1,281 @@
+{# AI SOLUTIONS #}
+
+<section data-controller="ai-solutions"
+         class="relative py-16 md:py-24 lg:py-32 flex items-center overflow-hidden bg-black">
+
+    {# Subtle grid overlay #}
+    <div class="absolute inset-0 opacity-[0.03]"
+         style="background-image:linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:60px 60px"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20 items-center">
+
+            {# Left: content #}
+            <div class="ai-top">
+
+                {# Badge (mini title) #}
+                {% if content.mini_title|default %}
+                    <div class="inline-flex items-center space-x-2 px-3 py-1.5 md:px-4 md:py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6 md:mb-8 text-white/60">
+                        {# <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain w-3.5 h-3.5 md:w-4 md:h-4 text-white/60">
+                            <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path>
+                            <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path>
+                            <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                            <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                            <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                            <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                            <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                            <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                            <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+                        </svg> #}
+                        <span class="text-[11px] md:text-xs text-white/60 font-medium tracking-wider uppercase">{{ content.mini_title }}</span>
+                    </div>
+                {% endif %}
+
+                {# Title #}
+                {% if content.title|default %}
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-5 md:mb-8 leading-[1.15] tracking-tight">
+                        {{ content.title }}
+                    </h2>
+                {% endif %}
+
+                {# Description #}
+                {% if content.description|default %}
+                    <div class="text-base md:text-xl lg:text-2xl text-white/60 mb-8 md:mb-12 leading-relaxed max-w-xl">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+
+                {# Bullets #}
+                {% if content.bullets|default %}
+                    <div class="space-y-4 md:space-y-5 mb-8 md:mb-12">
+                        {% for bullet in content.bullets %}
+                            <div class="ai-feature flex items-start space-x-3 text-white/70" data-feature-delay="{{ loop.index * 100 + 100 }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-5 h-5 md:w-6 md:h-6 text-white/40 flex-shrink-0 mt-0.5">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                {% if bullet.text|default %}
+                                    <div class="text-[15px] md:text-base lg:text-lg text-white/70 leading-relaxed">
+                                        {{ bullet.text|raw }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# CTA Button #}
+                {% if content.button_text|default %}
+                    <a href="{{ content.button_link|default('#') }}"
+                       class="ai-cta-btn group inline-flex items-center justify-center space-x-2 px-6 py-3.5 md:px-8 md:py-4 bg-white text-dark-800 rounded-full font-semibold transition-all duration-300 min-h-[44px] w-full sm:w-auto text-[15px] md:text-base">
+                        <span>{{ content.button_text }}</span>
+                        <div class="relative w-4 h-4 md:w-[18px] md:h-[18px]">
+                            <svg class="icon-chevron absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                            <svg class="icon-arrow absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </div>
+                    </a>
+                {% endif %}
+
+            </div>
+
+            {# Right: image or neural network SVG animation #}
+            <div class="ai-bottom relative h-[400px] md:h-[500px] lg:h-[700px] mt-8 lg:mt-0">
+
+                {% if content.image|default %}
+
+                    <img src="{{ content.image.url }}" alt="{{ content.image.title|default('') }}"
+                         class="absolute inset-0 w-full h-full object-cover rounded-2xl">
+
+                {% else %}
+
+                    {# Floating glow orbs #}
+                    <div class="ai-orb1 absolute top-20 right-20 w-40 h-40 rounded-full pointer-events-none ai-orb-violet"></div>
+                    <div class="ai-orb2 absolute bottom-32 left-20 w-48 h-48 rounded-full pointer-events-none ai-orb-pink"></div>
+                    <div class="ai-orb3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none ai-orb-orange"></div>
+
+                    {# Neural network SVG animation #}
+                    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="aiLineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%"   stop-color="rgba(139,92,246,0.6)"/>
+                                <stop offset="50%"  stop-color="rgba(168,85,247,0.6)"/>
+                                <stop offset="100%" stop-color="rgba(236,72,153,0.6)"/>
+                            </linearGradient>
+                            <linearGradient id="aiLineGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%"   stop-color="rgba(236,72,153,0.6)"/>
+                                <stop offset="50%"  stop-color="rgba(249,115,22,0.6)"/>
+                                <stop offset="100%" stop-color="rgba(251,191,36,0.6)"/>
+                            </linearGradient>
+                            <linearGradient id="aiLineGrad3" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%"   stop-color="rgba(139,92,246,0.5)"/>
+                                <stop offset="100%" stop-color="rgba(249,115,22,0.5)"/>
+                            </linearGradient>
+                            <radialGradient id="aiNodeGrad1">
+                                <stop offset="0%"   stop-color="rgba(139,92,246,0.9)"/>
+                                <stop offset="70%"  stop-color="rgba(139,92,246,0.4)"/>
+                                <stop offset="100%" stop-color="rgba(139,92,246,0)"/>
+                            </radialGradient>
+                            <radialGradient id="aiNodeGrad2">
+                                <stop offset="0%"   stop-color="rgba(236,72,153,0.9)"/>
+                                <stop offset="70%"  stop-color="rgba(236,72,153,0.4)"/>
+                                <stop offset="100%" stop-color="rgba(236,72,153,0)"/>
+                            </radialGradient>
+                            <radialGradient id="aiNodeGrad3">
+                                <stop offset="0%"   stop-color="rgba(249,115,22,0.9)"/>
+                                <stop offset="70%"  stop-color="rgba(249,115,22,0.4)"/>
+                                <stop offset="100%" stop-color="rgba(249,115,22,0)"/>
+                            </radialGradient>
+                            <filter id="aiGlow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                            <linearGradient id="aiFlowGrad">
+                                <stop offset="0%"   stop-color="rgba(99,102,241,0)">
+                                    <animate attributeName="stop-color" values="rgba(99,102,241,0);rgba(99,102,241,0.8);rgba(99,102,241,0)" dur="3s" repeatCount="indefinite"/>
+                                </stop>
+                                <stop offset="50%"  stop-color="rgba(236,72,153,0.8)">
+                                    <animate attributeName="offset" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+                                </stop>
+                                <stop offset="100%" stop-color="rgba(251,146,60,0)">
+                                    <animate attributeName="stop-color" values="rgba(251,146,60,0);rgba(251,146,60,0.8);rgba(251,146,60,0)" dur="3s" repeatCount="indefinite"/>
+                                </stop>
+                            </linearGradient>
+                        </defs>
+
+                        {# Connection lines layer 1 (background) #}
+                        <g opacity="0.3">
+                            <line x1="100" y1="100" x2="200" y2="180" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                            <line x1="100" y1="100" x2="180" y2="250" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                            <line x1="500" y1="120" x2="420" y2="200" stroke="url(#aiLineGrad2)" stroke-width="1"/>
+                            <line x1="500" y1="120" x2="440" y2="280" stroke="url(#aiLineGrad2)" stroke-width="1"/>
+                            <line x1="120" y1="600" x2="200" y2="520" stroke="url(#aiLineGrad3)" stroke-width="1"/>
+                            <line x1="120" y1="600" x2="220" y2="480" stroke="url(#aiLineGrad3)" stroke-width="1"/>
+                            <line x1="480" y1="580" x2="400" y2="500" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                            <line x1="480" y1="580" x2="380" y2="460" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                        </g>
+
+                        {# Connection lines layer 2 (mid) #}
+                        <g opacity="0.5">
+                            <line x1="200" y1="180" x2="300" y2="220" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="200" y1="180" x2="280" y2="320" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="180" y1="250" x2="300" y2="300" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="420" y1="200" x2="350" y2="280" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="420" y1="200" x2="300" y2="220" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="440" y1="280" x2="350" y2="340" stroke="url(#aiLineGrad3)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="200" y1="520" x2="280" y2="450" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="220" y1="480" x2="300" y2="420" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="400" y1="500" x2="330" y2="440" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                            <line x1="380" y1="460" x2="300" y2="420" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                        </g>
+
+                        {# Connection lines layer 3 (primary) #}
+                        <g opacity="0.8">
+                            <line x1="300" y1="220" x2="300" y2="300" stroke="url(#aiFlowGrad)" stroke-width="3" filter="url(#aiGlow)" stroke-linecap="round"/>
+                            <line x1="300" y1="300" x2="300" y2="420" stroke="url(#aiFlowGrad)" stroke-width="3" filter="url(#aiGlow)" stroke-linecap="round"/>
+                            <line x1="280" y1="320" x2="300" y2="420" stroke="url(#aiLineGrad1)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                            <line x1="350" y1="280" x2="330" y2="360" stroke="url(#aiLineGrad2)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                            <line x1="350" y1="340" x2="330" y2="360" stroke="url(#aiLineGrad3)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                            <line x1="280" y1="450" x2="300" y2="420" stroke="url(#aiLineGrad2)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                            <line x1="330" y1="440" x2="300" y2="420" stroke="url(#aiLineGrad3)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                        </g>
+
+                        {# Animated flow particles #}
+                        <g>
+                            <circle r="3" fill="#6366f1" filter="url(#aiGlow)"><animateMotion dur="3s" repeatCount="indefinite" path="M 100,100 Q 150,140 200,180" begin="0s"/><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="0s"/></circle>
+                            <circle r="3" fill="#ec4899" filter="url(#aiGlow)"><animateMotion dur="4s" repeatCount="indefinite" path="M 200,180 L 300,220" begin="0.25s"/><animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="0.25s"/></circle>
+                            <circle r="3" fill="#fb923c" filter="url(#aiGlow)"><animateMotion dur="5s" repeatCount="indefinite" path="M 300,220 L 300,300" begin="0.5s"/><animate attributeName="opacity" values="0;1;1;0" dur="5s" repeatCount="indefinite" begin="0.5s"/></circle>
+                            <circle r="3" fill="#8b5cf6" filter="url(#aiGlow)"><animateMotion dur="6s" repeatCount="indefinite" path="M 300,300 L 300,420" begin="0.75s"/><animate attributeName="opacity" values="0;1;1;0" dur="6s" repeatCount="indefinite" begin="0.75s"/></circle>
+                            <circle r="3" fill="#6366f1" filter="url(#aiGlow)"><animateMotion dur="3s" repeatCount="indefinite" path="M 500,120 Q 460,160 420,200" begin="1s"/><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="1s"/></circle>
+                            <circle r="3" fill="#ec4899" filter="url(#aiGlow)"><animateMotion dur="4s" repeatCount="indefinite" path="M 420,200 L 300,220" begin="1.25s"/><animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="1.25s"/></circle>
+                            <circle r="3" fill="#fb923c" filter="url(#aiGlow)"><animateMotion dur="5s" repeatCount="indefinite" path="M 120,600 Q 160,560 200,520" begin="1.5s"/><animate attributeName="opacity" values="0;1;1;0" dur="5s" repeatCount="indefinite" begin="1.5s"/></circle>
+                            <circle r="3" fill="#8b5cf6" filter="url(#aiGlow)"><animateMotion dur="6s" repeatCount="indefinite" path="M 200,520 L 280,450" begin="1.75s"/><animate attributeName="opacity" values="0;1;1;0" dur="6s" repeatCount="indefinite" begin="1.75s"/></circle>
+                            <circle r="3" fill="#6366f1" filter="url(#aiGlow)"><animateMotion dur="3s" repeatCount="indefinite" path="M 480,580 Q 440,540 400,500" begin="2s"/><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="2s"/></circle>
+                            <circle r="3" fill="#ec4899" filter="url(#aiGlow)"><animateMotion dur="4s" repeatCount="indefinite" path="M 400,500 L 330,440" begin="2.25s"/><animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="2.25s"/></circle>
+                            <circle r="3" fill="#fb923c" filter="url(#aiGlow)"><animateMotion dur="5s" repeatCount="indefinite" path="M 280,320 L 300,420" begin="2.5s"/><animate attributeName="opacity" values="0;1;1;0" dur="5s" repeatCount="indefinite" begin="2.5s"/></circle>
+                            <circle r="3" fill="#8b5cf6" filter="url(#aiGlow)"><animateMotion dur="6s" repeatCount="indefinite" path="M 350,340 L 330,360" begin="2.75s"/><animate attributeName="opacity" values="0;1;1;0" dur="6s" repeatCount="indefinite" begin="2.75s"/></circle>
+                        </g>
+
+                        {# Neural nodes layer 1 (background) #}
+                        <g opacity="0.4">
+                            <circle cx="100" cy="100" r="25" fill="url(#aiNodeGrad1)"/>
+                            <circle cx="500" cy="120" r="25" fill="url(#aiNodeGrad2)"/>
+                            <circle cx="120" cy="600" r="25" fill="url(#aiNodeGrad3)"/>
+                            <circle cx="480" cy="580" r="25" fill="url(#aiNodeGrad1)"/>
+                        </g>
+
+                        {# Neural nodes layer 2 (mid) #}
+                        <g opacity="0.7">
+                            <circle cx="200" cy="180" r="20" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                            <circle cx="180" cy="250" r="18" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                            <circle cx="420" cy="200" r="22" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                            <circle cx="440" cy="280" r="20" fill="url(#aiNodeGrad3)" filter="url(#aiGlow)"/>
+                            <circle cx="200" cy="520" r="18" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                            <circle cx="220" cy="480" r="16" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                            <circle cx="400" cy="500" r="20" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                            <circle cx="380" cy="460" r="18" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                            <circle cx="280" cy="320" r="16" fill="url(#aiNodeGrad3)" filter="url(#aiGlow)"/>
+                            <circle cx="350" cy="280" r="18" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                            <circle cx="350" cy="340" r="16" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                            <circle cx="280" cy="450" r="18" fill="url(#aiNodeGrad3)" filter="url(#aiGlow)"/>
+                            <circle cx="330" cy="440" r="16" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                        </g>
+
+                        {# Neural nodes layer 3 (primary, pulsing) #}
+                        <g opacity="1">
+                            <circle cx="300" cy="220" r="30" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)">
+                                <animate attributeName="r" values="30;35;30" dur="2s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="300" cy="300" r="35" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)">
+                                <animate attributeName="r" values="35;40;35" dur="2.5s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.9;1;0.9" dur="2.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="330" cy="360" r="28" fill="url(#aiNodeGrad3)" filter="url(#aiGlow)">
+                                <animate attributeName="r" values="28;33;28" dur="2.2s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.85;1;0.85" dur="2.2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="300" cy="420" r="32" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)">
+                                <animate attributeName="r" values="32;37;32" dur="2.3s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.9;1;0.9" dur="2.3s" repeatCount="indefinite"/>
+                            </circle>
+                        </g>
+
+                        {# Orbiting particles around center node (300,300) #}
+                        <g opacity="0.6">
+                            <circle r="4" fill="#6366f1" filter="url(#aiGlow)">
+                                <animateMotion dur="8s" repeatCount="indefinite" path="M 300,300 m 50,0 a 50,50 0 1,1 -100,0 a 50,50 0 1,1 100,0" begin="0s"/>
+                            </circle>
+                            <circle r="4" fill="#6366f1" filter="url(#aiGlow)">
+                                <animateMotion dur="8s" repeatCount="indefinite" path="M 300,300 m 50,0 a 50,50 0 1,1 -100,0 a 50,50 0 1,1 100,0" begin="-1.33s"/>
+                            </circle>
+                            <circle r="4" fill="#6366f1" filter="url(#aiGlow)">
+                                <animateMotion dur="8s" repeatCount="indefinite" path="M 300,300 m 50,0 a 50,50 0 1,1 -100,0 a 50,50 0 1,1 100,0" begin="-2.66s"/>
+                            </circle>
+                            <circle r="4" fill="#6366f1" filter="url(#aiGlow)">
+                                <animateMotion dur="8s" repeatCount="indefinite" path="M 300,300 m 50,0 a 50,50 0 1,1 -100,0 a 50,50 0 1,1 100,0" begin="-4s"/>
+                            </circle>
+                            <circle r="4" fill="#6366f1" filter="url(#aiGlow)">
+                                <animateMotion dur="8s" repeatCount="indefinite" path="M 300,300 m 50,0 a 50,50 0 1,1 -100,0 a 50,50 0 1,1 100,0" begin="-5.33s"/>
+                            </circle>
+                            <circle r="4" fill="#6366f1" filter="url(#aiGlow)">
+                                <animateMotion dur="8s" repeatCount="indefinite" path="M 300,300 m 50,0 a 50,50 0 1,1 -100,0 a 50,50 0 1,1 100,0" begin="-6.66s"/>
+                            </circle>
+                        </g>
+                    </svg>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+</section>

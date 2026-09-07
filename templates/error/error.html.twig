@@ -1,38 +1,146 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <section class="section-error">
-        <div class="section__title">
-            <h2>
-                {{ 'app.error'|trans }} {{ status_code }}
-            </h2>
 
-            {# Determine translation key based on status code with fallback #}
-            {% set key = 'app.http_' ~ status_code %}
-            {% set translated = key|trans({}, 'messages', app.request.locale) %}
-            {% if translated == key %}
-                {% set translated = 'app.http_default'|trans({}, 'messages', app.request.locale) %}
-            {% endif %}
+{# ── Resolve title & description via translation keys with fallback ── #}
+{% set titleKey = 'app.http_' ~ status_code %}
+{% set titleTrans = titleKey|trans({}, 'messages', app.request.locale) %}
+{% if titleTrans == titleKey %}
+    {% set titleTrans = 'app.http_default'|trans({}, 'messages', app.request.locale) %}
+{% endif %}
 
-            {# <div class="subtitle">{{ translated }}</div> #}
-            <h2 class="change-font-conthrax">
-                {{ translated }}
-            </h2>
+{% set descKey = 'app.error_desc_' ~ status_code %}
+{% set descTrans = descKey|trans({}, 'messages', app.request.locale) %}
+{% if descTrans == descKey %}
+    {% set descTrans = 'app.error_desc_default'|trans({}, 'messages', app.request.locale) %}
+{% endif %}
 
-            {# Show technical message only in dev/debug mode #}
-            {# {% if app.debug and exception is defined %}
-                <div class="description">
-                    {{ exception.message }}
-                </div>
-            {% endif %} #}
+{% set is5xx = status_code >= 500 %}
+{% set is404 = status_code == 404 %}
+{% set is403 = status_code == 403 %}
 
-            <div class="error-button">
-                <button type="button" class="btn btn-primary">
-                    <a href="{{ sulu_content_root_path('/') }}">
-                        <span>{{ 'app.return_home'|trans }}</span>
-                    </a>
-                </button>
-            </div>
+<section data-controller="error"
+         class="relative overflow-hidden flex items-center"
+         style="min-height: 100vh;">
+
+    {# ── Animated gradient background ── #}
+    <div class="absolute inset-0 overflow-hidden bg-surface">
+
+        <div class="absolute inset-0 opacity-80 err-bg-gradient"></div>
+
+        {# Blob 1 — Violet / Pink #}
+        <div class="absolute -top-1/2 -right-1/3 w-[200%] h-[200%] opacity-75 blur-[120px] err-blob-1"
+             style="background: radial-gradient(circle at center, rgba(139,92,246,.85) 0%, rgba(236,72,153,.75) 25%, rgba(249,115,22,.6) 50%, rgba(251,191,36,.4) 75%, transparent 100%);">
         </div>
-    </section>
+
+        {# Blob 2 — Pink / Orange #}
+        <div class="absolute -bottom-1/3 -left-1/4 w-[180%] h-[180%] opacity-65 blur-[110px] err-blob-2"
+             style="background: radial-gradient(ellipse at center, rgba(236,72,153,.8) 0%, rgba(249,115,22,.65) 30%, rgba(168,85,247,.5) 60%, rgba(251,191,36,.3) 85%, transparent 100%);">
+        </div>
+
+        <div class="absolute inset-0 bg-white/5"></div>
+    </div>
+
+    {# ── Content ── #}
+    <div class="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center w-full py-16 md:py-28 lg:py-32 mt-[80px]">
+        <div class="err-content">
+
+            {# Animated icon #}
+            <div class="mb-8 flex justify-center">
+                <div class="err-icon-wrap w-24 h-24 md:w-32 md:h-32 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                    {% if is5xx %}
+                        {# ServerCrash #}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                             stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="w-12 h-12 md:w-16 md:h-16">
+                            <path d="M6 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/>
+                            <path d="M6 14H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/>
+                            <path d="M6 6h.01"/>
+                            <path d="M6 18h.01"/>
+                            <path d="m13 6-4 6h6l-4 6"/>
+                        </svg>
+                    {% elseif is404 %}
+                        {# FileSearch #}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                             stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="w-12 h-12 md:w-16 md:h-16">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <circle cx="11" cy="15" r="2"/>
+                            <path d="m13.5 17.5 1.5 1.5"/>
+                        </svg>
+                    {% elseif is403 %}
+                        {# ShieldOff #}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                             stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="w-12 h-12 md:w-16 md:h-16">
+                            <path d="M19.7 14a6.9 6.9 0 0 0 .3-2V5l-8-3-3.2 1.2"/>
+                            <path d="m2 2 20 20"/>
+                            <path d="M4.7 4.7 4 5v7c0 6 8 10 8 10a20.3 20.3 0 0 0 5.62-4.38"/>
+                        </svg>
+                    {% else %}
+                        {# AlertTriangle #}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                             stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="w-12 h-12 md:w-16 md:h-16">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Badge #}
+            {# <div class="mb-6">
+                <span class="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg text-sm font-semibold">
+                    {{ status_text }}
+                </span>
+            </div> #}
+
+            {# Status code #}
+            <h1 class="text-7xl md:text-9xl font-bold text-white mb-6">{{ status_code }}</h1>
+
+            {# Title #}
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">{{ titleTrans }}</h2>
+
+            {# Description #}
+            <p class="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto mb-12">
+                {{ descTrans }}
+            </p>
+
+            {# CTAs #}
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="{{ sulu_content_root_path('/') }}"
+                   class="inline-flex items-center px-6 py-3.5 md:px-8 md:py-4 bg-white text-grey-900 rounded-full font-semibold hover:bg-white/90 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="mr-2 shrink-0">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>{{ 'app.go_home'|trans }}</span>
+                </a>
+
+                {% if is5xx %}
+                    <button type="button"
+                            class="err-refresh-btn inline-flex items-center px-6 py-3.5 md:px-8 md:py-4 bg-white/10 backdrop-blur-sm text-white border border-white/30 rounded-full font-semibold hover:bg-white/20 transition-all duration-300 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="mr-2 shrink-0">
+                            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                            <path d="M21 3v5h-5"/>
+                            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                            <path d="M8 16H3v5"/>
+                        </svg>
+                        <span>{{ 'app.try_again'|trans }}</span>
+                    </button>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
 {% endblock %}

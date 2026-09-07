@@ -1,0 +1,81 @@
+{# OUR SERVICES #}
+
+<section data-controller="our-services" class="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-white">
+
+    {# Subtle gradient overlay #}
+    {# <div class="absolute inset-0 bg-gradient-to-b from-purple-50/30 via-transparent to-orange-50/30 pointer-events-none"></div> #}
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+
+        {# Curved gradient path behind cards #}
+        {# <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:0"
+             viewBox="0 0 100 100" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="svcPathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%"   stop-color="var(--color-accent-violet)"  stop-opacity="0.5"/>
+                    <stop offset="25%"  stop-color="var(--color-accent-purple)"  stop-opacity="0.5"/>
+                    <stop offset="50%"  stop-color="var(--color-accent-pink)"    stop-opacity="0.5"/>
+                    <stop offset="75%"  stop-color="var(--color-accent-orange)"  stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="var(--color-accent-amber)"   stop-opacity="0.5"/>
+                </linearGradient>
+                <filter id="svcSoftBlur">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.3"/>
+                </filter>
+            </defs>
+            <path d="M 8 12 Q 25 30, 40 45 T 70 70 Q 80 80, 92 88"
+                  stroke="url(#svcPathGradient)" stroke-width="0.8" fill="none"
+                  stroke-linecap="round" filter="url(#svcSoftBlur)"/>
+        </svg> #}
+
+        {# Heading #}
+        <div class="services-heading text-center mb-12 md:mb-16 lg:mb-20">
+            {% if content.title|default %}
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 md:mb-6 tracking-tight px-4">
+                    {{ content.title }}
+                </h2>
+            {% endif %}
+
+            {% if content.description|default %}
+                <div class="text-base md:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
+                    {{ content.description|raw }}
+                </div>
+            {% endif %}
+        </div>
+
+        {# Cards grid #}
+        {% if content.cards|default %}
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+                {% for card in content.cards %}
+                    <div class="service-card group relative rounded-[28px] p-[1px] service-card-border transition-all duration-500">
+                        <div class="service-card-inner relative bg-white rounded-[27px] p-6 md:p-8 lg:p-10 h-full">
+
+                            {% if card.icon|default %}
+                                <div class="mb-5 md:mb-6 lg:mb-8">
+                                    <img src="{{ card.icon.url }}" alt="{{ card.icon.title|default('') }}"
+                                         class="service-icon w-7 h-7 md:w-8 md:h-8">
+                                </div>
+                            {% endif %}
+
+                            {% if card.title|default %}
+                                <h3 class="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4 tracking-tight">
+                                    {{ card.title }}
+                                </h3>
+                            {% endif %}
+
+                            {% if card.text|default %}
+                                <div class="text-[15px] md:text-base text-gray-600 leading-relaxed">
+                                    {{ card.text|raw }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% endif %}
+
+    </div>
+
+</section>

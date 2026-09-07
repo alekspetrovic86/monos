@@ -4,47 +4,70 @@
           xmlns:xi="http://www.w3.org/2001/XInclude"
           xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
     <key>homepage</key>
+
     <view>pages/homepage</view>
     <controller>Sulu\Bundle\WebsiteBundle\Controller\DefaultController::indexAction</controller>
     <cacheLifetime>86400</cacheLifetime>
+
     <meta>
-        <title lang="sr">Homepage</title>
         <title lang="en">Homepage</title>
     </meta>
+
     <properties>
         <property name="title" type="text_line" mandatory="true">
             <meta>
-                <title lang="sr">Naslov</title>
                 <title lang="en">Title</title>
             </meta>
             <params>
                 <param name="headline" value="true"/>
             </params>
+
             <tag name="sulu.rlp.part"/>
         </property>
+
         <property name="url" type="resource_locator" mandatory="true">
             <meta>
-                <title lang="sr">Putanja</title>
                 <title lang="en">Resourcelocator</title>
             </meta>
+
             <tag name="sulu.rlp"/>
         </property>
 
         <section name="content">
 			<meta>
-				<title lang="sr">Kontent</title>
 				<title lang="en">Content</title>
 			</meta>
 			<properties>
 				<block name="blocks" default-type="hero" minOccurs="0">
 					<meta>
-						<title lang="sr">Blocks</title>
 						<title lang="en">Blocks</title>
 					</meta>
 					<types>
                         <xi:include href="../includes/blocks/hero.xml"
                                             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/comming-soon.xml"
+                        <xi:include href="../includes/blocks/our-services.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/dandelion.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/ai-solutions.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/solutions.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/our-process.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/testimonial.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/services.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/intro-text-right.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/intro-center.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/intro.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/cta-primary.xml"
+                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                        <xi:include href="../includes/blocks/tech-marque.xml"
                                             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
                     </types>
 				</block>

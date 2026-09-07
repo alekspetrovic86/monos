@@ -1,0 +1,187 @@
+{# SOLUTIONS #}
+
+{% set anim = content.animation|default(false) %}
+
+<section data-controller="solutions" data-animation="{{ anim ? 'true' : 'false' }}"
+         class="relative py-16 md:py-24 lg:py-32 flex items-center overflow-hidden bg-black">
+
+    {# Subtle grid overlay #}
+    <div class="absolute inset-0 opacity-[0.03]"
+         style="background-image:linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:60px 60px"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-1 {{ content.image|default ? 'gap-12 md:gap-16 lg:gap-20' : '' }} items-center">
+
+            {# Content #}
+            <div class="solutions-top md:text-center">
+
+                {# Badge (mini title) #}
+                {% if content.mini_title|default %}
+                    <div class="inline-flex items-center space-x-2 px-3 py-1.5 md:px-4 md:py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6 md:mb-8 text-white/60">
+                        <span class="text-[11px] md:text-xs text-white/60 font-medium tracking-wider uppercase">{{ content.mini_title }}</span>
+                    </div>
+                {% endif %}
+
+                {# Title #}
+                {% if content.title|default %}
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 md:mb-8 leading-[1.15] tracking-tight md:max-w-[580px] md:mx-auto md:text-center">
+                        {{ content.title }}
+                    </h2>
+                {% endif %}
+
+                {# Description #}
+                {% if content.description|default %}
+                    <div class="text-lg md:text-xl lg:text-2xl text-white/60 mb-8 md:mb-12 leading-relaxed max-w-[880px] md:mx-auto md:text-center">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+
+                {# Bullets #}
+                {% if content.bullets|default %}
+                    <div class="space-y-4 md:space-y-5 mb-8 md:mb-12 md:inline-block md:max-w-[480px] md:text-left">
+                        {% for bullet in content.bullets %}
+                            <div class="solutions-feature flex items-start space-x-3 text-white/70"
+                                 data-feature-delay="{{ loop.index * 100 + 100 }}">
+                                <svg class="flex-shrink-0 mt-1 w-5 h-5 md:w-6 md:h-6" width="16" height="16" viewBox="0 0 16 16">
+                                    <g fill="#fff" fill-rule="evenodd">
+                                        <circle opacity="0" cx="8" cy="8" r="8"></circle>
+                                        <path d="M11.41 4.93L6.64 9.54 5.38 8.18a.7.7 0 0 0-.87-.04.61.61 0 0 0-.18.8l1.5 2.45c.15.22.41.36.69.36.28 0 .53-.14.68-.36.24-.31 4.82-5.78 4.82-5.78.6-.6-.13-1.15-.6-.68z"></path>
+                                    </g>
+                                </svg>
+                                {% if bullet.text|default %}
+                                    <div class="text-base md:text-base lg:text-lg text-white/70 leading-relaxed">
+                                        {{ bullet.text|raw }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# CTA Button #}
+                {% if content.button_text|default %}
+                    <div class="md:text-center">
+                        <a href="{{ content.button_link|default('#') }}"
+                        class="solutions-cta-btn group inline-flex items-center justify-center space-x-2 px-6 py-3.5 md:px-8 md:py-4 bg-transparent border border-white/80 text-white rounded-full font-semibold transition-all duration-300 min-h-[44px] w-full sm:w-auto text-[15px] md:text-base">
+                            <span>{{ content.button_text }}</span>
+                            <div class="relative w-4 h-4 md:w-[18px] md:h-[18px]">
+                                <svg class="icon-chevron absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"/>
+                                </svg>
+                                <svg class="icon-arrow absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            {# Visual — image always shown; brain SVG only when animation is enabled #}
+            {% if content.image|default or anim %}
+            <div class="{{ anim ? 'solutions-bottom ' : '' }}relative mt-8">
+                {% if content.image|default %}
+                    <img src="{{ content.image.url }}" alt="{{ content.image.title|default('') }}"
+                         class="w-full h-full object-cover rounded-2xl">
+                {% else %}
+                    <div class="flex items-center justify-center py-8">
+                        <div class="relative">
+                            <div class="brain-glow absolute rounded-full pointer-events-none"
+                                 style="inset: -60px"></div>
+                            <svg class="brain-svg relative z-10 w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80"
+                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="brainStrokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%"   stop-color="#8b5cf6"/>
+                                        <stop offset="25%"  stop-color="#a855f7"/>
+                                        <stop offset="50%"  stop-color="#ec4899"/>
+                                        <stop offset="75%"  stop-color="#f97316"/>
+                                        <stop offset="100%" stop-color="#fbbf24"/>
+                                    </linearGradient>
+                                    <filter id="brainGlowFilter">
+                                        <feGaussianBlur stdDeviation="0.1" result="coloredBlur"/>
+                                        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                    </filter>
+                                    {% if anim %}
+                                        <filter id="brainShimmerGlow" x="-100%" y="-100%" width="300%" height="300%">
+                                            <feGaussianBlur stdDeviation="0.25" result="coloredBlur"/>
+                                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                        </filter>
+                                    {% endif %}
+                                </defs>
+
+                                {# Brain paths — draw animation only when anim=true, otherwise static #}
+                                <path {{ anim ? 'class="brain-path" style="--l:150"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" stroke-linejoin="round" filter="url(#brainGlowFilter)"
+                                      d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:150; transition-delay:0.1s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" stroke-linejoin="round" filter="url(#brainGlowFilter)"
+                                      d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:28; transition-delay:0.25s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" filter="url(#brainGlowFilter)"
+                                      d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:15; transition-delay:0.35s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" filter="url(#brainGlowFilter)"
+                                      d="M17.599 6.5a3 3 0 0 0 .399-1.375"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:15; transition-delay:0.4s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" filter="url(#brainGlowFilter)"
+                                      d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:8; transition-delay:0.45s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" filter="url(#brainGlowFilter)"
+                                      d="M3.477 10.896a4 4 0 0 1 .585-.396"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:8; transition-delay:0.5s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" filter="url(#brainGlowFilter)"
+                                      d="M19.938 10.5a4 4 0 0 1 .585.396"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:12; transition-delay:0.55s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" filter="url(#brainGlowFilter)"
+                                      d="M6 18a4 4 0 0 1-1.967-.516"/>
+                                <path {{ anim ? 'class="brain-path" style="--l:12; transition-delay:0.6s"' : '' }}
+                                      stroke="url(#brainStrokeGrad)" stroke-width="0.06" stroke-linecap="round" filter="url(#brainGlowFilter)"
+                                      d="M19.967 17.484A4 4 0 0 1 18 18"/>
+
+                                {# Shimmer paths — only rendered when animation is enabled #}
+                                {% if anim %}
+                                    <path class="brain-shimmer" style="--l:150; --to:-150; --dur:4s;  --sd:0s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" stroke-linejoin="round" filter="url(#brainShimmerGlow)"
+                                          d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/>
+                                    <path class="brain-shimmer" style="--l:150; --to:-150; --dur:4s;  --sd:0.3s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" stroke-linejoin="round" filter="url(#brainShimmerGlow)"
+                                          d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/>
+                                    <path class="brain-shimmer" style="--l:28;  --to:-28;  --dur:2s;  --sd:0.1s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" filter="url(#brainShimmerGlow)"
+                                          d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/>
+                                    <path class="brain-shimmer" style="--l:15;  --to:-15;  --dur:1.5s; --sd:0.2s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" filter="url(#brainShimmerGlow)"
+                                          d="M17.599 6.5a3 3 0 0 0 .399-1.375"/>
+                                    <path class="brain-shimmer" style="--l:15;  --to:-15;  --dur:1.5s; --sd:0.4s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" filter="url(#brainShimmerGlow)"
+                                          d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/>
+                                    <path class="brain-shimmer" style="--l:8;   --to:-8;   --dur:1.2s; --sd:0s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" filter="url(#brainShimmerGlow)"
+                                          d="M3.477 10.896a4 4 0 0 1 .585-.396"/>
+                                    <path class="brain-shimmer" style="--l:8;   --to:-8;   --dur:1.2s; --sd:0.35s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" filter="url(#brainShimmerGlow)"
+                                          d="M19.938 10.5a4 4 0 0 1 .585.396"/>
+                                    <path class="brain-shimmer" style="--l:12;  --to:-12;  --dur:1.5s; --sd:0.15s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" filter="url(#brainShimmerGlow)"
+                                          d="M6 18a4 4 0 0 1-1.967-.516"/>
+                                    <path class="brain-shimmer" style="--l:12;  --to:-12;  --dur:1.5s; --sd:0.4s"
+                                          stroke="white" stroke-opacity="0.55" stroke-width="0.15" stroke-linecap="round" filter="url(#brainShimmerGlow)"
+                                          d="M19.967 17.484A4 4 0 0 1 18 18"/>
+                                {% endif %}
+                            </svg>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</section>

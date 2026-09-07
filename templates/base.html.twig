@@ -1,35 +1,87 @@
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|split('_')[0] }}">
-	<head>
-		{% set webspaceSettings = sulu_snippet_load_by_area('webspace_settings') %}
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link href="{{ asset('website/img/favicon.png') }}" rel="icon"/>
+    <head>
+        {% set webspaceSettings = sulu_snippet_load_by_area('webspace_settings') %}
+        <meta charset="utf-8">
+        {% if webspaceSettings.content.show_theme_toggle|default(false) or webspaceSettings.content.auto_theme_by_time|default(false) %}<script>(function(){var cfg='{{ webspaceSettings.content.auto_theme_by_time|default(false) ? "1" : "0" }}';if(sessionStorage.getItem('theme_cfg')!==cfg){sessionStorage.removeItem('auto_theme');localStorage.removeItem('user_theme');sessionStorage.setItem('theme_cfg',cfg);return;}var t=localStorage.getItem('user_theme');if(t==='dark'||t==='light'){document.documentElement.dataset.userTheme=t;return;}if(cfg==='1'){var a=sessionStorage.getItem('auto_theme');if(a==='dark'||a==='light'){document.documentElement.dataset.userTheme=a;}}})();</script>{% endif %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block meta %}
+            {% set _seoBase = extension.seo|default({}) %}
+            {% set _pageTitle = _seoBase.title|default(content.title|default('')) %}
+            {% set _seo = _seoBase|merge({'title': _pageTitle ? _pageTitle ~ ' | Monos' : 'Monos'}) %}
+            {{ include('@SuluWebsite/Extension/seo.html.twig', {
+                seo: _seo,
+                content: content|default([]),
+                localizations: localizations|default([]),
+                shadowBaseLocale: shadowBaseLocale|default(),
+            }) }}
+        {% endblock %}
 
-		<title>{{ extension.seo.title|default ?: content.title|default ?: 'Monos.' }}</title>
+        {# ── PWA / Browser meta ── #}
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="theme-color" content="#000000">
 
-		{% block meta %}
-			{% include "@SuluWebsite/Extension/seo.html.twig" with {
-				"seo": extension.seo|default([]),
-				"content": content|default([]),
-				"localizations": localizations|default([]),
-				"shadowBaseLocale": shadowBaseLocale|default(),
-			} %}
-		{% endblock %}
+        {# ── Open Graph ── #}
+        {% set ogTitle       = extension.seo.title|default(content.title|default('Monos')) %}
+        {% set ogDescription = extension.seo.description|default(content.excerpt|default('')) %}
+        {% set ogImage       = extension.excerpt.images[0].thumbnails['seo_og']|default('') %}
+        {% set ogUrl         = app.request.uri %}
+        {% set ogLocale      = app.request.locale|replace({'-': '_'}) %}
+        <meta property="og:type"        content="website">
+        <meta property="og:site_name"   content="Monos">
+        <meta property="og:url"         content="{{ ogUrl }}">
+        <meta property="og:title"       content="{{ ogTitle }}">
+        <meta property="og:description" content="{{ ogDescription }}">
+        <meta property="og:locale"      content="{{ ogLocale }}">
+        {% if ogImage %}<meta property="og:image" content="{{ ogImage }}">{% endif %}
 
-		{% block style %}
+        {# ── Twitter / X Card ── #}
+        <meta name="twitter:card"        content="summary_large_image">
+        <meta name="twitter:title"       content="{{ ogTitle }}">
+        <meta name="twitter:description" content="{{ ogDescription }}">
+        {% if ogImage %}<meta name="twitter:image" content="{{ ogImage }}">{% endif %}
+
+        {# ── JSON-LD Organization ── #}
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Monos",
+            "url": "{{ app.request.schemeAndHttpHost }}",
+            "sameAs": []
+        }
+        </script>
+
+        {# ── Google Consent Mode v2 — must be before GA loads ── #}
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+                'analytics_storage':   'denied',
+                'ad_storage':          'denied',
+                'ad_user_data':        'denied',
+                'ad_personalization':  'denied',
+                'wait_for_update':     500
+            });
+        </script>
+
+        {% block style %}
             {{ encore_entry_link_tags('website') }}
         {% endblock %}
 
-		{% block javascripts %}
+        {% block javascripts %}
             {{ encore_entry_script_tags('website') }}
         {% endblock %}
-
-	</head>
-	<body data-controller="remove-scroll-memory">
-		{% block header %}
-			{% include 'includes/header.html.twig' %}
+    </head>
+    <body data-controller="theme"
+          data-theme-header-mode-value="{{ webspaceSettings.content.header_mode|default('light') }}"
+          data-theme-toggle-enabled-value="{{ webspaceSettings.content.show_theme_toggle|default(false) ? 'true' : 'false' }}"
+          data-theme-auto-by-time-value="{{ webspaceSettings.content.auto_theme_by_time|default(false) ? 'true' : 'false' }}">
+        {% block header %}
+			{% include 'includes/header.html.twig' with {
+				"headerInfo": webspaceSettings.content ?? '',
+			} %}
 		{% endblock %}
 
 		{% block content %}{% endblock %}
@@ -37,10 +89,14 @@
 		{% block footer %}
 			{% include 'includes/footer.html.twig' with {
 				"footerInfo": webspaceSettings.content ?? '',
+                "account": webspaceSettings.content.account.entity|default,
 			} %}
 		{% endblock %}
 
-		<div class="global-loader" data-controller="loader"></div>
-	</body>
+        <div class="global-loader" data-controller="loader"></div>
+        {% if webspaceSettings.content.show_locale_suggestion|default(false) %}
+            {% include 'includes/locale-suggestion.html.twig' %}
+        {% endif %}
+        {% include 'includes/cookie-consent.html.twig' %}
+    </body>
 </html>
-

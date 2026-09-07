@@ -1,119 +1,172 @@
-{% extends 'form_div_layout.html.twig' %}
+{% extends '@SuluForm/themes/basic.html.twig' %}
 
-{# Modern contact form theme based on your new project design #}
-
-{# Generic row wrapper #}
-{% block form_row %}
-    {% set colClass = {
-        'full': 'col-12',
-        'half': 'col-12 col-xl-6',
-        'third': 'col-12 col-xl-4'
-    }[form.vars.attr.width|default('full')] %}
-
-    <div class="{{ colClass }}">
-        {{ form_label(form, null, { label_attr: { class: 'visually-hidden' } }) }}
-        {{ form_widget(form) }}
-        {{ form_errors(form) }}
-    </div>
-{% endblock %}
-
-{# Buttons #}
-{% block button_row %}
-    <div>
-        {{ form_widget(form) }}
-    </div>
-{% endblock %}
-
-{# Text inputs (text, email, date, time, etc.) #}
-{% block text_widget %}
-    {% if form.vars.label == 'time' %}
-        <div class="contact__field contact__field--icon">
-            <i class="bi bi-clock contact__icon" aria-hidden="true"></i>
-            <input
-                type="time"
-                class="contact__input contact__input--icon"
-                placeholder="{{ form.vars.label|striptags }}"
-                {{ block('widget_attributes') }}
-                value="{{ form.vars.value }}"
-            />
+{# ── reCAPTCHA v2 — explicit render so JS can pick the correct theme ──────── #}
+{%- block ewz_recaptcha_widget -%}
+    {% if form.vars.ewz_recaptcha_enabled %}
+        <div class="g-recaptcha-placeholder"
+             data-sitekey="{{ form.vars.public_key }}"
+             data-size="{{ attr.options.size|default('normal') }}"
+             data-type="{{ attr.options.type|default('image') }}">
         </div>
-    {% elseif form.vars.label == 'date' %}
-        <div class="contact__field contact__field--icon">
-            <i class="bi bi-calendar-event contact__icon" aria-hidden="true"></i>
-            <input
-                type="date"
-                class="contact__input contact__input--icon"
-                placeholder="{{ form.vars.label|striptags }}"
-                {{ block('widget_attributes') }}
-                value="{{ form.vars.value }}"
-            />
-        </div>
-    {% else %}
-        <input
-            type="text"
-            class="form-control"
-            placeholder="{{ form.vars.label|striptags }}"
-            {{ block('widget_attributes') }}
-            value="{{ form.vars.value }}"
-        />
+        <script src="{{ form.vars.url_challenge }}&render=explicit&onload=ctRecaptchaOnLoad" async defer></script>
     {% endif %}
-{% endblock %}
+{%- endblock ewz_recaptcha_widget -%}
 
-{% block email_widget %}
-    <input
-        type="email"
-        class="contact__input form-control"
-        placeholder="{{ form.vars.label|striptags }}"
-        {{ block('widget_attributes') }}
-        value="{{ value }}"
-    />
-{% endblock %}
-
-{% block tel_widget %}
-    <input
-        type="tel"
-        class="contact__input form-control"
-        placeholder="{{ form.vars.label|striptags }}"
-        {{ block('widget_attributes') }}
-        value="{{ value }}"
-    />
-{% endblock %}
-
-{% block textarea_widget %}
-    <textarea
-        rows="5"
-        class="contact__textarea form-control"
-        placeholder="{{ form.vars.label|striptags }}"
-        {{ block('widget_attributes') }}
-    >{{ value }}</textarea>
-{% endblock %}
-
-{# Checkbox (if present in Sulu form) #}
-{% block checkbox_widget %}
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" {{ block('widget_attributes') }} />
-        <label class="form-check-label visually-hidden" for="{{ id }}">{{ form.vars.label }}</label>
+{# ── Row wrapper ──────────────────────────────────────────────────────────── #}
+{%- block form_row -%}
+    {%- set widthClass = attr.width|default('full') == 'half' ? 'ct-field--half' : '' -%}
+    <div class="ct-field {{ widthClass }}{% if attr.lastWidth|default(false) %} ct-field--last{% endif %}">
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
     </div>
-{% endblock %}
+{%- endblock form_row -%}
 
-{# Select dropdown (choice field) #}
-{# {% block choice_widget %}
-    <div class="contact__field contact__field--icon">
-        <i class="bi bi-chevron-down contact__icon" aria-hidden="true"></i>
-        <select id="{{ id }}" name="{{ full_name }}" class="contact__input contact__input--icon">
-            {% if placeholder is defined and placeholder %}
-                <option value="" disabled {% if value is empty %}selected{% endif %}>{{ placeholder }}</option>
-            {% endif %}
-            {% for choice in choices %}
-                <option value="{{ choice.value }}" {% if choice.value == value %}selected{% endif %}>{{ choice.label }}</option>
-            {% endfor %}
+{# ── Button row ───────────────────────────────────────────────────────────── #}
+{%- block button_row -%}
+    <div class="ct-field">
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock button_row -%}
+
+{# ── Label ────────────────────────────────────────────────────────────────── #}
+{%- block form_label -%}
+    {%- if label is not same as(false) and label is not empty -%}
+        {%- set label %}{{ label|raw }}{% endset -%}
+        <label class="ct-label block text-xs md:text-sm font-medium text-grey-700 mb-2 uppercase tracking-wide"
+               {% if id is defined and id %}for="{{ id }}"{% endif %}>
+            {{- label -}}{% if required is defined and required %} *{% endif %}
+        </label>
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{# ── Text input ───────────────────────────────────────────────────────────── #}
+{%- block text_widget -%}
+    <input type="text"
+           class="ct-input w-full px-4 md:px-5 py-3.5 md:py-4 bg-white border border-grey-200 rounded-xl md:rounded-2xl text-grey-900 placeholder-grey-400 focus:outline-none focus:border-grey-900 focus:ring-1 focus:ring-grey-900 transition-all duration-200 text-[15px] md:text-base"
+           {{ block('widget_attributes') }}
+           value="{{ value }}"
+    />
+{%- endblock text_widget -%}
+
+{# ── Email input ──────────────────────────────────────────────────────────── #}
+{%- block email_widget -%}
+    <input type="email"
+           class="ct-input w-full px-4 md:px-5 py-3.5 md:py-4 bg-white border border-grey-200 rounded-xl md:rounded-2xl text-grey-900 placeholder-grey-400 focus:outline-none focus:border-grey-900 focus:ring-1 focus:ring-grey-900 transition-all duration-200 text-[15px] md:text-base"
+           {{ block('widget_attributes') }}
+           value="{{ value }}"
+    />
+{%- endblock email_widget -%}
+
+{# ── Tel input ────────────────────────────────────────────────────────────── #}
+{%- block tel_widget -%}
+    <input type="tel"
+           class="ct-input w-full px-4 md:px-5 py-3.5 md:py-4 bg-white border border-grey-200 rounded-xl md:rounded-2xl text-grey-900 placeholder-grey-400 focus:outline-none focus:border-grey-900 focus:ring-1 focus:ring-grey-900 transition-all duration-200 text-[15px] md:text-base"
+           {{ block('widget_attributes') }}
+           value="{{ value }}"
+    />
+{%- endblock tel_widget -%}
+
+{# ── URL input ────────────────────────────────────────────────────────────── #}
+{%- block url_widget -%}
+    <input type="url"
+           class="ct-input w-full px-4 md:px-5 py-3.5 md:py-4 bg-white border border-grey-200 rounded-xl md:rounded-2xl text-grey-900 placeholder-grey-400 focus:outline-none focus:border-grey-900 focus:ring-1 focus:ring-grey-900 transition-all duration-200 text-[15px] md:text-base"
+           {{ block('widget_attributes') }}
+           value="{{ value }}"
+    />
+{%- endblock url_widget -%}
+
+{# ── File upload ──────────────────────────────────────────────────────────── #}
+{%- block file_widget -%}
+    <div class="ct-file-wrap">
+        <input type="file"
+               class="sr-only"
+               {{ block('widget_attributes') }}
+        />
+        <label for="{{ id }}"
+               class="ct-file-label flex items-center justify-center space-x-2 w-full px-4 py-3.5 md:py-4 rounded-xl md:rounded-2xl border-2 border-dashed border-grey-300 hover:border-grey-900 cursor-pointer transition-all bg-white group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="ct-file-icon text-grey-400 group-hover:text-grey-900 transition-colors shrink-0">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="ct-file-label-text text-grey-500 group-hover:text-grey-900 transition-colors text-sm md:text-base">
+                {{- 'form.upload_file'|trans -}}
+            </span>
+        </label>
+        {%- if attr.hint is defined and attr.hint -%}
+            <p class="ct-file-hint text-xs text-grey-400 mt-2">{{ attr.hint }}</p>
+        {%- endif -%}
+    </div>
+{%- endblock file_widget -%}
+
+{# ── Number input ─────────────────────────────────────────────────────────── #}
+{%- block number_widget -%}
+    <input type="number"
+           class="ct-input w-full px-4 md:px-5 py-3.5 md:py-4 bg-white border border-grey-200 rounded-xl md:rounded-2xl text-grey-900 placeholder-grey-400 focus:outline-none focus:border-grey-900 focus:ring-1 focus:ring-grey-900 transition-all duration-200 text-[15px] md:text-base"
+           {{ block('widget_attributes') }}
+           value="{{ value }}"
+    />
+{%- endblock number_widget -%}
+
+{# ── Textarea ─────────────────────────────────────────────────────────────── #}
+{%- block textarea_widget -%}
+    <textarea rows="{{ form.vars.attr.rows|default(5) }}"
+              class="ct-input w-full px-4 md:px-5 py-3.5 md:py-4 bg-white border border-grey-200 rounded-xl md:rounded-2xl text-grey-900 placeholder-grey-400 focus:outline-none focus:border-grey-900 focus:ring-1 focus:ring-grey-900 transition-all duration-200 resize-none text-[15px] md:text-base"
+              {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock textarea_widget -%}
+
+{# ── Select / Choice collapsed ─────────────────────────────────────────────── #}
+{%- block choice_widget_collapsed -%}
+    <div class="ct-select-wrap relative">
+        <select class="ct-input ct-select w-full px-4 md:px-5 py-3.5 md:py-4 bg-white border border-grey-200 rounded-xl md:rounded-2xl text-grey-900 focus:outline-none focus:border-grey-900 focus:ring-1 focus:ring-grey-900 transition-all duration-200 text-[15px] md:text-base appearance-none cursor-pointer pr-10"
+                {{ block('widget_attributes') }}>
+            {% if placeholder is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+            {%- endif %}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('choice_widget_options') -}}
+                {%- if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif -%}
+            {%- endif -%}
+            {%- set options = choices -%}
+            {{- block('choice_widget_options') -}}
         </select>
+        <div class="ct-select-chevron pointer-events-none absolute inset-y-0 right-4 flex items-center">
+            <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
     </div>
-{% endblock %} #}
+{%- endblock choice_widget_collapsed -%}
 
-{# Submit button #}
-{% block button_widget %}
-    <button type="{{ type|default('submit') }}" class="contact__submit form-control">
+{# ── Submit button ────────────────────────────────────────────────────────── #}
+{%- block button_widget -%}
+    <button type="{{ type|default('submit') }}"
+            class="ct-submit w-full px-6 md:px-8 py-3.5 md:py-4 bg-dark-800 text-white rounded-full font-semibold hover:bg-dark-700 transition-all duration-300 flex items-center justify-center cursor-pointer shadow-lg shadow-dark-900/10 hover:shadow-xl hover:shadow-dark-900/20 text-[15px] md:text-base"
+            {{ block('button_attributes') }}>
         {{ label|default('Send Message') }}
     </button>
-{% endblock %}
+{%- endblock button_widget -%}
+
+{# ── Errors ───────────────────────────────────────────────────────────────── #}
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <div class="mt-1.5 text-xs text-red-600 leading-snug">
+            {%- for error in errors -%}
+                <p>{{ error.messageTemplate|trans(error.messageParameters, 'messages') }}</p>
+            {%- endfor -%}
+        </div>
+    {%- endif -%}
+{%- endblock form_errors -%}
+
+{# ── Honeypot (hidden spam trap) ──────────────────────────────────────────── #}
+{%- block honeypot_row -%}
+    <div class="sr-only" aria-hidden="true">
+        {{- block('form_row') -}}
+    </div>
+{%- endblock -%}

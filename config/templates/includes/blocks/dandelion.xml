@@ -1,0 +1,100 @@
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <block name="blocks" default-type="dandelion">
+        <types>
+            <type name="dandelion">
+                <meta>
+                    <title lang="en">Dandelion</title>
+                </meta>
+
+                <properties>
+                    <property name="mode" type="single_select">
+                        <meta>
+                            <title lang="en">Mode</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="light" type="collection">
+                                    <param name="title" value="Light"/>
+                                </param>
+                                <param name="dark" type="collection">
+                                    <param name="title" value="Dark"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="light_gradient" type="single_select">
+                        <meta>
+                            <title lang="en">Light Gradient (Light mode only)</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="gradient1" type="collection">
+                                    <param name="title" value="Gradient 1 — Peach / Lavender"/>
+                                </param>
+                                <param name="gradient2" type="collection">
+                                    <param name="title" value="Gradient 2 — Blue / Violet"/>
+                                </param>
+                                <param name="gradient3" type="collection">
+                                    <param name="title" value="Gradient 3 — Purple / Peach / Amber"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="mini_title_icon" type="single_media_selection">
+                        <meta>
+                            <title lang="en">Mini Title Icon</title>
+                        </meta>
+                    </property>
+
+                    <property name="mini_title" type="text_line">
+                        <meta>
+                            <title lang="en">Mini Title (Badge)</title>
+                        </meta>
+                    </property>
+
+                    <property name="title" type="text_line">
+                        <meta>
+                            <title lang="en">Title</title>
+                        </meta>
+                    </property>
+
+                    <property name="description" type="text_editor">
+                        <meta>
+                            <title lang="en">Description</title>
+                        </meta>
+                    </property>
+
+                    <block name="features" default-type="feature" minOccurs="0">
+                        <meta>
+                            <title lang="en">Features</title>
+                        </meta>
+                        <types>
+                            <type name="feature">
+                                <meta>
+                                    <title lang="en">Feature</title>
+                                </meta>
+                                <properties>
+                                    <property name="title" type="text_line">
+                                        <meta>
+                                            <title lang="en">Title</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="text" type="text_line">
+                                        <meta>
+                                            <title lang="en">Text</title>
+                                        </meta>
+                                    </property>
+                                </properties>
+                            </type>
+                        </types>
+                    </block>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>

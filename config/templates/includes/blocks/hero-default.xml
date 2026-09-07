@@ -1,0 +1,200 @@
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <block name="blocks" default-type="hero-default">
+        <types>
+            <type name="hero-default">
+                <meta>
+                    <title lang="en">Hero Default</title>
+                </meta>
+
+                <properties>
+                    <property name="mode" type="single_select">
+                        <meta>
+                            <title lang="en">Mode</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="light" type="collection">
+                                    <param name="title" value="Light (Colorful)"/>
+                                </param>
+                                <param name="dark" type="collection">
+                                    <param name="title" value="Dark (Minimal)"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="dark_title_color" type="single_select">
+                        <meta>
+                            <title lang="en">Title Color (Dark mode only)</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="gradient" type="collection">
+                                    <param name="title" value="Gradient (default)"/>
+                                </param>
+                                <param name="white" type="collection">
+                                    <param name="title" value="White"/>
+                                </param>
+                                <param name="purple" type="collection">
+                                    <param name="title" value="Purple"/>
+                                </param>
+                                <param name="orange" type="collection">
+                                    <param name="title" value="Orange"/>
+                                </param>
+                                <param name="violet" type="collection">
+                                    <param name="title" value="Violet"/>
+                                </param>
+                                <param name="pink" type="collection">
+                                    <param name="title" value="Pink"/>
+                                </param>
+                                <param name="indigo" type="collection">
+                                    <param name="title" value="Indigo"/>
+                                </param>
+                                <param name="amber" type="collection">
+                                    <param name="title" value="Amber"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="bg_variant" type="single_select">
+                        <meta>
+                            <title lang="en">Background Variant</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="1" type="collection">
+                                    <param name="title" value="Variant 1 — Base + 3 Blobs"/>
+                                </param>
+                                <param name="2" type="collection">
+                                    <param name="title" value="Variant 2 — Base + 5 Blobs"/>
+                                </param>
+                                <param name="3" type="collection">
+                                    <param name="title" value="Variant 3 — Base + 9 Blobs (Full)"/>
+                                </param>
+                                <param name="4" type="collection">
+                                    <param name="title" value="Variant 4 — Warm Base + 3 Blobs"/>
+                                </param>
+                                <param name="5" type="collection">
+                                    <param name="title" value="Variant 5 — Dark Warm + Animated Overlay"/>
+                                </param>
+                                <param name="6" type="collection">
+                                    <param name="title" value="Variant 6 — Cool Indigo/Violet/Pink"/>
+                                </param>
+                                <param name="7" type="collection">
+                                    <param name="title" value="Variant 7 — Deep Purple/Magenta"/>
+                                </param>
+                                <param name="8" type="collection">
+                                    <param name="title" value="Variant 8 — Golden Amber/Orange"/>
+                                </param>
+                                <param name="9" type="collection">
+                                    <param name="title" value="Variant 9 — Sunset Pink/Orange"/>
+                                </param>
+                                <param name="10" type="collection">
+                                    <param name="title" value="Variant 10 — Full Spectrum"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="alignment" type="single_select">
+                        <meta>
+                            <title lang="en">Alignment</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="center" type="collection">
+                                    <param name="title" value="Center"/>
+                                </param>
+                                <param name="left" type="collection">
+                                    <param name="title" value="Left"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="back_link_text" type="text_line" colspan="6">
+                        <meta>
+                            <title lang="en">Back Link Text</title>
+                        </meta>
+                    </property>
+
+                    <property name="back_link_url" type="link" colspan="6">
+                        <meta>
+                            <title lang="en">Back Link URL</title>
+                        </meta>
+                    </property>
+
+                    <property name="mini_title" type="text_line">
+                        <meta>
+                            <title lang="en">Mini Title (badge above heading)</title>
+                        </meta>
+                    </property>
+
+                    <property name="title" type="text_line">
+                        <meta>
+                            <title lang="en">Title</title>
+                        </meta>
+                    </property>
+
+                    <property name="description" type="text_editor">
+                        <meta>
+                            <title lang="en">Description</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_text" type="text_line" colspan="6">
+                        <meta>
+                            <title lang="en">Button 1 Text</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_link" type="link" colspan="6">
+                        <meta>
+                            <title lang="en">Button 1 Link</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_text2" type="text_line" colspan="6">
+                        <meta>
+                            <title lang="en">Button 2 Text</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_link2" type="link" colspan="6">
+                        <meta>
+                            <title lang="en">Button 2 Link</title>
+                        </meta>
+                    </property>
+
+                    <block name="bullets" default-type="bullet" minOccurs="0">
+                        <meta>
+                            <title lang="en">Bullets</title>
+                        </meta>
+                        <types>
+                            <type name="bullet">
+                                <meta>
+                                    <title lang="en">Bullet</title>
+                                </meta>
+                                <properties>
+                                    <property name="icon" type="single_media_selection" colspan="3">
+                                        <meta>
+                                            <title lang="en">Icon</title>
+                                        </meta>
+                                    </property>
+                                    <property name="text" type="text_line" colspan="9">
+                                        <meta>
+                                            <title lang="en">Text</title>
+                                        </meta>
+                                    </property>
+                                </properties>
+                            </type>
+                        </types>
+                    </block>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>

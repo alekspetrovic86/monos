@@ -1,0 +1,99 @@
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <block name="blocks" default-type="jobs">
+        <types>
+            <type name="jobs">
+                <meta>
+                    <title lang="en">Jobs</title>
+                </meta>
+
+                <properties>
+                    <property name="mode" type="single_select">
+                        <meta>
+                            <title lang="en">Mode</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="light" type="collection">
+                                    <param name="title" value="Light"/>
+                                </param>
+                                <param name="dark" type="collection">
+                                    <param name="title" value="Dark"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="title" type="text_line">
+                        <meta>
+                            <title lang="en">Title</title>
+                        </meta>
+                    </property>
+
+                    <property name="description" type="text_editor">
+                        <meta>
+                            <title lang="en">Description</title>
+                        </meta>
+                    </property>
+
+                    <block name="jobs" default-type="job" minOccurs="0">
+                        <meta>
+                            <title lang="en">Jobs</title>
+                        </meta>
+                        <types>
+                            <type name="job">
+                                <meta>
+                                    <title lang="en">Job</title>
+                                </meta>
+                                <properties>
+                                    <property name="title" type="text_line">
+                                        <meta>
+                                            <title lang="en">Title</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="badge" type="text_line">
+                                        <meta>
+                                            <title lang="en">Badge</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="text" type="text_editor">
+                                        <meta>
+                                            <title lang="en">Text</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="location" type="text_line" colspan="6">
+                                        <meta>
+                                            <title lang="en">Location</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="time" type="text_line" colspan="6">
+                                        <meta>
+                                            <title lang="en">Time</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="button_text" type="text_line" colspan="6">
+                                        <meta>
+                                            <title lang="en">Button Text</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="button_link" type="link" colspan="6">
+                                        <meta>
+                                            <title lang="en">Button Link</title>
+                                        </meta>
+                                    </property>
+                                </properties>
+                            </type>
+                        </types>
+                    </block>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>

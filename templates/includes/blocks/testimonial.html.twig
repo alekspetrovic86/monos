@@ -1,0 +1,124 @@
+{# TESTIMONIAL #}
+
+{% set isDark = content.mode|default('light') == 'dark' %}
+
+<section data-controller="testimonial"
+         data-mode-block="{{ isDark ? 'dark' : 'light' }}"
+         class="relative py-16 md:py-24 lg:py-32 overflow-hidden {{ isDark ? 'bg-black' : 'bg-white' }}">
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+
+        {# Header row: title/desc left, nav buttons right #}
+        {% if content.title|default or content.description|default or content.cards|default %}
+            <div class="testimonial-heading flex items-end justify-between mb-10 md:mb-12 lg:mb-16 gap-6">
+
+                <div>
+                    {% if content.title|default %}
+                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-1.2px] leading-[1.1] {{ isDark ? 'text-white' : 'text-grey-900' }} mb-3 md:mb-4">
+                            {{ content.title }}
+                        </h2>
+                    {% endif %}
+                    {% if content.description|default %}
+                        <div class="text-xl md:text-2xl lg:text-[21px] lg:tracking-[0.2px] {{ isDark ? 'text-grey-450' : 'text-grey-500' }} max-w-3xl leading-[1.38]">
+                            {{ content.description|raw }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Prev / Next buttons — desktop only, both versions always rendered, CSS toggles visibility #}
+                {% if content.cards|default %}
+                    <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+
+                        {# Dark-style buttons #}
+                        <div class="testimonial-nav-dark {{ isDark ? '' : 'hidden' }}">
+                            <div class="flex items-center gap-2">
+                                <button class="testimonial-prev w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer disabled:cursor-default disabled:bg-white/20 disabled:text-dark-800 not-disabled:bg-white/80 not-disabled:text-dark-800 not-disabled:hover:bg-white" aria-label="Previous">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <button class="testimonial-next w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer disabled:cursor-default disabled:bg-white/20 disabled:text-dark-800 not-disabled:bg-white/80 not-disabled:text-dark-800 not-disabled:hover:bg-white" aria-label="Next">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        {# Light-style buttons #}
+                        <div class="testimonial-nav-light {{ isDark ? 'hidden' : '' }}">
+                            <div class="flex items-center gap-2">
+                                <button class="testimonial-prev w-9 h-9 rounded-full flex items-center justify-center text-dark-300 border border-dark-200 transition-colors duration-200 disabled:text-dark-300 disabled:bg-transparent disabled:border-dark-200 not-disabled:bg-orange-500/10 not-disabled:text-orange-500 not-disabled:border-transparent cursor-pointer" aria-label="Previous">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <button class="testimonial-next w-9 h-9 rounded-full flex items-center justify-center text-dark-300 border border-dark-200 transition-colors duration-200 disabled:text-dark-300 disabled:bg-transparent disabled:border-dark-200 not-disabled:bg-orange-500/10 not-disabled:text-orange-500 not-disabled:border-transparent cursor-pointer" aria-label="Next">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+    </div>
+
+    {# Swiper — starts at container left edge, overflows to the right #}
+    {% if content.cards|default %}
+        <div class="testimonial-swiper-outer">
+            <div class="swiper testimonial-swiper overflow-visible">
+                <div class="swiper-wrapper">
+                    {% for card in content.cards %}
+                        <div class="swiper-slide h-auto">
+                            <div class="testimonial-card h-full rounded-2xl md:rounded-3xl {{ isDark ? 'border border-grey-700 bg-black' : 'bg-white testimonial-card--light' }} flex flex-col overflow-hidden">
+
+                                {# Coloured top bar #}
+                                <div class="testimonial-card-bar h-[8px] md:h-[10px] w-full flex-shrink-0"></div>
+
+                                {# Card body: author + quote #}
+                                <div class="flex flex-col md:flex-row flex-1 md:items-start">
+
+                                    {# Left: Author info #}
+                                    <div class="testimonial-card-author flex-shrink-0 flex flex-row md:flex-col items-center md:items-start gap-3 px-6 pt-6 pb-4 md:p-8">
+                                        {% if card.image|default %}
+                                            <img src="{{ card.image.url }}" alt="{{ card.name|default('') }}"
+                                                 class="w-11 h-11 md:w-12 md:h-12 rounded-full object-cover flex-shrink-0"/>
+                                        {% endif %}
+                                        <div class="md:mt-1">
+                                            {% if card.name|default %}
+                                                <p class="font-bold {{ isDark ? 'text-white' : 'text-grey-900' }} text-[17px] leading-snug">{{ card.name }}</p>
+                                            {% endif %}
+                                            {% if card.firm|default %}
+                                                <p class="text-[13px] {{ isDark ? 'text-grey-450' : 'text-grey-500' }} mt-0.5">{{ card.firm }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    {# Right: Quote text #}
+                                    <div class="flex-1 px-6 pb-12 md:px-8 md:pt-8 md:pb-16 flex items-start">
+                                        {% if card.text|default %}
+                                            <div class="text-[17px] md:text-lg lg:text-xl {{ isDark ? 'text-white' : 'text-grey-900' }} leading-relaxed">
+                                                {{ card.text|raw }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {# Pagination — mobile only #}
+        <div class="testimonial-pagination {{ isDark ? '' : 'testimonial-pagination--light' }} md:hidden mt-6 flex justify-center px-6"></div>
+    {% endif %}
+
+</section>

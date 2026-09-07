@@ -1,0 +1,364 @@
+{# SERVICES ART #}
+
+{% set isDark = content.mode|default('light') == 'dark' %}
+{% set isReverse = content.isReverse|default(false) %}
+{% set withBorders = content.withBorders|default %}
+
+{% set mediaType = content.media_type|default('image') %}
+{% set hasAnimation = mediaType == 'art' or mediaType == 'dev' or mediaType == 'ai' or (mediaType == 'image' and not content.image|default) %}
+
+<section data-controller="single-service"
+         data-single-service-animation-value="{{ hasAnimation ? 'true' : 'false' }}"
+         data-mode-block="{{ isDark ? 'dark' : 'light' }}"
+         class="single-service relative overflow-hidden {{ isDark ? 'bg-black' : 'bg-white' }}">
+
+    {% if not isDark %}
+        {# Subtle grid overlay (light mode) #}
+        <div class="absolute inset-0 opacity-[0.03]"
+             style="background-image:linear-gradient(rgba(0,0,0,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.05) 1px,transparent 1px);background-size:60px 60px"></div>
+    {% endif %}
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center {{ withBorders ? 'xl:border-t xl:border-b ' ~ (isDark ? 'xl:border-grey-700' : 'xl:border-grey-200') : '' }} py-16 md:py-24 lg:py-32">
+
+            {# Content – right side on desktop #}
+            <div class="art-fade-content {{ isReverse ? 'lg:order-1' : 'lg:order-2' }}">
+
+                {% if content.title|default %}
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-1.2px] leading-[1.1] {{ isDark ? 'text-white' : 'text-grey-900' }} mb-6 md:mb-8">
+                        {{ content.title }}
+                    </h2>
+                {% endif %}
+
+                {% if content.subtitle|default %}
+                    {% set subtitleParts = content.subtitle|split('|') %}
+                    <p class="art-subtitle text-lg md:text-xl lg:text-2xl font-semibold {{ isDark ? 'text-white/90' : 'text-grey-700' }} mb-6 md:mb-8">
+                        {{ subtitleParts[0] }}{% if subtitleParts[1] is defined %}<sup class="text-xs md:text-sm font-medium ml-[-0.25em] relative -top-1 md:-top-1 lg:-top-2">{{ subtitleParts[1] }}</sup>{% endif %}
+                    </p>
+                {% endif %}
+
+                {% if content.description|default %}
+                    <div class="art-description {{ isDark ? 'art-description--dark' : 'art-description--light' }} text-xl md:text-2xl lg:text-[21px] lg:tracking-[0.2px] {{ isDark ? 'text-grey-450' : 'text-grey-500' }} mb-8 md:mb-10 leading-[1.38] max-w-2xl">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+
+                {% if content.quotes_text|default %}
+                    <div class="art-quote relative pl-6 md:pl-8 border-l-4 {{ isDark ? 'border-white' : 'border-grey-900' }} py-2 mb-8 md:mb-10">
+                        <div class="text-lg md:text-xl lg:text-2xl font-medium {{ isDark ? 'text-white' : 'text-grey-900' }} italic leading-relaxed">
+                            {{ content.quotes_text|raw }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if content.button_text|default %}
+                    <a href="{{ content.button_link|default('#') }}"
+                       class="art-btn group inline-flex items-center space-x-2 {{ isDark ? 'text-white' : 'text-grey-900' }} font-semibold transition-colors duration-300 text-[15px] md:text-base">
+                        <span>{{ content.button_text }}</span>
+                        <div class="relative w-4 h-4 md:w-[18px] md:h-[18px]">
+                            <svg class="art-chevron-r absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                            <svg class="art-arrow-r absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </div>
+                    </a>
+                {% endif %}
+
+            </div>
+
+            {# Visual – left side on desktop #}
+            <div class="art-fade-visual {{ isReverse ? 'lg:order-2' : 'lg:order-1' }}">
+
+                {#
+                    art-visual-wrap: hover scale wrapper
+                    art-ring-wrap: translate(-50%,-50%) is baked into the @keyframes
+                    so it does not conflict with Tailwind's transform custom properties
+                #}
+                {% if mediaType == 'image' and content.image|default %}
+
+                    {# ── Image ── #}
+                    {% set media = sulu_resolve_media(content.image, 'en') %}
+                    <div class="art-visual-wrap w-full max-w-md md:max-w-lg mx-auto {{ isReverse ? 'lg:mx-0 lg:ml-auto' : 'lg:mx-0 lg:mr-auto' }}">
+                        <div class="relative rounded-[3rem] {{ isDark ? 'bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10' : 'bg-gradient-to-br from-black/5 to-black/[0.02] border-black/10 services-art-image--light' }} backdrop-blur-xl border overflow-hidden">
+                            <img src="{{ media.url }}"
+                                 alt="{{ media.title }}"
+                                 class="w-full h-auto">
+                        </div>
+                    </div>
+
+                {% elseif mediaType == 'dev' %}
+
+                    {# ── Dev animation – orbital nodes ── #}
+                    <div class="art-visual-wrap dev-visual-wrap relative aspect-square w-full max-w-md md:max-w-lg mx-auto {{ isReverse ? 'lg:ml-auto lg:mr-0' : 'lg:mr-auto lg:ml-0' }}">
+
+                        {# Glassmorphic container #}
+                        <div class="absolute inset-0 rounded-[3rem] {{ isDark ? 'bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10' : 'bg-gradient-to-br from-black/5 to-black/[0.02] border-black/10' }} backdrop-blur-xl border overflow-hidden">
+
+                            {# Orbital rings SVG #}
+                            <svg class="absolute inset-0 w-full h-full" style="overflow:visible;">
+                                <defs>
+                                    {# Outer ring: purple-500 → indigo-500 #}
+                                    <linearGradient id="dev-outer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%"   style="stop-color: var(--color-purple-500); stop-opacity: 0.65"/>
+                                        <stop offset="100%" style="stop-color: var(--color-indigo-500); stop-opacity: 0.55"/>
+                                    </linearGradient>
+                                </defs>
+                                {# Outer ring – purple/indigo, rotates CCW, 60s #}
+                                <circle class="dev-ring-outer" cx="50%" cy="50%" r="140"
+                                        fill="none" stroke="url(#dev-outer-gradient)"
+                                        stroke-width="1" stroke-dasharray="12 12"/>
+                            </svg>
+
+                            {# Central hub – amber-400 → orange-400, translate baked into keyframe #}
+                            <div class="dev-hub" style="position:absolute; top:50%; left:50%;">
+                                <div class="w-24 h-24 rounded-2xl backdrop-blur-md border-2 flex items-center justify-center"
+                                     style="background: linear-gradient(135deg, rgba(251,191,36,.5) 0%, rgba(251,146,60,.35) 100%); border-color: rgba(251,191,36,.65);">
+                                    <div class="w-16 h-16 rounded-xl border"
+                                         style="background: linear-gradient(135deg, rgba(251,191,36,.6) 0%, rgba(251,146,60,.45) 100%); border-color: rgba(251,191,36,.75);"></div>
+                                </div>
+                            </div>
+
+                            {#
+                                Node colors by semantics:
+                                API   = amber-400  (warm entry point)
+                                DB    = orange-400 (storage, persistent)
+                                UI    = pink-500   (visual/user-facing)
+                                CDN   = purple-500 (distributed network)
+                                AUTH  = indigo-500 (security, cool)
+                                CACHE = orange-400 (speed, warm)
+                            #}
+                            {% set nodes = [
+                                { label: 'API',   x:  140, y:    0, delay: '0s',   border: 'rgba(251,191,36,.65)', bg: 'rgba(251,191,36,.25)', color: 'rgba(251,191,36,1)'  },
+                                { label: 'DB',    x:   70, y:  121, delay: '0.5s', border: 'rgba(251,146,60,.65)', bg: 'rgba(251,146,60,.25)', color: 'rgba(251,146,60,1)'  },
+                                { label: 'UI',    x:  -70, y:  121, delay: '1s',   border: 'rgba(236,72,153,.65)', bg: 'rgba(236,72,153,.25)', color: 'rgba(236,72,153,1)'  },
+                                { label: 'CDN',   x: -140, y:    0, delay: '1.5s', border: 'rgba(168,85,247,.65)', bg: 'rgba(168,85,247,.25)', color: 'rgba(168,85,247,1)'  },
+                                { label: 'AUTH',  x:  -70, y: -121, delay: '2s',   border: 'rgba(99,102,241,.65)', bg: 'rgba(99,102,241,.25)',  color: 'rgba(99,102,241,1)'  },
+                                { label: 'CACHE', x:   70, y: -121, delay: '2.5s', border: 'rgba(251,146,60,.65)', bg: 'rgba(251,146,60,.25)', color: 'rgba(251,146,60,1)'  }
+                            ] %}
+                            {% for node in nodes %}
+                                <div style="position:absolute; top:50%; left:50%; transform:translate({{ node.x }}px, {{ node.y }}px);">
+                                    <div class="dev-node-pulse" style="--delay:{{ node.delay }}">
+                                        <div class="w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-xl backdrop-blur-sm border flex items-center justify-center"
+                                             style="background: {{ node.bg }}; border-color: {{ node.border }};">
+                                            <span class="text-[8px] font-mono font-semibold" style="color: {{ node.color }}">{{ node.label }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            {#
+                                Packets travel from hub outward.
+                                Color matches destination node: amber, orange, pink, purple, indigo, orange.
+                            #}
+                            {% set packets = [
+                                { x:  140, y:    0, mx:  70, my:   0, delay: '0s',   color: 'rgba(251,191,36,1)',  colorMid: 'rgba(251,191,36,0.6)'  },
+                                { x:   70, y:  121, mx:  35, my:  61, delay: '0.5s', color: 'rgba(251,146,60,1)',  colorMid: 'rgba(251,146,60,0.6)'  },
+                                { x:  -70, y:  121, mx: -35, my:  61, delay: '1s',   color: 'rgba(236,72,153,1)',  colorMid: 'rgba(236,72,153,0.6)'  },
+                                { x: -140, y:    0, mx: -70, my:   0, delay: '1.5s', color: 'rgba(168,85,247,1)',  colorMid: 'rgba(168,85,247,0.6)'  },
+                                { x:  -70, y: -121, mx: -35, my: -61, delay: '2s',   color: 'rgba(99,102,241,1)',  colorMid: 'rgba(99,102,241,0.6)'  },
+                                { x:   70, y: -121, mx:  35, my: -61, delay: '2.5s', color: 'rgba(251,146,60,1)',  colorMid: 'rgba(251,146,60,0.6)'  }
+                            ] %}
+                            {% for packet in packets %}
+                                <div class="dev-packet"
+                                     style="position:absolute; top:50%; left:50%; width:8px; height:8px; border-radius:50%; background:radial-gradient(circle, {{ packet.color }} 0%, {{ packet.colorMid }} 100%); --px:{{ packet.x }}px; --py:{{ packet.y }}px; --mx:{{ packet.mx }}px; --my:{{ packet.my }}px; --delay:{{ packet.delay }};"></div>
+                            {% endfor %}
+
+                        </div>
+
+                        {# Floating accent – violet blob #}
+                        <div class="dev-accent absolute -top-8 -left-8 w-40 h-40 rounded-full blur-3xl"></div>
+
+                    </div>
+
+                {% elseif mediaType == 'ai' %}
+
+                    {# ── AI animation – neural network ── #}
+                    <div class="art-visual-wrap ai-visual-wrap relative aspect-square w-full max-w-md md:max-w-lg mx-auto {{ isReverse ? 'lg:ml-auto lg:mr-0' : 'lg:mr-auto lg:ml-0' }}">
+
+                        {# Glassmorphic container #}
+                        <div class="absolute inset-0 rounded-[3rem] {{ isDark ? 'bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10' : 'bg-gradient-to-br from-black/5 to-black/[0.02] border-black/10' }} backdrop-blur-xl border overflow-hidden">
+
+                            <svg data-smil class="absolute inset-0 w-full h-full" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="aiLineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%"   stop-color="rgba(139,92,246,0.6)"/>
+                                        <stop offset="50%"  stop-color="rgba(168,85,247,0.6)"/>
+                                        <stop offset="100%" stop-color="rgba(236,72,153,0.6)"/>
+                                    </linearGradient>
+                                    <linearGradient id="aiLineGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%"   stop-color="rgba(236,72,153,0.6)"/>
+                                        <stop offset="50%"  stop-color="rgba(249,115,22,0.6)"/>
+                                        <stop offset="100%" stop-color="rgba(251,191,36,0.6)"/>
+                                    </linearGradient>
+                                    <linearGradient id="aiLineGrad3" x1="0%" y1="100%" x2="100%" y2="0%">
+                                        <stop offset="0%"   stop-color="rgba(139,92,246,0.5)"/>
+                                        <stop offset="100%" stop-color="rgba(249,115,22,0.5)"/>
+                                    </linearGradient>
+                                    <radialGradient id="aiNodeGrad1">
+                                        <stop offset="0%"   stop-color="rgba(139,92,246,0.9)"/>
+                                        <stop offset="70%"  stop-color="rgba(139,92,246,0.4)"/>
+                                        <stop offset="100%" stop-color="rgba(139,92,246,0)"/>
+                                    </radialGradient>
+                                    <radialGradient id="aiNodeGrad2">
+                                        <stop offset="0%"   stop-color="rgba(236,72,153,0.9)"/>
+                                        <stop offset="70%"  stop-color="rgba(236,72,153,0.4)"/>
+                                        <stop offset="100%" stop-color="rgba(236,72,153,0)"/>
+                                    </radialGradient>
+                                    <radialGradient id="aiNodeGrad3">
+                                        <stop offset="0%"   stop-color="rgba(249,115,22,0.9)"/>
+                                        <stop offset="70%"  stop-color="rgba(249,115,22,0.4)"/>
+                                        <stop offset="100%" stop-color="rgba(249,115,22,0)"/>
+                                    </radialGradient>
+                                    <filter id="aiGlow">
+                                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                    </filter>
+                                    <linearGradient id="aiFlowGrad">
+                                        <stop offset="0%" stop-color="rgba(99,102,241,0)">
+                                            <animate attributeName="stop-color" values="rgba(99,102,241,0);rgba(99,102,241,0.8);rgba(99,102,241,0)" dur="3s" repeatCount="indefinite"/>
+                                        </stop>
+                                        <stop offset="50%" stop-color="rgba(236,72,153,0.8)">
+                                            <animate attributeName="offset" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+                                        </stop>
+                                        <stop offset="100%" stop-color="rgba(251,146,60,0)">
+                                            <animate attributeName="stop-color" values="rgba(251,146,60,0);rgba(251,146,60,0.8);rgba(251,146,60,0)" dur="3s" repeatCount="indefinite"/>
+                                        </stop>
+                                    </linearGradient>
+                                </defs>
+
+                                <g opacity="0.3">
+                                    <line x1="100" y1="100" x2="200" y2="180" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                                    <line x1="100" y1="100" x2="180" y2="250" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                                    <line x1="500" y1="120" x2="420" y2="200" stroke="url(#aiLineGrad2)" stroke-width="1"/>
+                                    <line x1="500" y1="120" x2="440" y2="280" stroke="url(#aiLineGrad2)" stroke-width="1"/>
+                                    <line x1="120" y1="600" x2="200" y2="520" stroke="url(#aiLineGrad3)" stroke-width="1"/>
+                                    <line x1="120" y1="600" x2="220" y2="480" stroke="url(#aiLineGrad3)" stroke-width="1"/>
+                                    <line x1="480" y1="580" x2="400" y2="500" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                                    <line x1="480" y1="580" x2="380" y2="460" stroke="url(#aiLineGrad1)" stroke-width="1"/>
+                                </g>
+
+                                <g opacity="0.5">
+                                    <line x1="200" y1="180" x2="300" y2="220" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="200" y1="180" x2="280" y2="320" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="180" y1="250" x2="300" y2="300" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="420" y1="200" x2="350" y2="280" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="420" y1="200" x2="300" y2="220" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="440" y1="280" x2="350" y2="340" stroke="url(#aiLineGrad3)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="200" y1="520" x2="280" y2="450" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="220" y1="480" x2="300" y2="420" stroke="url(#aiLineGrad1)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="400" y1="500" x2="330" y2="440" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                                    <line x1="380" y1="460" x2="300" y2="420" stroke="url(#aiLineGrad2)" stroke-width="2" filter="url(#aiGlow)"/>
+                                </g>
+
+                                <g opacity="0.8">
+                                    <line x1="300" y1="220" x2="300" y2="300" stroke="url(#aiFlowGrad)" stroke-width="3" filter="url(#aiGlow)" stroke-linecap="round"/>
+                                    <line x1="300" y1="300" x2="300" y2="420" stroke="url(#aiFlowGrad)" stroke-width="3" filter="url(#aiGlow)" stroke-linecap="round"/>
+                                    <line x1="280" y1="320" x2="300" y2="420" stroke="url(#aiLineGrad1)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                                    <line x1="350" y1="280" x2="330" y2="360" stroke="url(#aiLineGrad2)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                                    <line x1="350" y1="340" x2="330" y2="360" stroke="url(#aiLineGrad3)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                                    <line x1="280" y1="450" x2="300" y2="420" stroke="url(#aiLineGrad2)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                                    <line x1="330" y1="440" x2="300" y2="420" stroke="url(#aiLineGrad3)" stroke-width="2.5" filter="url(#aiGlow)"/>
+                                </g>
+
+                                <g>
+                                    <circle r="3" fill="#6366f1" filter="url(#aiGlow)"><animateMotion dur="3s" repeatCount="indefinite" path="M 100,100 Q 150,140 200,180" begin="0s"/><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="0s"/></circle>
+                                    <circle r="3" fill="#ec4899" filter="url(#aiGlow)"><animateMotion dur="4s" repeatCount="indefinite" path="M 200,180 L 300,220" begin="0.25s"/><animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="0.25s"/></circle>
+                                    <circle r="3" fill="#fb923c" filter="url(#aiGlow)"><animateMotion dur="5s" repeatCount="indefinite" path="M 300,220 L 300,300" begin="0.5s"/><animate attributeName="opacity" values="0;1;1;0" dur="5s" repeatCount="indefinite" begin="0.5s"/></circle>
+                                    <circle r="3" fill="#8b5cf6" filter="url(#aiGlow)"><animateMotion dur="6s" repeatCount="indefinite" path="M 300,300 L 300,420" begin="0.75s"/><animate attributeName="opacity" values="0;1;1;0" dur="6s" repeatCount="indefinite" begin="0.75s"/></circle>
+                                    <circle r="3" fill="#6366f1" filter="url(#aiGlow)"><animateMotion dur="3s" repeatCount="indefinite" path="M 500,120 Q 460,160 420,200" begin="1s"/><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="1s"/></circle>
+                                    <circle r="3" fill="#ec4899" filter="url(#aiGlow)"><animateMotion dur="4s" repeatCount="indefinite" path="M 420,200 L 300,220" begin="1.25s"/><animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="1.25s"/></circle>
+                                </g>
+
+                                <g opacity="0.4">
+                                    <circle cx="100" cy="100" r="25" fill="url(#aiNodeGrad1)"/>
+                                    <circle cx="500" cy="120" r="25" fill="url(#aiNodeGrad2)"/>
+                                    <circle cx="120" cy="600" r="25" fill="url(#aiNodeGrad3)"/>
+                                    <circle cx="480" cy="580" r="25" fill="url(#aiNodeGrad1)"/>
+                                </g>
+
+                                <g opacity="0.7">
+                                    <circle cx="200" cy="180" r="20" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                                    <circle cx="180" cy="250" r="18" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                                    <circle cx="420" cy="200" r="22" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                                    <circle cx="440" cy="280" r="20" fill="url(#aiNodeGrad3)" filter="url(#aiGlow)"/>
+                                    <circle cx="200" cy="520" r="18" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                                    <circle cx="220" cy="480" r="16" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)"/>
+                                    <circle cx="400" cy="500" r="20" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                                    <circle cx="380" cy="460" r="18" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)"/>
+                                </g>
+
+                                <g opacity="1">
+                                    <circle cx="300" cy="220" r="30" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)">
+                                        <animate attributeName="r" values="30;35;30" dur="2s" repeatCount="indefinite"/>
+                                        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="300" cy="300" r="35" fill="url(#aiNodeGrad2)" filter="url(#aiGlow)">
+                                        <animate attributeName="r" values="35;40;35" dur="2.5s" repeatCount="indefinite"/>
+                                        <animate attributeName="opacity" values="0.9;1;0.9" dur="2.5s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="330" cy="360" r="28" fill="url(#aiNodeGrad3)" filter="url(#aiGlow)">
+                                        <animate attributeName="r" values="28;33;28" dur="2.2s" repeatCount="indefinite"/>
+                                        <animate attributeName="opacity" values="0.85;1;0.85" dur="2.2s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="300" cy="420" r="32" fill="url(#aiNodeGrad1)" filter="url(#aiGlow)">
+                                        <animate attributeName="r" values="32;37;32" dur="2.3s" repeatCount="indefinite"/>
+                                        <animate attributeName="opacity" values="0.9;1;0.9" dur="2.3s" repeatCount="indefinite"/>
+                                    </circle>
+                                </g>
+                            </svg>
+
+                            <div class="ai-orb1 absolute top-20 right-20 w-40 h-40 rounded-full pointer-events-none"
+                                 style="background:radial-gradient(circle,rgba(139,92,246,0.4) 0%,transparent 70%);filter:blur(40px)"></div>
+                            <div class="ai-orb2 absolute bottom-24 left-14 w-44 h-44 rounded-full pointer-events-none"
+                                 style="background:radial-gradient(circle,rgba(236,72,153,0.4) 0%,transparent 70%);filter:blur(50px)"></div>
+                            <div class="ai-orb3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 rounded-full pointer-events-none"
+                                 style="background:radial-gradient(circle,rgba(249,115,22,0.3) 0%,transparent 70%);filter:blur(60px)"></div>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    {# ── Art animation – rotating gradient ring ── #}
+                    <div class="art-visual-wrap art-visual-mob relative aspect-square w-full max-w-md md:max-w-lg mx-auto {{ isReverse ? 'lg:ml-auto lg:mr-0' : 'lg:mr-auto lg:ml-0' }}">
+
+                        {# Glassmorphic container #}
+                        <div class="absolute inset-0 rounded-[3rem] {{ isDark ? 'bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10' : 'bg-gradient-to-br from-black/5 to-black/[0.02] border-black/10' }} backdrop-blur-xl border overflow-hidden">
+
+                            {# Central rotating gradient ring #}
+                            <div class="art-ring-wrap" style="position:absolute; top:50%; left:50%;">
+                                <svg width="320" height="320" viewBox="0 0 320 320">
+                                    <defs>
+                                        <linearGradient id="art-ring-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            {# amber-400 → orange-400 → pink-500 → purple-500 → indigo-500 #}
+                                            <stop offset="0%"   style="stop-color: var(--color-amber-400)"/>
+                                            <stop offset="25%"  style="stop-color: var(--color-orange-400)"/>
+                                            <stop offset="50%"  style="stop-color: var(--color-pink-500)"/>
+                                            <stop offset="75%"  style="stop-color: var(--color-purple-500)"/>
+                                            <stop offset="100%" style="stop-color: var(--color-indigo-500)"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <circle cx="160" cy="160" r="130" fill="none" stroke="url(#art-ring-gradient)" stroke-width="12"/>
+                                </svg>
+                            </div>
+
+                        </div>
+
+                        {# Floating accent #}
+                        <div class="art-accent absolute -bottom-8 -left-8 w-40 h-40 rounded-full blur-3xl"></div>
+
+                    </div>
+
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</section>

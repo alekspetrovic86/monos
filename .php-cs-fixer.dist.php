@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
-$finder = (new PhpCsFixer\Finder())
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = (new Finder())
     ->in(__DIR__)
-    ->ignoreVCSIgnored(true)
+    ->ignoreDotFiles(false)
+    ->exclude('var')
     ->notName('bundles.php');
 
-return (new PhpCsFixer\Config())
+return (new Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
@@ -40,9 +44,13 @@ return (new PhpCsFixer\Config())
         'single_line_throw' => false,
         'visibility_required' => ['elements' => ['property', 'method', 'const']],
         'phpdoc_to_comment' => [
-            'ignored_tags' => ['todo', 'var'],
+            'ignored_tags' => ['todo', 'var', 'see', 'phpstan-ignore-next-line'],
         ],
         'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters']],
         'global_namespace_import' => ['import_classes' => false, 'import_constants' => false, 'import_functions' => false],
+        'nullable_type_declaration_for_default_null_value' => true,
+        'fully_qualified_strict_types' => false,
+        'no_null_property_initialization' => false,
+        'nullable_type_declaration' => false,
     ])
     ->setFinder($finder);

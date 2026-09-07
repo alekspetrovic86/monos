@@ -9,6 +9,22 @@
                 </meta>
 
                 <properties>
+                    <property name="mode" type="single_select">
+                        <meta>
+                            <title lang="en">Mode</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="light" type="collection">
+                                    <param name="title" value="Light"/>
+                                </param>
+                                <param name="dark" type="collection">
+                                    <param name="title" value="Dark"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
                     <property name="title" type="text_line">
                         <meta>
                             <title lang="en">Title</title>
@@ -21,6 +37,44 @@
                         </meta>
                     </property>
 
+                    <block name="infos" default-type="info" minOccurs="0">
+                        <meta>
+                            <title lang="en">Info Items</title>
+                        </meta>
+                        <types>
+                            <type name="info">
+                                <meta>
+                                    <title lang="en">Info Item</title>
+                                </meta>
+                                <properties>
+                                    <property name="icon" type="single_media_selection">
+                                        <meta>
+                                            <title lang="en">Icon</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="title" type="text_line" colspan="6">
+                                        <meta>
+                                            <title lang="en">Title</title>
+                                        </meta>
+                                    </property>
+
+                                    <property name="text" type="text_line" colspan="6">
+                                        <meta>
+                                            <title lang="en">Text</title>
+                                        </meta>
+                                    </property>
+                                </properties>
+                            </type>
+                        </types>
+                    </block>
+
+                    <property name="image" type="single_media_selection">
+                        <meta>
+                            <title lang="en">Image</title>
+                        </meta>
+                    </property>
+
                     <property name="form" type="single_form_selection">
                         <meta>
                             <title lang="en">Form</title>
@@ -28,6 +82,12 @@
                         <params>
                             <param name="resourceKey" value="page"/>
                         </params>
+                    </property>
+
+                    <property name="bottom_text" type="text_line">
+                        <meta>
+                            <title lang="en">Bottom Text</title>
+                        </meta>
                     </property>
                 </properties>
             </type>

@@ -1,10 +1,94 @@
-{# BLOCK: HERO #}
-<section class="section section-hero">
-    <div class="hero">
-        {% if content.media|default and content.media.type.name == 'image' %}
-            <div class="hero__media-image-wrapper">
-                <img class="hero__media-image" src="{{ content.media.url }}" alt="">
-            </div>
-        {% endif %}
+{# HERO #}
+
+{% set isDark = content.mode|default('light') == 'dark' %}
+
+<section data-controller="hero"
+         data-hero-mode-value="{{ isDark ? 'dark' : 'light' }}"
+         data-mode-block="{{ isDark ? 'dark' : 'light' }}"
+         class="relative hero-full-height flex items-center overflow-hidden pt-[80px]">
+
+    {# Animated background #}
+    <div class="hero-bg-container absolute inset-0 overflow-hidden {{ isDark ? 'hero-bg--dark' : 'bg-surface' }}">
+
+        {# Dark mode — static gradient (applied via .hero-bg--dark on container) #}
+
+        {# Light mode — ribbon system #}
+        <div data-theme-version="light" {{ isDark ? 'style="display:none"' : '' }}>
+            <div id="hero-ribbon1" class="absolute inset-0" style="opacity:0.6;"></div>
+            <div id="hero-ribbon2" class="absolute inset-0" style="opacity:0.5;"></div>
+            <div id="hero-wave3" class="absolute top-1/4 right-1/4 w-[120%] h-[120%]" style="opacity:0.6;"></div>
+            <div id="hero-wave4" class="absolute bottom-1/3 left-1/3 w-[100%] h-[100%]" style="opacity:0.5;"></div>
+            <div id="hero-wave5" class="absolute top-1/2 left-1/2 w-[90%] h-[90%]" style="opacity:0.55;"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5"></div>
+        </div>
+
+        {# Grain texture #}
+        <div class="absolute inset-0 mix-blend-overlay" style="
+            animation: grainPulse 8s ease-in-out infinite;
+            background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E&quot;);
+        "></div>
+
     </div>
+
+    {# Hero content #}
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-28 lg:py-32 w-full">
+        <div class="max-w-[660px] xl:max-w-4xl mx-auto xl:mx-0 xl:pl-[140px] 2xl:pl-0">
+            <div id="hero-content">
+
+                {# Headline #}
+                {% if content.title|default %}
+                    <h1 class="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[-1.2px] leading-[1.1] {{ isDark ? '' : 'text-dark-800 hero-headline' }} mb-4 md:mb-6">
+                        {% if isDark %}
+                            <span class="hero-default-dark-title">{{ content.title }}</span>
+                        {% else %}
+                            {{ content.title }}
+                        {% endif %}
+                    </h1>
+                {% endif %}
+
+                {# Description #}
+                {% if content.description|default %}
+                    <div class="hero-description text-lg md:text-xl lg:text-[21px] lg:tracking-[0.2px] {{ isDark ? 'text-white' : 'text-dark-700' }} mb-7 md:mb-10 leading-[1.38] max-w-2xl font-medium">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+
+                {# CTA Buttons #}
+                {% if content.button_text1|default or content.button_text2|default %}
+                    <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
+
+                        {% if content.button_text1|default %}
+                            <a id="btn-contact" href="{{ content.button_link1|default('#') }}"
+                               class="group px-6 py-3.5 md:px-8 md:py-4 {{ isDark ? 'bg-white text-dark-900' : 'bg-dark-800 text-white' }} rounded-full font-semibold transition-all duration-300 flex items-center justify-center space-x-2 min-h-[44px] text-[15px] md:text-base">
+                                <span>{{ content.button_text1 }}</span>
+                                <div class="relative w-[18px] h-[18px] md:w-5 md:h-5">
+                                    <svg class="icon-chevron absolute inset-0 w-[18px] h-[18px] md:w-5 md:h-5"
+                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                    <svg class="icon-arrow absolute inset-0 w-[18px] h-[18px] md:w-5 md:h-5"
+                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"/>
+                                        <polyline points="12 5 19 12 12 19"/>
+                                    </svg>
+                                </div>
+                            </a>
+                        {% endif %}
+
+                        {% if content.button_text2|default %}
+                            <a href="{{ content.button_link2|default('#') }}"
+                               class="hero-btn-secondary px-6 py-3.5 md:px-8 md:py-4 {{ isDark ? 'bg-transparent text-white border border-grey-700' : 'bg-white/80 backdrop-blur-md text-dark-800 border border-dark-800/10 hover:border-dark-800/20 hover:bg-white/90' }} rounded-full transition-all duration-300 flex items-center justify-center min-h-[44px] text-[15px] md:text-base font-semibold">
+                                {{ content.button_text2 }}
+                            </a>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
 </section>

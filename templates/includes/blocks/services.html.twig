@@ -1,0 +1,157 @@
+{# SERVICES #}
+
+{% set mode = content.mode|default('light') %}
+{% set isDark = mode == 'dark' %}
+{% set colorTheme = content.color_theme|default('purple') %}
+
+{# Per-theme light-mode classes for nav buttons and card links #}
+{% set themeMap = {
+    'purple': { btn: 'not-disabled:bg-purple-500/10 not-disabled:text-purple-500 not-disabled:border-transparent', link: 'text-purple-600 hover:text-purple-700' },
+    'orange': { btn: 'not-disabled:bg-orange-500/10 not-disabled:text-orange-500 not-disabled:border-transparent', link: 'text-orange-500 hover:text-orange-600' },
+    'violet': { btn: 'not-disabled:bg-violet-500/10 not-disabled:text-violet-500 not-disabled:border-transparent', link: 'text-violet-600 hover:text-violet-700' },
+    'pink':   { btn: 'not-disabled:bg-pink-500/10 not-disabled:text-pink-500 not-disabled:border-transparent',   link: 'text-pink-600 hover:text-pink-700' },
+    'indigo': { btn: 'not-disabled:bg-indigo-500/10 not-disabled:text-indigo-500 not-disabled:border-transparent', link: 'text-indigo-600 hover:text-indigo-700' },
+    'amber':  { btn: 'not-disabled:bg-amber-500/10 not-disabled:text-amber-500 not-disabled:border-transparent',  link: 'text-amber-500 hover:text-amber-600' },
+} %}
+{% set tc = themeMap[colorTheme] ?? themeMap['purple'] %}
+
+<section data-controller="services"
+         data-mode-block="{{ isDark ? 'dark' : 'light' }}"
+         data-color-theme="{{ colorTheme }}"
+         class="relative py-16 md:py-24 lg:py-32 overflow-hidden {{ isDark ? 'bg-black' : 'bg-white' }}">
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+        {# Header row: title/desc left, nav buttons right #}
+        {% if content.title|default or content.description|default or content.cards|default %}
+            <div class="services-block-heading flex items-end justify-between mb-10 md:mb-12 lg:mb-16 gap-6">
+
+                <div>
+                    {% if content.title|default %}
+                        <h2 class="services-heading-title text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-1.2px] leading-[1.1] {{ isDark ? 'text-white' : 'text-grey-900' }} mb-3 md:mb-4">
+                            {{ content.title }}
+                        </h2>
+                    {% endif %}
+                    {% if content.description|default %}
+                        <div class="services-heading-desc text-xl md:text-2xl lg:text-[21px] lg:tracking-[0.2px] {{ isDark ? 'text-grey-450' : 'text-grey-500' }} max-w-3xl leading-[1.38]">
+                            {{ content.description|raw }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Prev / Next buttons — desktop only, both versions always rendered, CSS toggles visibility #}
+                {% if content.cards|default %}
+                    <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+
+                        {# Dark-style buttons #}
+                        <div class="services-nav-dark {{ isDark ? '' : 'hidden' }}">
+                            <div class="flex items-center gap-2">
+                                <button class="services-prev w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer disabled:cursor-default disabled:bg-white/10 disabled:text-white/30 not-disabled:bg-white/80 not-disabled:text-dark-800 not-disabled:hover:bg-white" aria-label="Previous">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <button class="services-next w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer disabled:cursor-default disabled:bg-white/10 disabled:text-white/30 not-disabled:bg-white/80 not-disabled:text-dark-800 not-disabled:hover:bg-white" aria-label="Next">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        {# Light-style buttons #}
+                        <div class="services-nav-light {{ isDark ? 'hidden' : '' }}">
+                            <div class="flex items-center gap-2">
+                                <button class="services-prev w-9 h-9 rounded-full flex items-center justify-center text-dark-300 border border-dark-200 transition-colors duration-200 disabled:text-dark-300 disabled:bg-transparent disabled:border-dark-200 {{ tc.btn }} cursor-pointer" aria-label="Previous">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <button class="services-next w-9 h-9 rounded-full flex items-center justify-center text-dark-300 border border-dark-200 transition-colors duration-200 disabled:text-dark-300 disabled:bg-transparent disabled:border-dark-200 {{ tc.btn }} cursor-pointer" aria-label="Next">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+    </div>
+
+    {# Swiper — starts at container left edge, overflows to the right #}
+    {% if content.cards|default %}
+        <div class="services-swiper-outer">
+            <div class="swiper services-swiper overflow-visible">
+                <div class="swiper-wrapper">
+                    {% for card in content.cards %}
+                        <div class="swiper-slide h-auto">
+                            <div class="services-card {{ isDark ? 'services-card--dark border border-grey-700 bg-black' : 'bg-white' }} h-full rounded-2xl md:rounded-3xl overflow-hidden flex flex-col relative group/card">
+                                {% if card.button_link|default %}
+                                    <a href="{{ card.button_link }}" class="absolute inset-0 z-0" aria-label="{{ card.title|default('') }}" tabindex="-1"></a>
+                                {% endif %}
+
+                                {# Coloured top bar #}
+                                <div class="services-card-bar {{ isDark ? 'services-card-bar--dark' : '' }} h-[8px] md:h-[10px] w-full flex-shrink-0"></div>
+
+                                <div class="flex flex-col flex-1">
+
+                                    {# Content: title, description, button #}
+                                    <div class="flex flex-col flex-1 min-h-[320px] px-6 pt-10 pb-10 md:pt-20 md:px-10 md:pb-[68px]">
+
+                                        {% if card.title|default %}
+                                            <h3 class="services-card-title text-xl md:text-[28px] md:leading-snug font-semibold {{ isDark ? 'text-white' : 'text-grey-900' }} mb-3">
+                                                {{ card.title }}
+                                            </h3>
+                                        {% endif %}
+
+                                        {% if card.text|default %}
+                                            <div class="services-card-text text-base md:text-[18px] {{ isDark ? 'text-grey-450' : 'text-grey-500' }} leading-relaxed mb-5 flex-1">
+                                                {{ card.text|raw }}
+                                            </div>
+                                        {% endif %}
+
+                                        {% if card.button_text|default %}
+                                            <a href="{{ card.button_link|default('#') }}"
+                                               class="services-card-link relative z-10 inline-flex items-center gap-1.5 text-[15px] md:text-[15px] font-medium {{ isDark ? 'text-white/80 hover:text-white' : tc.link }} transition-colors duration-200">
+                                                <span>{{ card.button_text }}</span>
+                                                <div class="relative w-4 h-4">
+                                                    <svg class="icon-chevron absolute inset-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polyline points="9 18 15 12 9 6"/>
+                                                    </svg>
+                                                    <svg class="icon-arrow absolute inset-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        {% endif %}
+
+                                    </div>
+
+                                    {# Logo row #}
+                                    {% if card.images|default %}
+                                        <div class="services-logo-row border-t {{ isDark ? 'border-grey-700' : 'border-dark-100' }} flex items-center justify-evenly gap-4 flex-nowrap overflow-hidden p-6 md:py-5 md:px-[30px]">
+                                            {% for logo in card.images %}
+                                                <img src="{{ logo.url }}" alt="{{ logo.title|default('') }}"
+                                                     class="services-logo-img h-[30px] md:h-[40px] w-auto max-w-[80px] object-contain flex-shrink transition-all duration-300 {{ isDark ? 'services-card-logo--dark' : 'services-card-logo--light' }}">
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {# Pagination — mobile only #}
+        <div class="services-pagination {{ isDark ? 'services-pagination--dark' : '' }} md:hidden mt-8 flex justify-center px-6"></div>
+    {% endif %}
+
+</section>

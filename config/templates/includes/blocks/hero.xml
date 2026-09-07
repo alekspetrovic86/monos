@@ -9,6 +9,22 @@
                 </meta>
 
                 <properties>
+                    <property name="mode" type="single_select">
+                        <meta>
+                            <title lang="en">Mode</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="light" type="collection">
+                                    <param name="title" value="Light"/>
+                                </param>
+                                <param name="dark" type="collection">
+                                    <param name="title" value="Dark"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
                     <property name="title" type="text_line">
                         <meta>
                             <title lang="en">Title</title>
@@ -21,9 +37,27 @@
                         </meta>
                     </property>
 
-                    <property name="media" type="single_media_selection">
+                    <property name="button_text1" type="text_line" colspan="6">
                         <meta>
-                            <title lang="en">Media</title>
+                            <title lang="en">Button text 1</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_link1" type="link" colspan="6">
+                        <meta>
+                            <title lang="en">Button link 1</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_text2" type="text_line" colspan="6">
+                        <meta>
+                            <title lang="en">Button text 2</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_link2" type="link" colspan="6">
+                        <meta>
+                            <title lang="en">Button link 2</title>
                         </meta>
                     </property>
                 </properties>

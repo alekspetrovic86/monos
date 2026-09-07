@@ -4,11 +4,9 @@
             "turbo-core": {
                 "enabled": true,
                 "fetch": "eager"
-            }
-        },
-        "@symfony/ux-autocomplete": {
-            "autocomplete": {
-                "enabled": true,
+            },
+            "mercure-turbo-stream": {
+                "enabled": false,
                 "fetch": "eager"
             }
         }

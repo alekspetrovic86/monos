@@ -1,0 +1,36 @@
+{# TECH MARQUEE #}
+
+{% if content.logos|default %}
+<section data-controller="tech-marque" class="tech-marque py-4 md:py-5 lg:py-6 bg-grey-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="relative w-full overflow-hidden py-2 md:py-3">
+
+            {# Left fade #}
+            <div class="absolute left-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none tech-marque-fade-left"></div>
+            {# Right fade #}
+            <div class="absolute right-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none tech-marque-fade-right"></div>
+
+            {# Track — duplicated for seamless loop #}
+            <div class="tech-marque-track flex gap-16 md:gap-24 lg:gap-32 items-center w-max">
+
+                {# Set 1 #}
+                {% for logo in content.logos %}
+                    <div class="flex-shrink-0 flex items-center justify-center">
+                        <img src="{{ logo.url }}" alt="{{ logo.title|default('') }}"
+                             class="tech-marque-logo h-7 md:h-9 lg:h-10 w-auto object-contain select-none">
+                    </div>
+                {% endfor %}
+
+                {# Set 2 — duplicate for seamless loop #}
+                {% for logo in content.logos %}
+                    <div class="flex-shrink-0 flex items-center justify-center" aria-hidden="true">
+                        <img src="{{ logo.url }}" alt=""
+                             class="tech-marque-logo h-7 md:h-9 lg:h-10 w-auto object-contain select-none">
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}

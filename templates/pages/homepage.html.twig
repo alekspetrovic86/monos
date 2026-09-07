@@ -1,12 +1,5 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
 {% block content %}
-
-    <aside class="main-sidebar"></aside>
-
-    {# MAIN CONTENT #}
-    <main class="site-main site-main-homepage">
-        {% include 'includes/blocks.html.twig' %}
-    </main>
-
+    {% include 'includes/blocks.html.twig' %}
 {% endblock %}

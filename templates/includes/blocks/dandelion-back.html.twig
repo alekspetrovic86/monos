@@ -1,0 +1,66 @@
+{# DANDELION #}
+
+<section data-controller="dandelion" class="dandelion-bg relative overflow-hidden">
+    <div class="relative min-h-[820px] md:min-h-[1000px] lg:min-h-[1000px]">
+
+        {# Content #}
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24 pb-32 md:pb-40 lg:pb-48">
+            <div class="gc-heading text-center max-w-4xl mx-auto">
+
+                {# Badge (mini title) #}
+                {% if content.mini_title|default or content.mini_title_icon|default %}
+                    <div class="inline-flex items-center space-x-2 px-4 py-2 bg-white/60 backdrop-blur-md rounded-full border border-gray-200/50 shadow-sm mb-8">
+                        {% if content.mini_title_icon|default %}
+                            <img src="{{ content.mini_title_icon.url }}" alt="{{ content.mini_title_icon.title|default('') }}"
+                                 class="w-4 h-4">
+                        {% endif %}
+                        {% if content.mini_title|default %}
+                            <span class="text-xs text-gray-700 font-medium tracking-wider uppercase">{{ content.mini_title }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {# Title #}
+                {% if content.title|default %}
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-1.2px] leading-[1.1] text-gray-900 mb-6">
+                        {{ content.title }}
+                    </h2>
+                {% endif %}
+
+                {# Description #}
+                {% if content.description|default %}
+                    <div class="text-xl md:text-2xl lg:text-[21px] lg:tracking-[0.2px] text-dark-400 mb-12 md:mb-16 leading-[1.38]">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+
+                {# Features #}
+                {% if content.features|default %}
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                        {% for feature in content.features %}
+                            <div class="gc-stat text-center" data-stat-delay="{{ loop.index * 100 }}">
+                                {% if feature.title|default %}
+                                    <div class="gc-stat-value text-4xl md:text-5xl font-bold mb-2">
+                                        {{ feature.title }}
+                                    </div>
+                                {% endif %}
+                                {% if feature.text|default %}
+                                    <div class="text-sm md:text-base text-gray-600">
+                                        {{ feature.text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        {# Interactive Dandelion canvas — anchored to bottom #}
+        <div class="absolute bottom-0 left-0 right-0 h-auto md:h-[500px] lg:h-[600px] pointer-events-auto">
+            <canvas id="dandelion-canvas" class="block w-full h-full min-h-[500px]"></canvas>
+        </div>
+
+    </div>
+</section>

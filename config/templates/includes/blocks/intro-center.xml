@@ -1,0 +1,61 @@
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <block name="blocks" default-type="intro-center">
+        <types>
+            <type name="intro-center">
+                <meta>
+                    <title lang="en">Intro Center</title>
+                </meta>
+
+                <properties>
+                    <property name="mode" type="single_select">
+                        <meta>
+                            <title lang="en">Mode</title>
+                        </meta>
+                        <params>
+                            <param name="values" type="collection">
+                                <param name="dark" type="collection">
+                                    <param name="title" value="Dark"/>
+                                </param>
+                                <param name="light" type="collection">
+                                    <param name="title" value="Light"/>
+                                </param>
+                            </param>
+                        </params>
+                    </property>
+
+                    <property name="mini_title" type="text_line">
+                        <meta>
+                            <title lang="en">Mini Title (Label)</title>
+                        </meta>
+                    </property>
+
+                    <property name="title" type="text_line">
+                        <meta>
+                            <title lang="en">Title</title>
+                        </meta>
+                    </property>
+
+                    <property name="description" type="text_editor">
+                        <meta>
+                            <title lang="en">Description</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_text" type="text_line" colspan="6">
+                        <meta>
+                            <title lang="en">Button Text</title>
+                        </meta>
+                    </property>
+
+                    <property name="button_link" type="link" colspan="6">
+                        <meta>
+                            <title lang="en">Button Link</title>
+                        </meta>
+                    </property>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>

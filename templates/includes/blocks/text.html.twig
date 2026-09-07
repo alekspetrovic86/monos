@@ -1,0 +1,18 @@
+{# TEXT #}
+
+{% set isDark = content.mode|default('light') == 'dark' %}
+
+<section data-block="text" data-mode-block="{{ isDark ? 'dark' : 'light' }}"
+         class="tb-section relative py-16 md:py-24 lg:py-32 {{ isDark ? 'bg-black' : 'bg-white' }}">
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+
+        {% if content.description|default %}
+            <div class="tb-description max-w-[800px] mx-auto">
+                {{ content.description|raw }}
+            </div>
+        {% endif %}
+
+    </div>
+
+</section>

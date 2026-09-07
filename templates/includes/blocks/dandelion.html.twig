@@ -1,0 +1,74 @@
+{# DANDELION #}
+
+{% set isDark = content.mode|default('light') == 'dark' %}
+{% set lightGradient = content.light_gradient|default('gradient1') %}
+{% set lightBgClass = lightGradient == 'gradient2' ? 'dandelion-bg--light-2' : (lightGradient == 'gradient3' ? 'dandelion-bg--light-3' : 'dandelion-bg') %}
+
+<section data-controller="dandelion"
+         data-dandelion-mode-value="{{ isDark ? 'dark' : 'light' }}"
+         data-dandelion-gradient="{{ isDark ? 'dark' : content.light_gradient|default('gradient1') }}"
+         data-mode-block="{{ isDark ? 'dark' : 'light' }}"
+         class="{{ isDark ? 'dandelion-bg--dark' : lightBgClass }} relative overflow-hidden">
+    <div class="relative min-h-[820px] md:min-h-[1000px] lg:min-h-[1000px]">
+
+        {# Content #}
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24 pb-32 md:pb-40 lg:pb-48">
+            <div class="gc-heading text-center max-w-4xl mx-auto">
+
+                {# Badge (mini title) #}
+                {% if content.mini_title|default or content.mini_title_icon|default %}
+                    <div class="dandelion-badge inline-flex items-center space-x-2 px-4 py-2 {{ isDark ? 'bg-white/10 border-white/15' : 'bg-white/60 border-gray-200/50' }} backdrop-blur-md rounded-full border shadow-sm mb-8">
+                        {% if content.mini_title_icon|default %}
+                            <img src="{{ content.mini_title_icon.url }}" alt="{{ content.mini_title_icon.title|default('') }}"
+                                 class="dandelion-badge-icon w-4 h-4 {{ isDark ? 'brightness-0 invert' : '' }}">
+                        {% endif %}
+                        {% if content.mini_title|default %}
+                            <span class="dandelion-badge-text text-xs {{ isDark ? 'text-white/70' : 'text-grey-500' }} font-medium tracking-wider uppercase">{{ content.mini_title }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {# Title #}
+                {% if content.title|default %}
+                    <h2 class="dandelion-title text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-1.2px] leading-[1.1] {{ isDark ? 'text-white' : 'text-grey-900' }} mb-6">
+                        {{ content.title }}
+                    </h2>
+                {% endif %}
+
+                {# Description #}
+                {% if content.description|default %}
+                    <div class="dandelion-desc text-xl md:text-2xl lg:text-[21px] lg:tracking-[0.2px] {{ isDark ? 'text-grey-450' : 'text-grey-500' }} mb-12 md:mb-16 leading-[1.38]">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+
+                {# Features #}
+                {% if content.features|default %}
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                        {% for feature in content.features %}
+                            <div class="gc-stat text-center" data-stat-delay="{{ loop.index * 100 }}">
+                                {% if feature.title|default %}
+                                    <div class="gc-stat-value text-4xl md:text-5xl font-bold mb-2">
+                                        {{ feature.title }}
+                                    </div>
+                                {% endif %}
+                                {% if feature.text|default %}
+                                    <div class="dandelion-feature-text text-sm md:text-base {{ isDark ? 'text-grey-450' : 'text-grey-500' }}">
+                                        {{ feature.text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        {# Interactive Dandelion canvas — anchored to bottom #}
+        <div class="absolute bottom-0 left-0 right-0 h-auto md:h-[500px] lg:h-[600px] pointer-events-auto">
+            <canvas id="dandelion-canvas" class="block w-full h-full min-h-[500px]"></canvas>
+        </div>
+
+    </div>
+</section>

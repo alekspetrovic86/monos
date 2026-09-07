@@ -1,4 +1,10 @@
-# www.robotstxt.org/
-# www.google.com/support/webmasters/bin/answer.py?hl=en&answer=156449
-
 User-agent: *
+Allow: /
+
+# Block admin and API paths
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_profiler/
+Disallow: /_wdt/
+
+Sitemap: https://monos.rs/sitemap.xml

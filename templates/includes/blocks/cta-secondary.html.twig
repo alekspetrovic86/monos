@@ -1,0 +1,59 @@
+{# CTA SECONDARY #}
+
+<section class="cta-secondary relative py-16 md:py-28 lg:py-32 overflow-hidden bg-black">
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
+        <div class="cta-secondary-card relative rounded-3xl p-8 md:p-12 lg:p-16 text-center"
+             style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px 0 rgba(0,0,0,.37),inset 0 1px 1px 0 rgba(255,255,255,.05);">
+
+            <div class="space-y-6">
+
+                {% if content.title|default %}
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-1.2px] leading-[1.1] text-white">
+                        {{ content.title }}
+                    </h2>
+                {% endif %}
+
+                {% if content.description|default %}
+                    <div class="text-xl md:text-2xl lg:text-[21px] lg:tracking-[0.2px] text-grey-450 leading-[1.38] max-w-3xl mx-auto">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+
+                {% if content.button_text|default or content.button_text2|default %}
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 pt-4">
+
+                        {% if content.button_text|default %}
+                            <a href="{{ content.button_link|default('#') }}"
+                               class="cta-secondary-btn-primary group inline-flex items-center justify-center space-x-2 px-6 py-3.5 md:px-8 md:py-4 bg-white text-dark-800 rounded-full font-semibold transition-all duration-300 min-h-[44px] text-[15px] md:text-base w-full sm:w-auto hover:bg-white/90">
+                                <span>{{ content.button_text }}</span>
+                                <div class="relative w-4 h-4 md:w-[18px] md:h-[18px]">
+                                    <svg class="icon-chevron absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                    <svg class="icon-arrow absolute inset-0 w-4 h-4 md:w-[18px] md:h-[18px]"
+                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                                    </svg>
+                                </div>
+                            </a>
+                        {% endif %}
+
+                        {% if content.button_text2|default %}
+                            <a href="{{ content.button_link2|default('#') }}"
+                               class="inline-flex items-center justify-center px-6 py-3.5 md:px-8 md:py-4 bg-white/10 backdrop-blur-sm text-white rounded-full border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-300 min-h-[44px] text-[15px] md:text-base font-semibold w-full sm:w-auto">
+                                {{ content.button_text2 }}
+                            </a>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+</section>

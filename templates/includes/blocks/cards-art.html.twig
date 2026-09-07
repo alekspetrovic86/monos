@@ -1,0 +1,66 @@
+{# CARDS ART #}
+
+{% set isDark = content.mode|default('light') == 'dark' %}
+
+{# 3-stop gradient sets cycling per card #}
+{% set gradients = [
+    'ca-gradient--1',
+    'ca-gradient--2',
+    'ca-gradient--3',
+    'ca-gradient--4',
+] %}
+
+<section data-controller="cards-art"
+         data-mode-block="{{ isDark ? 'dark' : 'light' }}"
+         class="cards-art-section relative py-16 md:py-24 lg:py-32 {{ isDark ? 'bg-black' : 'bg-white' }}">
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+        {# Heading #}
+        {% if content.title|default or content.description|default %}
+            <div class="ca-heading text-center mb-12 md:mb-16">
+                {% if content.title|default %}
+                    <h2 class="ca-heading-title text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-1.2px] leading-[1.1] {{ isDark ? 'text-white' : 'text-grey-900' }} mb-4 md:mb-6">
+                        {{ content.title }}
+                    </h2>
+                {% endif %}
+                {% if content.description|default %}
+                    <div class="ca-heading-desc text-xl md:text-2xl lg:text-[21px] lg:tracking-[0.2px] {{ isDark ? 'text-grey-450' : 'text-grey-500' }} max-w-3xl mx-auto leading-[1.38]">
+                        {{ content.description|raw }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {# Cards grid #}
+        {% if content.cards|default %}
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for card in content.cards %}
+                    {% set gradientClass = gradients[loop.index0 % gradients|length] %}
+                    <div class="ca-item group relative overflow-hidden rounded-2xl md:rounded-3xl aspect-square"
+                         style="--ca-delay: {{ loop.index0 * 0.1 }}s">
+
+                        {# Gradient background #}
+                        <div class="ca-item-gradient {{ gradientClass }} absolute inset-0 {{ isDark ? 'opacity-100' : 'opacity-80 group-hover:opacity-100' }} transition-opacity duration-500"></div>
+
+                        {# Content overlay #}
+                        <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
+                            {% if card.mini_title|default %}
+                                <span class="ca-item-mini-title text-white/80 text-sm font-semibold mb-1">
+                                    {{ card.mini_title }}
+                                </span>
+                            {% endif %}
+                            {% if card.title|default %}
+                                <h3 class="ca-item-title text-white text-xl font-bold leading-snug">
+                                    {{ card.title }}
+                                </h3>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+</section>

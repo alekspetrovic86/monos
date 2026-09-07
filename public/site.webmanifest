@@ -1,0 +1,10 @@
+{
+    "name": "Monos",
+    "short_name": "Monos",
+    "description": "Monos",
+    "start_url": "https://monos.rs/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "icons": []
+}
