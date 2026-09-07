@@ -32,56 +32,5 @@
 
             <tag name="sulu.rlp"/>
         </property>
-
-        <section name="content">
-			<meta>
-				<title lang="en">Content</title>
-			</meta>
-			<properties>
-				<block name="blocks" default-type="hero-default" minOccurs="0">
-					<meta>
-						<title lang="en">Blocks</title>
-					</meta>
-					<types>
-                        <xi:include href="../includes/blocks/hero-default.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/single-service.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/cta-primary.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/cta-secondary.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/tech-marque.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/intro-text-right.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/intro-center.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/intro.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/cards-gradient.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/services.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/cards-badges.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/cards-art.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/features.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/dandelion.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/jobs.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/contact.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/single-job.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/text.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                    </types>
-				</block>
-			</properties>
-		</section>
     </properties>
 </template>
