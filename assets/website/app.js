@@ -11,6 +11,9 @@
 // Tailwind with CSS Variables
 import './styles/tailwind.css';
 
+// Swiper (slajder na stranici projekta) — osnovni CSS, bez modula
+import 'swiper/css';
+
 // Main SCSS
 import './styles/app.scss';
 

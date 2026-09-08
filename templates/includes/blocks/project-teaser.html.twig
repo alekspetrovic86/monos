@@ -11,8 +11,10 @@
 {% set _label = content.title|default('')|split("\n")|first|trim %}
 {% set _size = content.image.properties|default({}) %}
 
+{# data-scroll-memory-id: po njemu scroll-memory vraća raširenu stavku pri povratku sa projekta. #}
 <article data-block="project-teaser"
          data-project-list-target="item"
+         data-scroll-memory-id="{{ _href }}"
          class="group mt-[2px] first:mt-0 lg:ml-[240px]">
 
     {# Okvir slike — širina je ono što se animira (480→540 / 292→375). #}

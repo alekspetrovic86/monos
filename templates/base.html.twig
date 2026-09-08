@@ -61,8 +61,9 @@
             {{ encore_entry_script_tags('website') }}
         {% endblock %}
     </head>
-    {# menu kontroler je na <body>: header (toggle/nav) i sadržaj (inert pod mobilnim overlayem) su mu targeti. #}
-    <body data-controller="menu">
+    {# menu kontroler je na <body>: header (toggle/nav) i sadržaj (inert pod mobilnim overlayem) su mu targeti.
+       Stranica projekta (F7–F11) nema meni — prazni i `header` i `body_attributes`. #}
+    <body {% block body_attributes %}data-controller="menu"{% endblock %}>
         {% block header %}
             {% include 'includes/header.html.twig' %}
         {% endblock %}

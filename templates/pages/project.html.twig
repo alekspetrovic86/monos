@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{# STRANICA PROJEKTA — Figma F7 16:2 / F8 17:21 (desktop 1440×900), F21 63:274 / F22 63:285 / F23 63:295 (mobile 375×812).
+   Stranica crteža (F11 17:67, F24 63:311) je child projekta sa istim template-om: umesto „→Drawings" stoji „←Images".
+
+   Nema menija: u Figmi „Read more" (desktop) i „Back" (mobile) stoje tačno gde inače stoji logo, a „→Drawings" gde stoji
+   Reset — zato su `header` i `body_attributes` prazni.
+
+   DESKTOP (grid u main.scss: 240 | 540 | 16 | 642)
+     slika        L240 T2  540×675 — DNO na 677 je fiksno, slika drugog formata raste naviše (poravnanje po dnu)
+     brojač       R780 T677        tekst desno   L796 T10 642×304 (19 redova) — ako je duži, seče se
+     →Drawings    L2   T314        Expand view   L796 T314        Read more   R1438 T314   ← baseline kao nav i logo
+     naslov       L240 T725 (3 reda)   podnaslov L240 T789   Back R780 T789
+     „Read more": nastavak teksta od T330 (F8), „Read less" vraća. Isti tekst je dva puta u DOM-u: kadar (sečen na 304)
+     i nastavak (ista širina, pomeren za −304 pa sečen) — prelom je identičan, pa se tekst nastavlja tačno od 20. reda.
+     Bez JS-a kadar nije sečen (min-height), nastavak je sakriven — ceo tekst se čita.
+
+   MOBILE (blok tok; stage je sticky)
+     slika T48–517 (dno fiksno) + brojač T517 R371 = sticky blok sa belom pozadinom: tekst skroluje IZA njega,
+     bela traka 375×16 na T517 (F22) maskira prelaz. Naslov T530, tekst T594 (367 široko), donji padding 124
+     → na kraju skrola tekst se završava na 688, 40px iznad linkova. Nema Read more ni Expand view.
+     →Drawings R291 T728 i Back R371 T728 su fiksni (kao logo/Reset na naslovnoj).
+
+   Mirno stanje doslovno Figma: bez podvlačenja, podvlačenje samo na hover/focus-visible. #}
+
+{% set _images = content.images|default([]) %}
+{% set _parent = sulu_content_load_parent(uuid, ['url']) %}
+{% set _isDrawings = _parent.template|default('') == 'project' %}
+{% set _drawings = _isDrawings ? null : sulu_navigation_tree(uuid)|filter(item => item.template|default('') == 'project')|first %}
+{% set _listHref = sulu_content_root_path() %}
+
+{% block body_attributes %}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+    {# project-slider je na korenu: slajder je u stage-u, a „Expand view" (target expand) u koloni teksta. #}
+    <article class="project" data-controller="project-slider">
+
+        {# ── Slajder + brojač ─────────────────────────────────────── #}
+        {# Klik na levu polovinu = prethodna, desnu = sledeća (project-slider). Slika poravnata po DNU kadra 4:5:
+           `.project__frame` je visok 125cqw (540→675, 375→469), slika drugog formata ostaje uz donju ivicu. #}
+        <div class="project__stage sticky top-0 z-10 bg-paper pt-[48px] lg:static lg:pt-[2px]">
+            <div class="project__frame swiper" data-project-slider-target="swiper">
+                <div class="swiper-wrapper">
+                    {% for image in _images %}
+                        {% set _size = image.properties|default({}) %}
+                        <div class="swiper-slide project__slide">
+                            <img src="{{ image.url }}"
+                                 alt="{{ image.title|default('') }}"
+                                 {% if _size.width|default and _size.height|default %}width="{{ _size.width }}" height="{{ _size.height }}"{% endif %}
+                                 {% if not loop.first %}loading="lazy"{% endif %}
+                                 class="project__image">
+                        </div>
+                    {% endfor %}
+                </div>
+                {# Polovine slike su dugmad (tastatura, čitači); bez JS-a ih nema. #}
+                <button type="button"
+                        data-action="project-slider#prev"
+                        aria-label="{{ 'app.project.previous'|trans }}"
+                        class="project__half project__half--prev"></button>
+                <button type="button"
+                        data-action="project-slider#next"
+                        aria-label="{{ 'app.project.next'|trans }}"
+                        class="project__half project__half--next"></button>
+            </div>
+
+            {# Brojač: desno poravnat na desnu ivicu slike, 14px/500 kao sav tekst. #}
+            <p class="h-[16px] pr-[4px] text-right lg:pr-0" aria-live="polite">
+                <span data-project-slider-target="counter">1</span>
+            </p>
+        </div>
+
+        {# ── Naslov, podnaslov, Back ──────────────────────────────── #}
+        {# Naslov: tri reda (prelomi iz urednika); min-h 48 drži tekst ispod na istom mestu i sa kraćim naslovom. #}
+        <h1 class="project__title mx-[4px] -mt-[3px] min-h-[48px] max-w-[392px] whitespace-pre-line lg:mx-0 lg:mt-[32px]">{{ content.title }}</h1>
+
+        <div class="project__meta hidden lg:mt-[16px] lg:flex lg:justify-between lg:gap-[16px]">
+            <p class="max-w-[356px]">{{ content.subtitle|default('') }}</p>
+            <a href="{{ _listHref }}"
+               data-controller="scroll-memory"
+               data-action="scroll-memory#back"
+               class="shrink-0 hover:underline focus-visible:underline">{{ 'app.project.back'|trans }}</a>
+        </div>
+
+        {# ── Tekst ────────────────────────────────────────────────── #}
+        <div class="project__text mx-[4px] mt-[16px] pb-[124px] lg:mx-0 lg:mt-0 lg:pt-[10px] lg:pb-[96px]"
+             data-controller="read-more"
+             data-read-more-more-value="{{ 'app.project.read_more'|trans }}"
+             data-read-more-less-value="{{ 'app.project.read_less'|trans }}">
+            <div class="project__excerpt" data-read-more-target="excerpt">
+                <div class="rich-text project__rich">{{ content.body|default('')|raw }}</div>
+            </div>
+
+            {# Baseline T314: „Expand view" (Task 11R — zasad vodi na punu sliku tekućeg slajda) i „Read more". #}
+            <div class="hidden h-[16px] lg:flex lg:justify-between">
+                <a href="{{ _images|first ? (_images|first).url : '#' }}"
+                   target="_blank"
+                   rel="noopener"
+                   data-project-slider-target="expand"
+                   class="text-nav hover:underline focus-visible:underline">{{ 'app.project.expand'|trans }}</a>
+                <button type="button"
+                        hidden
+                        aria-expanded="false"
+                        data-read-more-target="toggle"
+                        data-action="read-more#toggle"
+                        class="cursor-pointer text-nav hover:underline focus-visible:underline">{{ 'app.project.read_more'|trans }}</button>
+            </div>
+
+            {# Nastavak od 20. reda odmah ispod reda linkova (T330): kopija istog teksta, pomerena za −304 i sečena.
+               Samo vizuelno — čitači već imaju ceo tekst u kadru iznad. #}
+            <div class="hidden overflow-hidden lg:block"
+                 hidden
+                 aria-hidden="true"
+                 data-read-more-target="rest">
+                <div class="rich-text project__rich -mt-[304px]">{{ content.body|default('')|raw }}</div>
+            </div>
+        </div>
+
+        {# ── Fiksni linkovi ───────────────────────────────────────── #}
+        {# Prati kontejner kao header. Desktop: →Drawings L2 T314. Mobile: →Drawings R291 T728, Back R371 T728. #}
+        <nav aria-label="{{ 'app.project.nav'|trans }}"
+             class="pointer-events-none fixed inset-y-0 left-[var(--container-offset)] z-20 w-[min(100%,1440px)]">
+            {% if _isDrawings %}
+                <a href="{{ sulu_content_path(_parent.content.url|default('/')) }}"
+                   class="pointer-events-auto absolute bottom-[68px] right-[84px] w-[84px] text-right
+                          hover:underline focus-visible:underline
+                          lg:top-[314px] lg:left-[2px] lg:right-auto lg:bottom-auto lg:w-auto lg:text-left">{{ 'app.project.images'|trans }}</a>
+            {% elseif _drawings %}
+                <a href="{{ sulu_content_path(_drawings.url) }}"
+                   class="pointer-events-auto absolute bottom-[68px] right-[84px] w-[84px] text-right
+                          hover:underline focus-visible:underline
+                          lg:top-[314px] lg:left-[2px] lg:right-auto lg:bottom-auto lg:w-auto lg:text-left">{{ 'app.project.drawings'|trans }}</a>
+            {% endif %}
+
+            <a href="{{ _listHref }}"
+               data-controller="scroll-memory"
+               data-action="scroll-memory#back"
+               class="pointer-events-auto absolute bottom-[68px] right-[4px] w-[48px] text-right text-nav
+                      hover:underline focus-visible:underline lg:hidden">{{ 'app.project.back'|trans }}</a>
+        </nav>
+    </article>
+{% endblock %}

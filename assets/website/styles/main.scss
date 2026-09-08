@@ -65,6 +65,11 @@ body {
     animation: project-list-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Povratak sa projekta („Back"): lista se vraća u zatečeno stanje, bez podizanja. */
+.js .project-list--restored {
+    animation: none;
+}
+
 /* Detalji stavke (naslov, podnaslov, „Enter"): bez JS-a vidljivi; sa JS-om sakriveni od prvog
    crtanja do connect()-a project-list kontrolera, koji od tada upravlja `hidden` atributom. */
 .js:not(.project-list-ready) .project-teaser__detail {
@@ -85,4 +90,106 @@ body {
 .rich-text a:hover,
 .rich-text a:focus-visible {
     text-decoration: underline;
+}
+
+/* ── Stranica projekta (F7–F11 desktop, F21–F24 mobile) ────────────────────────────────────────────
+   Desktop: grid 240 | 540 | 16 | 642 (= 1438). Tekst desno zauzima sve redove; četvrti red (1fr) upija
+   višak visine da naslov i podnaslov ostanu na T725/T789 bez obzira na dužinu teksta.
+   Mobile: običan tok — stage (slika + brojač) je sticky na vrhu, tekst skroluje iza njega. */
+@media (min-width: 1024px) {
+    .project {
+        display: grid;
+        grid-template-columns: 240px 540px 16px 642px;
+        grid-template-rows: auto auto auto 1fr;
+    }
+
+    .project__stage {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .project__title {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .project__meta {
+        grid-column: 2;
+        grid-row: 3;
+    }
+
+    .project__text {
+        grid-column: 4;
+        grid-row: 1 / 5;
+    }
+}
+
+/* Kadar slike je 4:5 od svoje širine: 540 → 675 (dno na 677), 375 → 469 (dno na 517).
+   round() drži celobrojnu visinu da tekst ispod ne padne na polupiksel; bez round() (stariji browseri)
+   ostaje 125cqw. Slika je poravnata po DNU kadra — drugi format raste naviše, dno ostaje. */
+.project__stage {
+    container-type: inline-size;
+}
+
+.project__frame {
+    height: 125cqw;
+    height: round(up, 125cqw, 1px);
+}
+
+.project__slide {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.project__image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Polovine slike: leva = prethodna, desna = sledeća. Postoje samo sa JS-om. */
+.project__half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    display: none;
+    width: 50%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.js .project__half {
+    display: block;
+}
+
+.project__half--prev {
+    left: 0;
+}
+
+.project__half--next {
+    right: 0;
+}
+
+/* Tekst: pasusi bez razmaka (Figma — prelom reda, ne prazan red), za razliku od opisa u listi. */
+.project__rich p + p {
+    margin-top: 0;
+}
+
+/* Kadar teksta na desktopu: 19 redova = 304px, red „Expand view / Read more" ispod na T314.
+   Sa JS-om se seče (nastavak ide kroz „Read more"); bez JS-a samo drži minimum, tekst se čita ceo. */
+@media (min-width: 1024px) {
+    .project__excerpt {
+        min-height: 304px;
+    }
+
+    .js .project__excerpt {
+        height: 304px;
+        overflow: hidden;
+    }
 }

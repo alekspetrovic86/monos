@@ -2,9 +2,13 @@
 
 {# Naslovna = lista projekata (F1). Prva slika miruje na T314 (desktop) / T456 (mobile) — to je padding liste.
    Pri učitavanju lista krene malo niže i podigne se (CSS animacija `project-list-rise`).
-   project-list kontroler: klik na sliku širi stavku i podiže je na vrh; najviše jedna raširena. #}
+   project-list kontroler: klik na sliku širi stavku i podiže je na vrh; najviše jedna raširena.
+   scroll-memory: pri odlasku na projekat pamti skrol i raširenu stavku; „Back" sa projekta ih vraća
+   (scroll-memory:restore → project-list#restore, bez animacije). #}
 {% block content %}
-    <div data-controller="project-list" class="project-list pt-[456px] lg:pt-[314px]">
+    <div data-controller="project-list scroll-memory"
+         data-action="click->scroll-memory#store scroll-memory:restore->project-list#restore"
+         class="project-list pt-[456px] lg:pt-[314px]">
         {% include 'includes/blocks.html.twig' %}
     </div>
 {% endblock %}
