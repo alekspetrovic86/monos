@@ -42,14 +42,17 @@
         <div class="project__stage sticky top-0 z-10 bg-paper pt-[48px] lg:static lg:pt-[2px]">
             <div class="project__frame swiper" data-project-slider-target="swiper">
                 <div class="swiper-wrapper">
+                    {# Slajd je umanjeni format 540/375 (2x 1080/750); puna rezolucija je u data-full — samo za expand view. #}
                     {% for image in _images %}
-                        {% set _size = image.properties|default({}) %}
                         <div class="swiper-slide project__slide">
-                            <img src="{{ image.url }}"
-                                 alt="{{ image.title|default('') }}"
-                                 {% if _size.width|default and _size.height|default %}width="{{ _size.width }}" height="{{ _size.height }}"{% endif %}
-                                 {% if not loop.first %}loading="lazy"{% endif %}
-                                 class="project__image">
+                            {{ include('includes/picture.html.twig', {
+                                image: image,
+                                widths: [375, 540, 750, 1080],
+                                sizes: '(min-width: 1024px) 540px, 100vw',
+                                loading: loop.first ? '' : 'lazy',
+                                class: 'project__image',
+                                attr: { 'data-full': image.url },
+                            }, with_context = false) }}
                         </div>
                     {% endfor %}
                 </div>
@@ -91,12 +94,19 @@
                 <div class="rich-text project__rich">{{ content.body|default('')|raw }}</div>
             </div>
 
-            {# Baseline T314: „Expand view" (Task 11R — zasad vodi na punu sliku tekućeg slajda) i „Read more". #}
+            {# Baseline T314: „Expand view" i „Read more". Expand view (F12 17:80 / F13 17:93): image-zoom otvara punu
+               rezoluciju tekućeg slajda preko celog ekrana (okvir 1200×896 od L240, vertikalno centrirano) sa dubinskim
+               zoom-om; „Esc" na L2 T314 zatvara. Slajder drži href i data-image-zoom-src-value na tekućem slajdu.
+               Bez JS-a (ili ispod 1024px) link otvara punu sliku u novom tabu. #}
             <div class="hidden h-[16px] lg:flex lg:justify-between">
                 <a href="{{ _images|first ? (_images|first).url : '#' }}"
                    target="_blank"
                    rel="noopener"
                    data-project-slider-target="expand"
+                   data-controller="image-zoom"
+                   data-image-zoom-src-value="{{ _images|first ? (_images|first).url : '' }}"
+                   data-image-zoom-close-value="{{ 'app.project.esc'|trans }}"
+                   data-action="image-zoom#open"
                    class="text-nav hover:underline focus-visible:underline">{{ 'app.project.expand'|trans }}</a>
                 <button type="button"
                         hidden

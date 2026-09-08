@@ -3,22 +3,75 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://schemas.sulu.io/media/formats http://schemas.sulu.io/media/formats-1.1.xsd">
 
-    <!-- See: http://docs.sulu.io/en/latest/book/image-formats.html how to define image-formats -->
-
     <!--
-    <format key="300x">
+    Formati fotografija — samo ŠIRINA, visina prati original (mode inset, bez y): fotografije imaju različite
+    formate i to je namerno (lista i slajder ih poravnavaju po dnu). Nijedan format ne seče sliku.
+
+    Ključ = širina u pikselima. Koriste se kao `srcset` sa w-deskriptorima (includes/picture.html.twig),
+    pa browser sam bira 1x ili 2x kandidata prema `sizes` i gustini ekrana:
+
+        lista obična     desktop 480  (2x: 960)    mobile 292 (2x: 584)
+        lista istaknuta  desktop 540  (2x: 1080)   mobile 375 (2x: 750)
+        slajder          desktop 540  (2x: 1080)   mobile 375 (2x: 750)
+        expand view      bez formata — puna rezolucija (image.url), učitava se tek na „Expand view"
+
+    Sulu uz svaki ključ nudi i `ključ.webp` / `ključ.jpg` — lista i slajder koriste webp (jpg kao rezerva),
+    original ostaje PNG samo u expand view-u.
+    -->
+
+    <format key="w292">
         <meta>
-            <title lang="en">Example Image</title>
-            <title lang="de">Beispielbild</title>
+            <title lang="en">List 292 (mobile)</title>
         </meta>
-
-        <scale x="300"/>
+        <scale x="292" mode="inset"/>
     </format>
-    -->
 
-    <!--
-    Render an image from the media_selection in a specific format the following way:
+    <format key="w375">
+        <meta>
+            <title lang="en">Featured / slider 375 (mobile)</title>
+        </meta>
+        <scale x="375" mode="inset"/>
+    </format>
 
-    <img src="{{ image.thumbnails['300x'] }}" alt="{{ image.title }}" title="{{ image.description|default(image.title) }}">
-    -->
+    <format key="w480">
+        <meta>
+            <title lang="en">List 480 (desktop)</title>
+        </meta>
+        <scale x="480" mode="inset"/>
+    </format>
+
+    <format key="w540">
+        <meta>
+            <title lang="en">Featured / slider 540 (desktop)</title>
+        </meta>
+        <scale x="540" mode="inset"/>
+    </format>
+
+    <format key="w584">
+        <meta>
+            <title lang="en">List 292 @2x</title>
+        </meta>
+        <scale x="584" mode="inset"/>
+    </format>
+
+    <format key="w750">
+        <meta>
+            <title lang="en">Featured / slider 375 @2x</title>
+        </meta>
+        <scale x="750" mode="inset"/>
+    </format>
+
+    <format key="w960">
+        <meta>
+            <title lang="en">List 480 @2x</title>
+        </meta>
+        <scale x="960" mode="inset"/>
+    </format>
+
+    <format key="w1080">
+        <meta>
+            <title lang="en">Featured / slider 540 @2x</title>
+        </meta>
+        <scale x="1080" mode="inset"/>
+    </format>
 </formats>

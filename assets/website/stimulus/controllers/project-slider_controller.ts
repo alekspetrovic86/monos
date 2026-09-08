@@ -5,7 +5,8 @@ import Swiper from 'swiper';
 // Swiper, jedan slajd u kadru, kružno. Listanje: klik na LEVU polovinu slike = prethodna, na DESNU = sledeća
 // (dva providna dugmeta preko slike — rade i tastaturom). Prevlačenje prstom radi kao i inače.
 // Brojač (target `counter`) je 1-based indeks tekućeg slajda, desno poravnat na desnu ivicu slike.
-// „Expand view" (target `expand`, opciono) vodi na punu sliku tekućeg slajda — pravi fullscreen je Task 11R.
+// „Expand view" (target `expand`, opciono): href i data-image-zoom-src-value prate PUNU rezoluciju tekućeg slajda
+// (data-full na <img>; src/srcset slajda su umanjeni formati). Sam fullscreen radi image-zoom kontroler na tom linku.
 export default class ProjectSliderController extends Controller<HTMLElement> {
     static targets = ['swiper', 'counter', 'expand'];
 
@@ -56,7 +57,13 @@ export default class ProjectSliderController extends Controller<HTMLElement> {
 
         if (this.hasExpandTarget) {
             const image = this.swiper.slides[this.swiper.activeIndex]?.querySelector('img');
-            if (image) this.expandTarget.href = image.currentSrc || image.src;
+            if (image) {
+                const full = image.dataset.full || image.currentSrc || image.src;
+                this.expandTarget.href = full;
+                if (this.expandTarget.hasAttribute('data-image-zoom-src-value')) {
+                    this.expandTarget.setAttribute('data-image-zoom-src-value', full);
+                }
+            }
         }
     }
 }

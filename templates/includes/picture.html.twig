@@ -1,0 +1,30 @@
+{# RESPONZIVNA FOTOGRAFIJA — umanjeni Sulu formati (config/image-formats.xml) umesto originala.
+   Originali su do 3240px / 10 MB; lista i slajder dobijaju webp (jpg kao rezerva) u širinama iz `widths`,
+   a browser bira kandidata po `sizes` i gustini ekrana (1x/2x). Format slike se čuva — formati ne seku.
+   Puna rezolucija (image.url) ostaje samo za expand view.
+
+   Parametri (include ... only):
+     image    Sulu media (media_selection / single_media_selection)
+     widths   lista širina, npr. [292, 480, 584, 960] — svaka mora da postoji kao format `w<širina>`
+     sizes    atribut `sizes`, npr. '(min-width: 1024px) 480px, 292px'
+     class    klase za <img>
+     loading  'lazy' ili prazno
+     attr     dodatni atributi za <img> kao mapa {ime: vrednost} #}
+{% set _size = image.properties|default({}) %}
+{% set _webp = [] %}
+{% set _jpg = [] %}
+{% for _w in widths %}
+    {% set _webp = _webp|merge([image.thumbnails['w' ~ _w ~ '.webp'] ~ ' ' ~ _w ~ 'w']) %}
+    {% set _jpg = _jpg|merge([image.thumbnails['w' ~ _w ~ '.jpg'] ~ ' ' ~ _w ~ 'w']) %}
+{% endfor %}
+<picture>
+    <source type="image/webp" srcset="{{ _webp|join(', ') }}" sizes="{{ sizes }}">
+    <img src="{{ image.thumbnails['w' ~ widths|first ~ '.jpg'] }}"
+         srcset="{{ _jpg|join(', ') }}"
+         sizes="{{ sizes }}"
+         alt="{{ image.title|default('') }}"
+         {% if _size.width|default and _size.height|default %}width="{{ _size.width }}" height="{{ _size.height }}"{% endif %}
+         {% if loading|default %}loading="{{ loading }}"{% endif %}
+         {% for _name, _value in attr|default({}) %}{{ _name }}="{{ _value }}" {% endfor %}
+         class="{{ class|default('') }}">
+</picture>

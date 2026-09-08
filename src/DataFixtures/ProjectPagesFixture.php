@@ -32,7 +32,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
     public const CONTENTS_PATH = '/cmf/' . self::WEBSPACE . '/contents';
 
     /** Node imena projekata, redom kao tizeri na naslovnoj. */
-    public const PROJECTS = ['project-corridor', 'project-wardrobe', 'project-bedroom-wide', 'project-bedroom'];
+    public const PROJECTS = ['project-corridor', 'project-wardrobe', 'project-bedroom-wide', 'project-bedroom', 'project-photos'];
     private const DRAWINGS_NODE = 'drawings';
 
     // Naslov i podnaslov doslovno iz Figme (tri reda naslova = prelomi se čuvaju), isti na svim projektima.
@@ -44,7 +44,9 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
      */
     private const PAGES = [
         'project-corridor' => [
-            'images' => ['project-2.png', 'project-1.png', 'project-4.png', 'project-3-wide.png'],
+            // 2. slajd = ista fotografija iz F12 (17:80) u punoj veličini 717×896 — merenje expand view-a (next + Expand view).
+            // Prvi slajd ostaje isečak iz F7 (540×675) da 16:2 ostane piksel-tačan.
+            'images' => ['project-2.png', 'project-2-full.png', 'project-1.png', 'project-4.png', 'project-3-wide.png'],
             'body' => self::BODY_SHORT,
             'drawings' => true,
         ],
@@ -54,13 +56,22 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
             'drawings' => true,
         ],
         'project-bedroom-wide' => [
-            'images' => ['project-3-wide.png', 'project-3.png', 'project-1.png', 'project-2.png'],
+            // 2. slajd = fotografija iz F13 (17:93) u punoj veličini 1200×816 — merenje expand view-a (next + Expand view).
+            'images' => ['project-3-wide.png', 'project-5-wide.png', 'project-3.png', 'project-1.png', 'project-2.png'],
             'body' => self::BODY_SHORTEST,
             'drawings' => false,
         ],
         'project-bedroom' => [
             'images' => ['project-4.png', 'project-2.png', 'project-1.png', 'project-3-wide.png'],
             'body' => self::BODY_LONG,
+            'drawings' => false,
+        ],
+        // Prave fotografije iz Photos/ (Task 11R) — granice pravila za formate i expand view:
+        // photo-wide 3240×2160 (1.500, 10 MB) i photo-tall 1215×2160 (0.562). Lista/slajder ih dobijaju umanjene,
+        // expand view učitava original. Peti tizer je van kadra F1/F2 (900px), pa ne ulazi u ta merenja.
+        'project-photos' => [
+            'images' => ['photo-wide.png', 'photo-tall.png', 'project-1.png', 'project-2.png'],
+            'body' => self::BODY_SHORT,
             'drawings' => false,
         ],
     ];

@@ -31,7 +31,9 @@
     },
     "dependencies": {
         "@hotwired/stimulus": "^3.2.2",
+        "@panzoom/panzoom": "^4.6.2",
         "@symfony/stimulus-bridge": "^4.0.1",
+        "glightbox": "^3.3.1",
         "postcss-loader": "^8.2.0",
         "sass": "^1.93.2",
         "swiper": "^12.0.3"

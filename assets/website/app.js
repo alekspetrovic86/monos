@@ -14,6 +14,9 @@ import './styles/tailwind.css';
 // Swiper (slajder na stranici projekta) — osnovni CSS, bez modula
 import 'swiper/css';
 
+// GLightbox (expand view na stranici projekta) — osnovni CSS; skin „monos" je u main.scss
+import 'glightbox/dist/css/glightbox.css';
+
 // Main SCSS
 import './styles/app.scss';
 

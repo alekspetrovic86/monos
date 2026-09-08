@@ -102,6 +102,11 @@ export default class ProjectListController extends Controller<HTMLElement> {
         const expanded = item.hasAttribute('data-expanded');
         this.detail(item).hidden = !expanded;
         this.frame(item).setAttribute('aria-expanded', String(expanded));
+
+        // Responzivna slika: `sizes` prati stanje (480/292 obična → 540/375 istaknuta), pa browser po potrebi
+        // doučita veći kandidat iz srcset-a. Vrednosti nosi stavka (data-sizes / data-sizes-expanded).
+        const sizes = expanded ? item.dataset.sizesExpanded : item.dataset.sizes;
+        if (sizes) item.querySelectorAll('[sizes]').forEach((source) => source.setAttribute('sizes', sizes));
     }
 
     private frame(item: HTMLElement): HTMLElement {

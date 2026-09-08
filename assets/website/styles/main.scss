@@ -82,6 +82,12 @@ body {
     }
 }
 
+/* Responzivne slike (includes/picture.html.twig): <picture> ne pravi svoju kutiju — <img> učestvuje direktno
+   u roditeljevom layoutu (flex kadar slajdera, okvir tizera), pa max-width/max-height 100% važe kao za goli <img>. */
+picture {
+    display: contents;
+}
+
 /* Rich text iz urednika (dugi opis projekta). Pasusi razdvojeni jednim praznim redom. */
 .rich-text p + p {
     margin-top: 16px;
@@ -192,4 +198,76 @@ body {
         height: 304px;
         overflow: hidden;
     }
+}
+
+/* ── Expand view (F12 17:80 / F13 17:93) — image-zoom kontroler, GLightbox skin „monos" ─────────────────────────
+   Bela pozadina. Okvir slike: od leve margine (container-offset + 240) do desne ivice viewporta, 2px gore i dole
+   (1440×900 → 1200×896). Slika je uz levu ivicu okvira, vertikalno centrirana; veličinu joj zadaje kontroler
+   (uklapanje u okvir), a omotač .gslide-media je tačno njene veličine — Panzoom contain računa prema roditelju.
+   GLightbox-ove podrazumevane granice (100vw/100vh, min-width 200) se poništavaju. Desktop-only (kontroler). */
+.glightbox-monos .goverlay {
+    background: var(--color-paper);
+}
+
+.glightbox-monos .gloader {
+    display: none;
+}
+
+.glightbox-monos .gslide,
+.glightbox-monos .gslide-inner-content {
+    height: 100%;
+}
+
+.glightbox-monos .gslide-inner-content {
+    position: relative;
+}
+
+.glightbox-monos .ginner-container {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    bottom: 2px;
+    left: calc(var(--container-offset) + 240px);
+    width: auto;
+    height: auto;
+    max-width: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.glightbox-monos .gslide-media {
+    overflow: hidden;
+}
+
+.glightbox-monos .gslide-image img {
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    min-width: 0;
+    margin: 0;
+}
+
+/* „Esc" na L2 T314 kao ostali elementi tog baseline-a (Reset, →Drawings): 14/16, 500, bez okvira i pozadine.
+   Mirno stanje bez podvlačenja — podvlačenje samo na hover i focus-visible. */
+.image-zoom__close {
+    position: absolute;
+    top: 314px;
+    left: calc(var(--container-offset) + 2px);
+    z-index: 99999;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-ink);
+    font: inherit;
+    line-height: 16px;
+    cursor: pointer;
+}
+
+.image-zoom__close:hover,
+.image-zoom__close:focus-visible {
+    text-decoration: underline;
 }

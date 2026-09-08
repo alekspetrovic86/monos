@@ -28,8 +28,9 @@ final class HomepageTeaserFixture implements DocumentFixtureInterface
      * Fotografije su isečene iz Figma frame-ova: project-2 iz F1/F7, project-1 iz F2 (12:66),
      * project-3-wide iz F9 (17:39) — format 3:2, kao treća stavka u F1 (480×320); project-4 iz F13 (17:93).
      * Slike zadržavaju svoj format — lista ih ne seče na 4:5.
+     * Peta stavka: prava fotografija photo-wide (3240×2160, 10 MB) — test Sulu formata; van kadra F1/F2 (900px).
      */
-    private const IMAGES = ['project-2.png', 'project-1.png', 'project-3-wide.png', 'project-4.png'];
+    private const IMAGES = ['project-2.png', 'project-1.png', 'project-3-wide.png', 'project-4.png', 'photo-wide.png'];
 
     // Tekst doslovno iz Figme (isti na sve tri lokalizacije i na svim tizerima — test podatak).
     private const TITLE = "Lorem ipsum dolor sit amet\nDuis autem vel eum iriure dolor\nMolestie";
@@ -59,6 +60,7 @@ final class HomepageTeaserFixture implements DocumentFixtureInterface
         '<p>2.1</p>'
         . '<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea '
         . 'commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.</p>',
+        '',
     ];
 
     public function __construct(

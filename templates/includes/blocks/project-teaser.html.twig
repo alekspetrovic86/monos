@@ -6,15 +6,18 @@
    Razmaci između stavki: slika → sledeća slika 2px (F2: prethodna do 22, sledeća od 24); tekst → sledeća slika 16px.
    Slika je link na projekat: prvi klik širi (kontroler ga preseče), drugi klik ulazi — na mobilnom „Enter" u Figmi ne postoji.
    Bez JS-a: detalji su vidljivi (CSS ih krije samo do connect()-a), slika vodi pravo na projekat.
-   Mirno stanje doslovno Figma: bez podvlačenja — podvlačenje samo na hover/focus-visible. Slika zadržava svoj format (h-auto). #}
+   Mirno stanje doslovno Figma: bez podvlačenja — podvlačenje samo na hover/focus-visible. Slika zadržava svoj format (h-auto).
+   Slika je umanjeni Sulu format (includes/picture.html.twig), ne original: obična 480/292 (2x 960/584), istaknuta
+   540/375 (2x 1080/750) — `sizes` prati stanje (project-list ga menja iz data-sizes / data-sizes-expanded). #}
 {% set _href = content.link|default('/') %}
 {% set _label = content.title|default('')|split("\n")|first|trim %}
-{% set _size = content.image.properties|default({}) %}
 
 {# data-scroll-memory-id: po njemu scroll-memory vraća raširenu stavku pri povratku sa projekta. #}
 <article data-block="project-teaser"
          data-project-list-target="item"
          data-scroll-memory-id="{{ _href }}"
+         data-sizes="(min-width: 1024px) 480px, 292px"
+         data-sizes-expanded="(min-width: 1024px) 540px, 375px"
          class="group mt-[2px] first:mt-0 lg:ml-[240px]">
 
     {# Okvir slike — širina je ono što se animira (480→540 / 292→375). #}
@@ -24,10 +27,12 @@
        aria-expanded="false"
        aria-label="{{ _label|default('app.teaser.enter'|trans) }}"
        class="block w-[min(292px,100%)] group-data-expanded:w-full lg:w-[480px] lg:group-data-expanded:w-[540px]">
-        <img src="{{ content.image.url }}"
-             alt="{{ content.image.title|default('') }}"
-             {% if _size.width|default and _size.height|default %}width="{{ _size.width }}" height="{{ _size.height }}"{% endif %}
-             class="block h-auto w-full">
+        {{ include('includes/picture.html.twig', {
+            image: content.image,
+            widths: [292, 375, 480, 540, 584, 750, 960, 1080],
+            sizes: '(min-width: 1024px) 480px, 292px',
+            class: 'block h-auto w-full',
+        }, with_context = false) }}
     </a>
 
     {# Detalji — samo u istaknutom stanju. pb 14 + mt 2 sledeće stavke = 16 do sledeće slike. #}
