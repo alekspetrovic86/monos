@@ -1,8 +1,11 @@
 {# Pravna zona Information stranice — sadržaj bez omotača (desktop T666 R1345, mobile uz dno L4).
    Redovi: „Terms of use", copyright, prazan red, kredit „Code by Seiora" (F19; na desktopu ga je dizajner propustio —
    vlasnik potvrdio da ide na obe širine). `text` = legal_text stranice, ispod svega.
-   Mirno stanje bez podvlačenja — podvlačenje samo hover/focus-visible. #}
+   Mirno stanje bez podvlačenja — podvlačenje samo hover/focus-visible.
+   Širina: 238 (F5 L1107 R1345; F19 L4 R242). Omotač u header-u je shrink-to-fit sa desnim sidrom, pa bez max-w dug
+   `legal_text` širi blok ULEVO umesto da se prelomi. `lg:ml-auto` drži desnu ivicu na 1345. #}
 {% set s = settings.content|default({}) %}
+<div class="max-w-[238px] lg:ml-auto">
 
 {% if s.terms_link|default %}
     <p><a href="{{ s.terms_link }}" class="hover:underline focus-visible:underline">{{ 'app.information.terms'|trans }}</a></p>
@@ -16,3 +19,4 @@
 {% if text|default %}
     <div class="rich-text rich-text--tight mt-[16px]">{{ text|raw }}</div>
 {% endif %}
+</div>

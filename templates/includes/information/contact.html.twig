@@ -1,8 +1,11 @@
 {# Kontakt zona Information stranice — sadržaj bez omotača (omotač zadaje poziciju: desktop slot podmenija T394 R1345,
    mobile T368 L4). Redovi po 16px, prazan red = mt 16 (Figma: ime, telefon, dva mejla, prazno, Instagram).
    `settings` = sulu_snippet_load_by_area('webspace_settings'); `text` = contact_text stranice (ispod, prazan red iznad).
-   Mirno stanje bez podvlačenja — podvlačenje samo hover/focus-visible. #}
+   Mirno stanje bez podvlačenja — podvlačenje samo hover/focus-visible.
+   Širina: 190 (F5 L1155 R1345; F19 L4 R194). Omotač u header-u je shrink-to-fit sa desnim sidrom, pa bez max-w dug
+   `contact_text` širi blok ULEVO umesto da se prelomi. `lg:ml-auto` drži desnu ivicu na 1345 i kad je nav širi. #}
 {% set s = settings.content|default({}) %}
+<div class="max-w-[190px] lg:ml-auto">
 
 {% if s.contact_name|default %}
     <p>{{ s.contact_name }}</p>
@@ -19,3 +22,4 @@
 {% if text|default %}
     <div class="rich-text rich-text--tight mt-[16px]">{{ text|raw }}</div>
 {% endif %}
+</div>
