@@ -37,3 +37,52 @@ body {
 .js:not(.menu-ready) [data-menu-target="submenu"] {
     display: none;
 }
+
+/* Kontejner: sav sadržaj u najviše 1440px, poravnat skroz levo. Iznad 1440 leva margina raste
+   kao četvrtina viška i staje na 160 — na 1920 je 120, na 2560 je 160. */
+:root {
+    --container-max: 1440px;
+    --container-offset: clamp(0px, calc((100vw - var(--container-max)) * 0.25), 160px);
+}
+
+.l-container {
+    max-width: var(--container-max);
+    margin-left: var(--container-offset);
+}
+
+/* Lista projekata (naslovna). Pri učitavanju krene malo niže i podigne se na položaj iz F1 —
+   samo pomeraj, bez poskakivanja i bez efekata. Bez JS-a nema animacije. */
+@keyframes project-list-rise {
+    from {
+        transform: translateY(48px);
+    }
+    to {
+        transform: none;
+    }
+}
+
+.js .project-list {
+    animation: project-list-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Detalji stavke (naslov, podnaslov, „Enter"): bez JS-a vidljivi; sa JS-om sakriveni od prvog
+   crtanja do connect()-a project-list kontrolera, koji od tada upravlja `hidden` atributom. */
+.js:not(.project-list-ready) .project-teaser__detail {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .project-list {
+        animation: none;
+    }
+}
+
+/* Rich text iz urednika (dugi opis projekta). Pasusi razdvojeni jednim praznim redom. */
+.rich-text p + p {
+    margin-top: 16px;
+}
+
+.rich-text a:hover,
+.rich-text a:focus-visible {
+    text-decoration: underline;
+}

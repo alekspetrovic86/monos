@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{# Naslovna = lista projekata (F1). Prva slika miruje na T314 (desktop) / T456 (mobile) — to je padding liste.
+   Pri učitavanju lista krene malo niže i podigne se (CSS animacija `project-list-rise`).
+   project-list kontroler: klik na sliku širi stavku i podiže je na vrh; najviše jedna raširena. #}
 {% block content %}
-    {% include 'includes/blocks.html.twig' %}
+    <div data-controller="project-list" class="project-list pt-[456px] lg:pt-[314px]">
+        {% include 'includes/blocks.html.twig' %}
+    </div>
 {% endblock %}

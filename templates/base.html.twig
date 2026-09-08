@@ -67,7 +67,8 @@
             {% include 'includes/header.html.twig' %}
         {% endblock %}
 
-        <div data-menu-target="content">
+        {# l-container: najviše 1440px, skroz levo; iznad 1440 leva margina (main.scss). #}
+        <div data-menu-target="content" class="l-container">
             {% block content %}{% endblock %}
         </div>
     </body>

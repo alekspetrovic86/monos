@@ -23,8 +23,9 @@
     {% endfor %}
 {% endif %}
 
+{# Fiksiran, ali prati kontejner: levo = --container-offset, širina najviše 1440 (main.scss). #}
 <header data-action="keydown.esc@document->menu#close"
-        class="pointer-events-none fixed inset-0 z-50">
+        class="pointer-events-none fixed inset-y-0 left-[var(--container-offset)] z-50 w-[min(100%,1440px)]">
 
     {# ── Logo / CLOSE ───────────────────────────────────────────── #}
     {# Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371). #}
