@@ -42,7 +42,7 @@
         <div class="project__stage sticky top-0 z-10 bg-paper pt-[48px] lg:static lg:pt-[2px]">
             <div class="project__frame swiper" data-project-slider-target="swiper">
                 <div class="swiper-wrapper">
-                    {# Slajd je umanjeni format 540/375 (2x 1080/750); expand view (w2400, ne original) je u data-full. #}
+                    {# Slajd je umanjeni format 540/375 (2x 1080/750); expand view (w2400.webp, ne original) je u data-full. #}
                     {% for image in _images %}
                         <div class="swiper-slide project__slide">
                             {{ include('includes/picture.html.twig', {
@@ -51,7 +51,7 @@
                                 sizes: '(min-width: 1024px) 540px, 100vw',
                                 loading: loop.first ? '' : 'lazy',
                                 class: 'project__image',
-                                attr: { 'data-full': image.thumbnails['w2400'] },
+                                attr: { 'data-full': image.thumbnails['w2400.webp'] },
                             }, with_context = false) }}
                         </div>
                     {% endfor %}
@@ -94,17 +94,17 @@
                 <div class="rich-text project__rich">{{ content.body|default('')|raw }}</div>
             </div>
 
-            {# Baseline T314: „Expand view" i „Read more". Expand view (F12 17:80 / F13 17:93): image-zoom otvara w2400 (okvir je 1200 CSS px, 2400 na retini — original se ne servira; tip fajla prati original)
+            {# Baseline T314: „Expand view" i „Read more". Expand view (F12 17:80 / F13 17:93): image-zoom otvara w2400.webp (okvir je 1200 CSS px, 2400 na retini — original se ne servira; webp bez obzira na tip originala: vlasnikove fotografije su PNG, a crteži linijska grafika)
                tekućeg slajda preko celog ekrana (okvir 1200×896 od L240, vertikalno centrirano) sa dubinskim
                zoom-om; „Esc" na L2 T314 zatvara. Slajder drži href i data-image-zoom-src-value na tekućem slajdu.
                Bez JS-a (ili ispod 1024px) link otvara istu sliku u novom tabu. #}
             <div class="hidden h-[16px] lg:flex lg:justify-between">
-                <a href="{{ _images|first ? (_images|first).thumbnails['w2400'] : '#' }}"
+                <a href="{{ _images|first ? (_images|first).thumbnails['w2400.webp'] : '#' }}"
                    target="_blank"
                    rel="noopener"
                    data-project-slider-target="expand"
                    data-controller="image-zoom"
-                   data-image-zoom-src-value="{{ _images|first ? (_images|first).thumbnails['w2400'] : '' }}"
+                   data-image-zoom-src-value="{{ _images|first ? (_images|first).thumbnails['w2400.webp'] : '' }}"
                    data-image-zoom-close-value="{{ 'app.project.esc'|trans }}"
                    data-action="image-zoom#open"
                    class="text-nav hover:underline focus-visible:underline">{{ 'app.project.expand'|trans }}</a>
