@@ -5,7 +5,7 @@ import Swiper from 'swiper';
 // Swiper, jedan slajd u kadru, kružno. Listanje: klik na LEVU polovinu slike = prethodna, na DESNU = sledeća
 // (dva providna dugmeta preko slike — rade i tastaturom). Prevlačenje prstom radi kao i inače.
 // Brojač (target `counter`) je 1-based indeks tekućeg slajda, desno poravnat na desnu ivicu slike.
-// „Expand view" (target `expand`, opciono): href i data-image-zoom-src-value prate PUNU rezoluciju tekućeg slajda
+// „Expand view" (target `expand`, opciono): href i data-image-zoom-src-value prate w2400 tekućeg slajda
 // (data-full na <img>; src/srcset slajda su umanjeni formati). Sam fullscreen radi image-zoom kontroler na tom linku.
 export default class ProjectSliderController extends Controller<HTMLElement> {
     static targets = ['swiper', 'counter', 'expand'];

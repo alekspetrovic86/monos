@@ -4,7 +4,7 @@ import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
 
 // data-controller="image-zoom" — „Expand view" (F12 17:80 / F13 17:93): slika preko celog ekrana sa dubinskim zoom-om.
 //
-// Samostalan: radi nad bilo kojom slikom čiji URL prima kroz data-image-zoom-src-value (PUNA rezolucija — tek se ovde
+// Samostalan: radi nad bilo kojom slikom čiji URL prima kroz data-image-zoom-src-value (w2400 — tek se ovde
 // učitava; lista i slajder koriste umanjene formate) i ne zna ništa o slajderu. Element je link na istu sliku, pa bez
 // JS-a, ili ispod 1024px, link prosto vodi na nju.
 //

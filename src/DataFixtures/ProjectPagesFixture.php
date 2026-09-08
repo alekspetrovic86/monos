@@ -46,31 +46,31 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
         'project-corridor' => [
             // 2. slajd = ista fotografija iz F12 (17:80) u punoj veličini 717×896 — merenje expand view-a (next + Expand view).
             // Prvi slajd ostaje isečak iz F7 (540×675) da 16:2 ostane piksel-tačan.
-            'images' => ['project-2.png', 'project-2-full.png', 'project-1.png', 'project-4.png', 'project-3-wide.png'],
+            'images' => ['project-2.jpg', 'project-2-full.png', 'project-1.jpg', 'project-4.jpg', 'project-3-wide.jpg'],
             'body' => self::BODY_SHORT,
             'drawings' => true,
         ],
         'project-wardrobe' => [
-            'images' => ['project-1.png', 'project-2.png', 'project-4.png', 'project-3.png'],
+            'images' => ['project-1.jpg', 'project-2.jpg', 'project-4.jpg', 'project-3.jpg'],
             'body' => self::BODY_MOBILE,
             'drawings' => true,
         ],
         'project-bedroom-wide' => [
             // 2. slajd = fotografija iz F13 (17:93) u punoj veličini 1200×816 — merenje expand view-a (next + Expand view).
-            'images' => ['project-3-wide.png', 'project-5-wide.png', 'project-3.png', 'project-1.png', 'project-2.png'],
+            'images' => ['project-3-wide.jpg', 'project-5-wide.png', 'project-3.jpg', 'project-1.jpg', 'project-2.jpg'],
             'body' => self::BODY_SHORTEST,
             'drawings' => false,
         ],
         'project-bedroom' => [
-            'images' => ['project-4.png', 'project-2.png', 'project-1.png', 'project-3-wide.png'],
+            'images' => ['project-4.jpg', 'project-2.jpg', 'project-1.jpg', 'project-3-wide.jpg'],
             'body' => self::BODY_LONG,
             'drawings' => false,
         ],
         // Prave fotografije iz Photos/ (Task 11R) — granice pravila za formate i expand view:
-        // photo-wide 3240×2160 (1.500, 10 MB) i photo-tall 1215×2160 (0.562). Lista/slajder ih dobijaju umanjene,
-        // expand view učitava original. Peti tizer je van kadra F1/F2 (900px), pa ne ulazi u ta merenja.
+        // photo-wide 2400×1600 (1.500, original 3240×2160) i photo-tall 1215×2160 (0.562), JPEG. Lista/slajder ih dobijaju umanjene,
+        // expand view učitava w2400. Peti tizer je van kadra F1/F2 (900px), pa ne ulazi u ta merenja.
         'project-photos' => [
-            'images' => ['photo-wide.png', 'photo-tall.png', 'project-1.png', 'project-2.png'],
+            'images' => ['photo-wide.jpg', 'photo-tall.jpg', 'project-1.jpg', 'project-2.jpg'],
             'body' => self::BODY_SHORT,
             'drawings' => false,
         ],

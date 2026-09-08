@@ -13,11 +13,20 @@
         lista obična     desktop 480  (2x: 960)    mobile 292 (2x: 584)
         lista istaknuta  desktop 540  (2x: 1080)   mobile 375 (2x: 750)
         slajder          desktop 540  (2x: 1080)   mobile 375 (2x: 750)
-        expand view      bez formata — puna rezolucija (image.url), učitava se tek na „Expand view"
+        expand view      w2400 — okvir je 1200 CSS px, dakle 2400 na retini; više od toga niko ne vidi,
+                         a original (do 10 MB) bi se samo čekao. Učitava se tek na „Expand view". Sulu ne uvećava
+                         manje originale, pa manja slika ostaje u svojoj veličini; tip prati original (JPEG → jpg q90, PNG → png bez
+                         gubitka — zato isečci F12/F13 u fixture-u ostaju PNG). Original ostaje u Suluu, ne servira se.
 
-    Sulu uz svaki ključ nudi i `ključ.webp` / `ključ.jpg` — lista i slajder koriste webp (jpg kao rezerva),
-    original ostaje PNG samo u expand view-u.
+    Sulu uz svaki ključ nudi i `ključ.webp` / `ključ.jpg` — lista i slajder koriste webp (jpg kao rezerva).
     -->
+
+    <format key="w2400">
+        <meta>
+            <title lang="en">Expand view 2400</title>
+        </meta>
+        <scale x="2400" mode="inset"/>
+    </format>
 
     <format key="w292">
         <meta>

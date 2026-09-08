@@ -75,9 +75,17 @@ final class FixtureMedia
         $tmp = \tempnam(\sys_get_temp_dir(), 'monos-fixture-');
         \copy(self::FILES_DIR . '/' . $fileName, $tmp);
 
+        // Fotografije su JPEG (max 2400px; prave q82, Figma isečci za merenje q95 — razvojni podaci, ne smeju da opterete git).
+        // PNG samo tamo gde merenje traži piksel-tačnost: crtež i dva isečka F12/F13 za expand view (w2400 ih ne prekodira).
+        $mimeType = match (\strtolower(\pathinfo($fileName, \PATHINFO_EXTENSION))) {
+            'jpg', 'jpeg' => 'image/jpeg',
+            'webp' => 'image/webp',
+            default => 'image/png',
+        };
+
         try {
             $media = $this->mediaManager->save(
-                new UploadedFile($tmp, $fileName, 'image/png', null, true),
+                new UploadedFile($tmp, $fileName, $mimeType, null, true),
                 [
                     'collection' => $collectionId,
                     'locale' => 'en',
