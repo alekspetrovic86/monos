@@ -84,7 +84,9 @@ export default class MenuController extends Controller<HTMLElement> {
     };
 
     private render(): void {
-        this.logoLabelTarget.textContent = this.open ? 'CLOSE' : 'Monos';
+        // Natpisi dolaze iz Twig-a (data-label-open = prevedeno „CLOSE", data-label-closed = „Monos").
+        const { labelOpen = 'CLOSE', labelClosed = 'Monos' } = this.logoLabelTarget.dataset;
+        this.logoLabelTarget.textContent = this.open ? labelOpen : labelClosed;
         this.logoLabelTarget.classList.toggle('u-tracked', this.open);
         this.toggleTarget.setAttribute('aria-expanded', String(this.open));
 

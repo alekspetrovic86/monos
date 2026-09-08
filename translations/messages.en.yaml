@@ -16,7 +16,7 @@
 "app.try_again": "Try Again"
 "Show more": "Show more"
 "Show less": "Show less"
-"No projects in this categor": "No projects in this category"
+"No projects in this category": "No projects in this category"
 "Back to all references": "Back to all references"
 "app.menu.nav": "Main navigation"
 "app.menu.toggle": "Menu"
@@ -34,3 +34,25 @@
 "app.menu.back": "Back"
 "app.menu.in_preparation": "in preparation"
 "app.information.terms": "Terms of use"
+
+# ── Header (Task 13R). Two renderings of one term: desktop "Reset" 14px, mobile "RESET" 10px (u-fine).
+"app.menu.reset": "Reset"
+"app.menu.reset_short": "RESET"
+"app.menu.close": "CLOSE"
+
+# ── Navigation names (Task 13R). Deliberately English in all three locales: Figma shows them in English
+#    with "En" active — they are studio category names, not UI. Currently sourced from the Sulu page tree
+#    (page titles); these keys are the reference. "Exhibitions" with h (Figma typo "Exibitions" corrected).
+"app.nav.material": "Material"
+"app.nav.press": "Press"
+"app.nav.information": "Information"
+"app.nav.all": "All"
+"app.nav.architecture": "Architecture"
+"app.nav.interior": "Interior"
+"app.nav.furniture": "Furniture"
+"app.nav.objects": "Objects"
+"app.nav.graphic_design": "Graphic design"
+"app.nav.publications": "Publications"
+"app.nav.awards": "Awards"
+"app.nav.exhibitions": "Exhibitions"
+"app.nav.media": "Media"

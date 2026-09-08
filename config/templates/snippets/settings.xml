@@ -7,7 +7,6 @@
 
     <meta>
         <title lang="en">Settings</title>
-        <title lang="de">Settings</title>
     </meta>
 
     <areas>
@@ -15,7 +14,6 @@
         <area key="webspace_settings">
             <meta>
                 <title lang="en">Webspace Settings</title>
-                <title lang="de">Webspace Settings</title>
             </meta>
         </area>
     </areas>
@@ -24,7 +22,6 @@
         <property name="title" type="text_line" mandatory="true">
             <meta>
                 <title lang="en">Title</title>
-                <title lang="de">Titel</title>
             </meta>
 
             <tag name="sulu.node.name"/>

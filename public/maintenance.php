@@ -17,11 +17,6 @@ $translations = [
         'heading' => 'The page is currently down for maintenance',
         'description' => 'Sorry for any inconvenience caused. Please try again shortly.',
     ],
-    'de' => [
-        'title' => 'Wartungsarbeiten',
-        'heading' => 'Die Seite wird derzeit gewartet',
-        'description' => 'Wir bitten um Verständnis. Bitte versuche es in Kürze erneut.',
-    ],
 ];
 
 // check if ip is within allowed range

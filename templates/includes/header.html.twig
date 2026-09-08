@@ -73,7 +73,8 @@
 
     {# ── Logo / CLOSE ───────────────────────────────────────────── #}
     {# Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371). #}
-    {# Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). #}
+    {# Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). Oba natpisa su na span-u (data-label-*) da bi
+       kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
     <button type="button"
             data-menu-target="toggle"
             data-action="menu#toggle"
@@ -83,7 +84,9 @@
                    hover:underline focus-visible:underline
                    right-[4px] bottom-[68px]
                    lg:right-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
-        <span data-menu-target="logoLabel">Monos</span>
+        <span data-menu-target="logoLabel"
+              data-label-open="{{ 'app.menu.close'|trans }}"
+              data-label-closed="Monos">Monos</span>
     </button>
 
     {# ── Reset ──────────────────────────────────────────────────── #}
@@ -94,8 +97,8 @@
               hover:underline focus-visible:underline
               left-[4px] bottom-[84px]
               lg:left-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
-        <span class="u-fine lg:hidden">RESET</span>
-        <span class="hidden lg:inline">Reset</span>
+        <span class="u-fine lg:hidden">{{ 'app.menu.reset_short'|trans }}</span>
+        <span class="hidden lg:inline">{{ 'app.menu.reset'|trans }}</span>
     </a>
 
     {% if _info %}

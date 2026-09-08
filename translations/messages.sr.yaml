@@ -20,17 +20,40 @@
 "Back to all references": "Nazad na sve reference"
 "app.menu.nav": "Glavna navigacija"
 "app.menu.toggle": "Meni"
-"app.teaser.enter": "Enter"
+"app.teaser.enter": "Uđi" # TODO: potvrditi sa dizajnerom
 "app.project.nav": "Navigacija projekta"
-"app.project.back": "Back"
-"app.project.drawings": "→Drawings"
-"app.project.images": "←Images"
-"app.project.expand": "Expand view"
-"app.project.read_more": "Read more"
-"app.project.read_less": "Read less"
+"app.project.back": "Nazad" # TODO: potvrditi sa dizajnerom
+"app.project.drawings": "→Crteži" # TODO: potvrditi sa dizajnerom
+"app.project.images": "←Slike" # TODO: potvrditi sa dizajnerom
+"app.project.expand": "Prošireni prikaz" # TODO: potvrditi sa dizajnerom
+"app.project.read_more": "Pročitaj više" # TODO: potvrditi sa dizajnerom
+"app.project.read_less": "Pročitaj manje" # TODO: potvrditi sa dizajnerom
 "app.project.previous": "Prethodna slika"
 "app.project.next": "Sledeća slika"
 "app.project.esc": "Esc"
-"app.menu.back": "Back"
+"app.menu.back": "Nazad" # TODO: potvrditi sa dizajnerom
 "app.menu.in_preparation": "u pripremi"
-"app.information.terms": "Terms of use"
+"app.information.terms": "Uslovi korišćenja" # TODO: potvrditi sa dizajnerom
+
+# ── Header (Task 13R). Dva prikaza istog pojma: desktop „Reset" 14px, mobilni „RESET" 10px (u-fine).
+"app.menu.reset": "Reset" # TODO: potvrditi sa dizajnerom
+"app.menu.reset_short": "RESET" # TODO: potvrditi sa dizajnerom
+"app.menu.close": "ZATVORI" # TODO: potvrditi sa dizajnerom
+
+# ── Nazivi navigacije (Task 13R). NAMERNO NA ENGLESKOM u sva tri jezika: u Figmi su engleski i kad je
+#    aktivan jezik „En" — to su nazivi kategorija studija, ne UI. Dizajner nije nacrtao sr/ja UI.
+#    Nazivi trenutno dolaze iz Sulu stabla (naslov stranice), pa su ovi ključevi referentni: ako vlasnik
+#    odluči drugačije, izmena je jedan katalog. „Exhibitions" ide sa h (Figma ima tipfeler „Exibitions").
+"app.nav.material": "Material"
+"app.nav.press": "Press"
+"app.nav.information": "Information"
+"app.nav.all": "Sve" # TODO: potvrditi sa dizajnerom
+"app.nav.architecture": "Architecture"
+"app.nav.interior": "Interior"
+"app.nav.furniture": "Furniture"
+"app.nav.objects": "Objects"
+"app.nav.graphic_design": "Graphic design"
+"app.nav.publications": "Publications"
+"app.nav.awards": "Awards"
+"app.nav.exhibitions": "Exhibitions"
+"app.nav.media": "Media"
