@@ -100,13 +100,6 @@
                     </meta>
                 </property>
 
-                <property name="show_locale_suggestion" type="checkbox">
-                    <meta>
-                        <title lang="en">Show Locale Suggestion Popup</title>
-                        <title lang="de">Locale-Empfehlungs-Popup anzeigen</title>
-                        <info_text lang="en">Shows a small popup suggesting a better language version based on the visitor's location.</info_text>
-                    </meta>
-                </property>
 
                 <property name="header_button_text" type="text_line" colspan="6">
                     <meta>

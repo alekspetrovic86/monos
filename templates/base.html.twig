@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|split('_')[0] }}">
     <head>
-        {% set webspaceSettings = sulu_snippet_load_by_area('webspace_settings') %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,19 +51,6 @@
         }
         </script>
 
-        {# ── Google Consent Mode v2 — must be before GA loads ── #}
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('consent', 'default', {
-                'analytics_storage':   'denied',
-                'ad_storage':          'denied',
-                'ad_user_data':        'denied',
-                'ad_personalization':  'denied',
-                'wait_for_update':     500
-            });
-        </script>
-
         {% block style %}
             {{ encore_entry_link_tags('website') }}
         {% endblock %}
@@ -81,9 +67,5 @@
         {% block content %}{% endblock %}
 
         <div class="global-loader" data-controller="loader"></div>
-        {% if webspaceSettings.content.show_locale_suggestion|default(false) %}
-            {% include 'includes/locale-suggestion.html.twig' %}
-        {% endif %}
-        {% include 'includes/cookie-consent.html.twig' %}
     </body>
 </html>
