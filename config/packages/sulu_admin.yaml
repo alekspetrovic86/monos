@@ -10,10 +10,8 @@ sulu_core:
     locales:
         sr: Serbian
         en: English
-        de: German
         ja: Japanese
     translations:
         - sr
         - en
-        - de
         - ja

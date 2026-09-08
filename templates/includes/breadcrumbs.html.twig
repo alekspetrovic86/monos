@@ -1,7 +1,0 @@
-{% set items = uuid is defined ? sulu_breadcrumb(uuid) : null %}
-
-{% if items is iterable and items|length >= 2 %}
-	{% set backItem = items[items|length - 2] %}
-	{% set backHref = backItem.url|default('/') %}
-{% endif %}
-

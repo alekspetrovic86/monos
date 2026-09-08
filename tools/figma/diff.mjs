@@ -3,7 +3,9 @@
 // Upotreba: node tools/figma/diff.mjs <nodeId> <url> <WxH> [prag%]
 import { chromium } from 'playwright';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, statSync, copyFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Konvencija izlaznih kodova: 0 = ispod praga, 1 = iznad praga,
 // 2 = harness ne može da izmeri (greška u opremi, ne u dizajnu).
@@ -36,6 +38,9 @@ if (!token) {
 const [width, height] = viewport.split('x').map(Number);
 const outDir = 'var/figma';
 mkdirSync(outDir, { recursive: true });
+// Trajna arhiva referenci: `.figma-refs/` u RODITELJSKOM direktorijumu repoa,
+// van gita. Putanja se izvodi iz lokacije skripte (tools/figma/), ne hardkoduje.
+const archiveDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '.figma-refs');
 
 const safeId = nodeId.replaceAll(':', '-');
 
@@ -50,9 +55,23 @@ try {
     if (res.ok) version = (await res.json()).version;
 } catch { /* pada u fallback ispod */ }
 
-let figmaPng;
+// Redosled traženja reference:
+//   1. var/figma/figma-<id>[-v<version>].png  — radni keš
+//   2. ../.figma-refs/figma-<id>.png          — trajna arhiva (kopira se u keš)
+//   3. Figma API
+//   4. exit 2
+const cachePng = `${outDir}/figma-${safeId}.png`;
+const archivePng = `${archiveDir}/figma-${safeId}.png`;
+let figmaPng = null;
+
+// 1. Radni keš.
 if (version) {
-    figmaPng = `${outDir}/figma-${safeId}-v${version}.png`;
+    for (const candidate of [`${outDir}/figma-${safeId}-v${version}.png`, cachePng]) {
+        if (existsSync(candidate)) {
+            figmaPng = candidate;
+            break;
+        }
+    }
 } else {
     // Figma nedostupna (429, mreža, timeout). Uzmi najnoviju poznatu referencu.
     // Ustajalo poređenje nikad nije tiho — upozorenje ide pri svakom takvom pokretanju.
@@ -63,14 +82,39 @@ if (version) {
         .filter((f) => re.test(f))
         .map((f) => ({ f, t: statSync(`${outDir}/${f}`).mtimeMs }))
         .sort((a, b) => b.t - a.t)[0];
+    if (cached) {
+        figmaPng = `${outDir}/${cached.f}`;
+        console.warn(`UPOZORENJE: Figma nedostupna. Merim prema keširanoj referenci ${cached.f}, koja može biti ustajala.`);
+    }
+}
 
-    if (!cached) {
-        console.error('Figma nedostupna i nema keširane reference — nema šta da se meri.');
+// 2. Trajna arhiva — kopija ide u keš da sledeće pokretanje ne zavisi ni od arhive.
+if (!figmaPng && existsSync(archivePng)) {
+    copyFileSync(archivePng, cachePng);
+    figmaPng = cachePng;
+    console.log(`koristim arhiviranu referencu figma-${safeId}.png iz .figma-refs/`);
+}
+
+// 3. Figma API — tek kad nema ni keša ni arhive.
+if (!figmaPng) {
+    if (!version) {
+        // 4. Ništa od toga nije dostupno.
+        console.error(`Figma nedostupna, nema keširane reference u ${outDir}/ ni arhivirane u ${archiveDir}/ — nema šta da se meri.`);
         process.exit(2);
     }
-    figmaPng = `${outDir}/${cached.f}`;
-    console.warn(`UPOZORENJE: Figma nedostupna. Merim prema keširanoj referenci ${cached.f}, koja može biti ustajala.`);
+    figmaPng = `${outDir}/figma-${safeId}-v${version}.png`;
+    const api = `https://api.figma.com/v1/images/${FILE_KEY}?ids=${encodeURIComponent(nodeId)}&format=png&scale=1`;
+    const meta = await fetch(api, { headers: { 'X-Figma-Token': token }, signal: AbortSignal.timeout(30000) }).then((r) => r.json());
+    const imgUrl = meta.images?.[nodeId];
+    if (!imgUrl) {
+        console.error('Figma nije vratila sliku:', JSON.stringify(meta));
+        process.exit(2);
+    }
+    const buf = Buffer.from(await fetch(imgUrl, { signal: AbortSignal.timeout(30000) }).then((r) => r.arrayBuffer()));
+    writeFileSync(figmaPng, buf);
+    console.log(`referenca skinuta → ${figmaPng}`);
 }
+
 const shotPng = `${outDir}/shot-${safeId}.png`;
 const diffPng = `${outDir}/diff-${safeId}.png`;
 
