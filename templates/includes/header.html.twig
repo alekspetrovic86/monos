@@ -91,9 +91,10 @@
 
     {# ── Reset ──────────────────────────────────────────────────── #}
     {# Desktop: L2 T314, 14px/500 tracked. Mobile: L4 T712, 10px/200 (u-fine). Koren TEKUĆEG jezika (/, /en, /ja). #}
+    {# z-10: mobilni overlay (375×728) je kasniji sibling i bez ovoga se crta PREKO Reseta (y711–728). #}
     <a href="{{ sulu_content_root_path() }}"
        data-menu-target="reset"
-       class="pointer-events-auto absolute u-tracked
+       class="pointer-events-auto absolute z-10 u-tracked
               hover:underline focus-visible:underline
               left-[4px] bottom-[84px]
               lg:left-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
