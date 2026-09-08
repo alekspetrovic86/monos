@@ -31,6 +31,9 @@
         {% set ogTitle       = extension.seo.title|default(content.title|default('Monos'))|replace({"\n": " ", "\r": ""}) %}
         {% set ogDescription = extension.seo.description|default(content.excerpt|default('')) %}
         {% set ogImage       = extension.excerpt.images[0].thumbnails['seo_og']|default('') %}
+        {% if ogImage and ogImage starts with '/' %}
+            {% set ogImage = app.request.schemeAndHttpHost ~ ogImage %}
+        {% endif %}
         {% set ogUrl         = app.request.uri %}
         {% set ogLocale      = app.request.locale|replace({'-': '_'}) %}
         <meta property="og:type"        content="website">

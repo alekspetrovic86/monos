@@ -20,25 +20,25 @@
 "Back to all references": "Nazad na sve reference"
 "app.menu.nav": "Glavna navigacija"
 "app.menu.toggle": "Meni"
-"app.teaser.enter": "Uđi" # TODO: potvrditi sa dizajnerom
+"app.teaser.enter": "Uđi"
 "app.project.nav": "Navigacija projekta"
-"app.project.back": "Nazad" # TODO: potvrditi sa dizajnerom
-"app.project.drawings": "→Crteži" # TODO: potvrditi sa dizajnerom
-"app.project.images": "←Slike" # TODO: potvrditi sa dizajnerom
-"app.project.expand": "Prošireni prikaz" # TODO: potvrditi sa dizajnerom
-"app.project.read_more": "Pročitaj više" # TODO: potvrditi sa dizajnerom
-"app.project.read_less": "Pročitaj manje" # TODO: potvrditi sa dizajnerom
+"app.project.back": "Nazad"
+"app.project.drawings": "→Crteži"
+"app.project.images": "←Slike"
+"app.project.expand": "Uvećaj"
+"app.project.read_more": "Više"
+"app.project.read_less": "Manje"
 "app.project.previous": "Prethodna slika"
 "app.project.next": "Sledeća slika"
 "app.project.esc": "Esc"
-"app.menu.back": "Nazad" # TODO: potvrditi sa dizajnerom
+"app.menu.back": "Nazad"
 "app.menu.in_preparation": "u pripremi"
-"app.information.terms": "Uslovi korišćenja" # TODO: potvrditi sa dizajnerom
+"app.information.terms": "Uslovi korišćenja"
 
 # ── Header (Task 13R). Dva prikaza istog pojma: desktop „Reset" 14px, mobilni „RESET" 10px (u-fine).
-"app.menu.reset": "Reset" # TODO: potvrditi sa dizajnerom
-"app.menu.reset_short": "RESET" # TODO: potvrditi sa dizajnerom
-"app.menu.close": "ZATVORI" # TODO: potvrditi sa dizajnerom
+"app.menu.reset": "Reset"
+"app.menu.reset_short": "RESET"
+"app.menu.close": "ZATVORI"
 
 # ── Nazivi navigacije (Task 13R). NAMERNO NA ENGLESKOM u sva tri jezika: u Figmi su engleski i kad je
 #    aktivan jezik „En" — to su nazivi kategorija studija, ne UI. Dizajner nije nacrtao sr/ja UI.
@@ -47,7 +47,7 @@
 "app.nav.material": "Material"
 "app.nav.press": "Press"
 "app.nav.information": "Information"
-"app.nav.all": "Sve" # TODO: potvrditi sa dizajnerom
+"app.nav.all": "Sve"
 "app.nav.architecture": "Architecture"
 "app.nav.interior": "Interior"
 "app.nav.furniture": "Furniture"
