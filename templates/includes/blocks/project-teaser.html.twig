@@ -1,0 +1,33 @@
+{# PROJECT TEASER — Figma F1/F2 desktop (12:66, 1440×900), F14/F15 mobile (51:174, 375×812).
+   Desktop: slika L240 T24 540×675 (kolona = 1/6 margine + 37.5% širine), naslov T747 (48px ispod slike),
+   podnaslov T811 (16px ispod naslova), „Enter" desno poravnat na desnu ivicu slike (780).
+   Mobile: slika puna širina T48, tekst u gutteru 4px, naslov 93px ispod slike; „Enter" ne postoji u Figmi.
+   Mirno stanje doslovno Figma: bez podvlačenja — podvlačenje samo na hover/focus-visible.
+   Odnos stranica slike je 4:5 na obe širine — jedna slika, različito skalirana. #}
+<section data-block="project-teaser"
+         class="mt-[16px] first:mt-[48px] lg:first:mt-[24px]
+                lg:ml-[calc(100%/6)] lg:w-[37.5%] lg:max-w-[540px]">
+
+    {% if content.image %}
+        <img src="{{ content.image.url }}"
+             alt="{{ content.image.title|default('') }}"
+             class="block w-full aspect-[4/5] object-cover">
+    {% endif %}
+
+    <div class="mx-[4px] lg:mx-0">
+        {% if content.title|default %}
+            <p class="mt-[93px] lg:mt-[48px] whitespace-pre-line">{{ content.title }}</p>
+        {% endif %}
+
+        <div class="mt-[16px] flex justify-between gap-[16px]">
+            {% if content.subtitle|default %}
+                <p>{{ content.subtitle }}</p>
+            {% endif %}
+
+            {% if content.link|default %}
+                <a href="{{ content.link }}"
+                   class="hidden shrink-0 hover:underline focus-visible:underline lg:block">{{ 'app.teaser.enter'|trans }}</a>
+            {% endif %}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<!-- project-teaser: fotografija + naslov (3 reda) + podnaslov + „Enter". Figma F1/F2 (12:66), F14/F15 (51:174). -->
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <block name="blocks" default-type="project-teaser">
+        <types>
+            <type name="project-teaser">
+                <meta>
+                    <title lang="en">Project teaser</title>
+                    <title lang="sr">Projekat — najava</title>
+                    <title lang="ja">プロジェクト紹介</title>
+                </meta>
+
+                <properties>
+                    <property name="image" type="single_media_selection">
+                        <meta>
+                            <title lang="en">Image</title>
+                            <title lang="sr">Slika</title>
+                            <title lang="ja">画像</title>
+                        </meta>
+                        <params>
+                            <param name="types" value="image"/>
+                        </params>
+                    </property>
+
+                    <property name="title" type="text_area">
+                        <meta>
+                            <title lang="en">Title</title>
+                            <title lang="sr">Naslov</title>
+                            <title lang="ja">タイトル</title>
+                            <info_text lang="en">Line breaks are kept (Figma: three lines).</info_text>
+                            <info_text lang="sr">Prelomi reda se čuvaju (Figma: tri reda).</info_text>
+                        </meta>
+                    </property>
+
+                    <property name="subtitle" type="text_line">
+                        <meta>
+                            <title lang="en">Subtitle</title>
+                            <title lang="sr">Podnaslov</title>
+                            <title lang="ja">サブタイトル</title>
+                        </meta>
+                    </property>
+
+                    <property name="link" type="link">
+                        <meta>
+                            <title lang="en">Enter link</title>
+                            <title lang="sr">„Enter" link</title>
+                            <title lang="ja">「Enter」リンク</title>
+                        </meta>
+                    </property>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>

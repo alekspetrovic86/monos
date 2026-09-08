@@ -32,5 +32,23 @@
 
             <tag name="sulu.rlp"/>
         </property>
+        <section name="content">
+            <meta>
+                <title lang="en">Content</title>
+                <title lang="sr">Sadržaj</title>
+            </meta>
+            <properties>
+                <block name="blocks" default-type="project-teaser" minOccurs="0">
+                    <meta>
+                        <title lang="en">Blocks</title>
+                        <title lang="sr">Blokovi</title>
+                    </meta>
+                    <types>
+                        <xi:include href="../includes/blocks/project-teaser.xml"
+                                    xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+                    </types>
+                </block>
+            </properties>
+        </section>
     </properties>
 </template>
