@@ -31,11 +31,11 @@
 
     <div class="mt-8 flex gap-4">
         <a href="{{ sulu_content_root_path('/') }}"
-           class="u-tracked underline underline-offset-2">{{ 'app.go_home'|trans }}</a>
+           class="u-tracked hover:underline hover:underline-offset-2 focus-visible:underline focus-visible:underline-offset-2">{{ 'app.go_home'|trans }}</a>
 
         {% if is5xx %}
             <button type="button"
-                    class="err-refresh-btn u-tracked underline underline-offset-2 cursor-pointer">{{ 'app.try_again'|trans }}</button>
+                    class="err-refresh-btn u-tracked hover:underline hover:underline-offset-2 focus-visible:underline focus-visible:underline-offset-2 cursor-pointer">{{ 'app.try_again'|trans }}</button>
         {% endif %}
     </div>
 
