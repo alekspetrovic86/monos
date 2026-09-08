@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block meta %}
             {% set _seoBase = extension.seo|default({}) %}
-            {% set _pageTitle = _seoBase.title|default(content.title|default('')) %}
+            {# Naslov projekta je text_area (prelomi iz urednika) — u <title> prelomi postaju razmaci. #}
+            {% set _pageTitle = _seoBase.title|default(content.title|default(''))|replace({"\n": " ", "\r": ""}) %}
             {% set _seo = _seoBase|merge({'title': _pageTitle ? _pageTitle ~ ' | Monos' : 'Monos'}) %}
             {{ include('@SuluWebsite/Extension/seo.html.twig', {
                 seo: _seo,
@@ -19,11 +20,15 @@
         {% endblock %}
 
         {# ── PWA / Browser meta ── #}
+        {# Favicon: slovo „M" u Inter 500, crno na belom, bez zaobljenja (Monos nema logo — u Figmi je čist tekst). #}
+        <link rel="icon" href="/favicon.ico" sizes="32x32">
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="manifest" href="/site.webmanifest">
-        <meta name="theme-color" content="#000000">
+        <meta name="theme-color" content="#FFFFFF">
 
         {# ── Open Graph ── #}
-        {% set ogTitle       = extension.seo.title|default(content.title|default('Monos')) %}
+        {% set ogTitle       = extension.seo.title|default(content.title|default('Monos'))|replace({"\n": " ", "\r": ""}) %}
         {% set ogDescription = extension.seo.description|default(content.excerpt|default('')) %}
         {% set ogImage       = extension.excerpt.images[0].thumbnails['seo_og']|default('') %}
         {% set ogUrl         = app.request.uri %}

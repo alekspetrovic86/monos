@@ -86,7 +86,8 @@
         </div>
 
         {# ── Tekst ────────────────────────────────────────────────── #}
-        <div class="project__text mx-[4px] mt-[16px] pb-[124px] lg:mx-0 lg:mt-0 lg:pt-[10px] lg:pb-[96px]"
+        {# Ispod lg (tableti 768–1023 nemaju Figma frame) tekst je najviše 600px širok — na 1000px bi inače imao 120+ znakova u redu. #}
+        <div class="project__text mx-[4px] mt-[16px] max-w-[600px] pb-[124px] lg:mx-0 lg:mt-0 lg:max-w-none lg:pt-[10px] lg:pb-[96px]"
              data-controller="read-more"
              data-read-more-more-value="{{ 'app.project.read_more'|trans }}"
              data-read-more-less-value="{{ 'app.project.read_less'|trans }}">

@@ -33,6 +33,24 @@ Sajt je na `http://127.0.0.1:8000`, admin na `http://127.0.0.1:8000/admin/`.
 web UI 8025, iz `compose.override.yaml`). `sulu:build dev` kreira šeme i
 učitava fixtures. Za rad na stilovima koristi `yarn encore dev --watch`.
 
+## Produkcija
+
+**`sulu:build prod` je ZABRANJEN na produkciji.** Sulu-ov `prod` build target
+uključuje `fixtures`: učitao bi lorem projekte i prepisao `blocks` naslovne
+stranice (sr/en/ja) — sve što je urednik uneo bi nestalo. Fixture klase su zato
+registrovane samo u `dev` i `test` kontejneru (`config/services.yaml`), ali
+target se i dalje ne pokreće — koristi eksplicitne targete:
+
+```bash
+php bin/console sulu:build database phpcr phpcr_migrations system_collections security --env=prod
+```
+
+Provera da fixture nisu u prod kontejneru:
+
+```bash
+php bin/console debug:container --env=prod | grep -i "App\\DataFixtures"   # ništa
+```
+
 ## Jezici
 
 - `sr` (podrazumevani, na `/`)

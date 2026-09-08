@@ -50,6 +50,6 @@
     {# Dugi opis (F1: L240 T928, 540 široko) — vidljiv u oba stanja. Oznaka „1.2" je deo teksta.
        Obično: 14 ispod slike; istaknuto: 2 ispod detalja (14 + 2 = 16). Ako ga nema, sledeća slika dolazi odmah (2px). #}
     {% if content.description|default %}
-        <div class="rich-text mx-[4px] mt-[14px] pb-[14px] group-data-expanded:mt-[2px] lg:mx-0 lg:w-[540px]">{{ content.description|raw }}</div>
+        <div class="rich-text mx-[4px] mt-[14px] max-w-[600px] pb-[14px] group-data-expanded:mt-[2px] lg:mx-0 lg:w-[540px] lg:max-w-none">{{ content.description|raw }}</div>
     {% endif %}
 </article>

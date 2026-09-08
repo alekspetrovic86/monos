@@ -28,7 +28,8 @@
 
 {% block content %}
     {# ── Mobile: zone u toku ──────────────────────────────────── #}
-    <div class="flex min-h-dvh flex-col px-[4px] pt-[48px] pb-[100px] lg:hidden">
+    {# max-w 600: ispod lg (tableti) tekstualne zone ne prelaze 600px — spec; na 375 je i dalje puna širina (367). #}
+    <div class="flex min-h-dvh max-w-[600px] flex-col px-[4px] pt-[48px] pb-[100px] lg:hidden">
         <div class="rich-text rich-text--tight">{{ content.intro_text|default('')|raw }}</div>
         <div class="mt-[32px]">
             {% include 'includes/information/contact.html.twig' with { settings: _settings, text: content.contact_text|default('') } only %}

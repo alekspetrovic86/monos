@@ -21,6 +21,14 @@
     Sulu uz svaki ključ nudi i `ključ.webp` / `ključ.jpg` — lista i slajder koriste webp (jpg kao rezerva).
     -->
 
+    <!-- og:image (base.html.twig) — 1200×630 je Open Graph preporuka; inset: slika stane u okvir, ne seče se. -->
+    <format key="seo_og">
+        <meta>
+            <title lang="en">Open Graph 1200×630</title>
+        </meta>
+        <scale x="1200" y="630" mode="inset"/>
+    </format>
+
     <format key="w2400">
         <meta>
             <title lang="en">Expand view 2400</title>

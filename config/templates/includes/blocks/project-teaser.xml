@@ -57,7 +57,7 @@
                         </meta>
                     </property>
 
-                    <property name="link" type="link">
+                    <property name="link" type="link" mandatory="true">
                         <meta>
                             <title lang="en">Enter link</title>
                             <title lang="sr">„Enter" link</title>

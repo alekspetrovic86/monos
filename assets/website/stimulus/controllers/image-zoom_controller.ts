@@ -78,7 +78,11 @@ export default class ImageZoomController extends Controller<HTMLElement> {
         lightbox.on('slide_after_load', (data: { slideNode: HTMLElement }) => {
             this.attach(data.slideNode.querySelector('img'));
         });
-        lightbox.on('close', () => this.detach());
+        lightbox.on('close', () => {
+            this.detach();
+            // Fokus se vraća na okidač („Expand view"), kao što menu_controller vraća na logo — GLightbox ga ostavlja na <body>.
+            this.element.focus();
+        });
 
         return lightbox;
     }

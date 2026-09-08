@@ -16,6 +16,26 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
+        # Fixtures nisu servisi produkcije: Sulu-ov `sulu:build prod` uključuje target `fixtures`, pa bi svaka
+        # registrovana klasa učitala lorem projekte i prepisala `blocks` naslovne. Registrovane su samo u dev/test (dole).
+        exclude:
+            - '../src/DataFixtures/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+# Fixtures postoje samo u dev i test kontejneru. U produkciji `sulu:build prod` (koji poziva fixtures) je zabranjen —
+# vidi README, sekcija „Produkcija".
+when@dev:
+    services:
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            autowire: true
+            autoconfigure: true
+
+when@test:
+    services:
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            autowire: true
+            autoconfigure: true

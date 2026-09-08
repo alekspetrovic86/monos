@@ -6,7 +6,8 @@
     <key>default</key>
 
     <view>pages/default</view>
-    <controller>Sulu\Bundle\WebsiteBundle\Controller\DefaultController::indexAction</controller>
+    <!-- App kontroler: `in_preparation` → 404 (naziv ostaje u meniju, ruta nije javna). -->
+    <controller>App\Controller\DefaultController::indexAction</controller>
     <cacheLifetime>604800</cacheLifetime>
 
     <meta>
