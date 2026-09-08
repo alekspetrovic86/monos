@@ -3,9 +3,12 @@
    vlasnik potvrdio da ide na obe širine). `text` = legal_text stranice, ispod svega.
    Mirno stanje bez podvlačenja — podvlačenje samo hover/focus-visible.
    Širina: 238 (F5 L1107 R1345; F19 L4 R242). Omotač u header-u je shrink-to-fit sa desnim sidrom, pa bez max-w dug
-   `legal_text` širi blok ULEVO umesto da se prelomi. `lg:ml-auto` drži desnu ivicu na 1345. #}
+   `legal_text` širi blok ULEVO umesto da se prelomi. `lg:ml-auto` drži desnu ivicu na 1345. Vrednost 239 — vidi ispod. #}
 {% set s = settings.content|default({}) %}
-<div class="max-w-[238px] lg:ml-auto">
+{# 239, ne 238 iz Figme: Chrome renderuje „Monos ©2026. All Rights Reserved."
+   na 238.39px (Inter 14px), pa bi 238 prelomio red koji je u dizajnu jedan.
+   Odstupanje od 1px je nevidljivo; prelom nije. #}
+<div class="max-w-[239px] lg:ml-auto">
 
 {% if s.terms_link|default %}
     <p><a href="{{ s.terms_link }}" class="hover:underline focus-visible:underline">{{ 'app.information.terms'|trans }}</a></p>
