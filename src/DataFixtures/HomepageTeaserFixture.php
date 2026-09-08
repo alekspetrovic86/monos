@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Homepage sadržaj po Figmi: jedan `project-teaser` blok (F1/F2, F14/F15) na sr/en/ja.
+ * Homepage sadržaj po Figmi: četiri `project-teaser` bloka (prvi = F1/F2, F14/F15) na sr/en/ja.
  *
  * Ponovljiv: kolekcija se traži po ključu, medij po imenu fajla u kolekciji,
  * a blok se prepisuje. Pokreće se sa
@@ -32,10 +32,15 @@ final class HomepageTeaserFixture implements DocumentFixtureInterface
 
     private const COLLECTION_KEY = 'monos.projects';
     private const COLLECTION_TITLE = 'Projects';
-    private const IMAGE_PATH = __DIR__ . '/files/project-1.png';
-    private const IMAGE_NAME = 'project-1.png';
+    private const FILES_DIR = __DIR__ . '/files';
 
-    // Tekst doslovno iz Figme (isti na sve tri lokalizacije).
+    /**
+     * Četiri tizera, redom kako stoje na stranici. Fotografije su isečene iz Figma frame-ova:
+     * project-1 iz F1/F2 (12:66), project-2 iz F7 (16:2), project-3 iz F9 (17:39), project-4 iz F13 (17:93).
+     */
+    private const IMAGES = ['project-1.png', 'project-2.png', 'project-3.png', 'project-4.png'];
+
+    // Tekst doslovno iz Figme (isti na sve tri lokalizacije i na svim tizerima — test podatak).
     private const TITLE = "Lorem ipsum dolor sit amet\nDuis autem vel eum iriure dolor\nMolestie";
     private const SUBTITLE = 'Sed diam nonummy nibh euismod tincidunt ut laoreet';
 
@@ -51,24 +56,29 @@ final class HomepageTeaserFixture implements DocumentFixtureInterface
     public function load(DocumentManager $documentManager): void
     {
         $userId = $this->userId();
-        $mediaId = $this->media($this->collectionId($userId), $userId);
+        $collectionId = $this->collectionId($userId);
+        $mediaIds = \array_map(
+            fn (string $file): int => $this->media($file, $collectionId, $userId),
+            self::IMAGES,
+        );
 
         foreach (self::LOCALES as $locale) {
             $home = $documentManager->find('/cmf/' . self::WEBSPACE . '/contents', $locale);
             \assert($home instanceof HomeDocument);
 
-            $home->getStructure()->bind([
-                'blocks' => [
-                    [
-                        'type' => 'project-teaser',
-                        'image' => ['id' => $mediaId, 'displayOption' => null],
-                        'title' => self::TITLE,
-                        'subtitle' => self::SUBTITLE,
-                        // Projekti još ne postoje — „Enter" privremeno vodi na početnu.
-                        'link' => ['provider' => 'page', 'href' => $home->getUuid(), 'locale' => $locale],
-                    ],
-                ],
-            ]);
+            $blocks = [];
+            foreach ($mediaIds as $mediaId) {
+                $blocks[] = [
+                    'type' => 'project-teaser',
+                    'image' => ['id' => $mediaId, 'displayOption' => null],
+                    'title' => self::TITLE,
+                    'subtitle' => self::SUBTITLE,
+                    // Projekti još ne postoje — „Enter" privremeno vodi na početnu.
+                    'link' => ['provider' => 'page', 'href' => $home->getUuid(), 'locale' => $locale],
+                ];
+            }
+
+            $home->getStructure()->bind(['blocks' => $blocks]);
 
             $documentManager->persist($home, $locale);
             $documentManager->publish($home, $locale);
@@ -109,21 +119,21 @@ final class HomepageTeaserFixture implements DocumentFixtureInterface
         ], $userId)->getId();
     }
 
-    private function media(int $collectionId, int $userId): int
+    private function media(string $fileName, int $collectionId, int $userId): int
     {
-        $existing = $this->mediaRepository->findMediaWithFilenameInCollectionWithId(self::IMAGE_NAME, $collectionId);
+        $existing = $this->mediaRepository->findMediaWithFilenameInCollectionWithId($fileName, $collectionId);
         if (null !== $existing) {
             return $existing->getId();
         }
 
         // Kopija: storage čita sa putanje, a izvor u repou ostaje netaknut.
         $tmp = \tempnam(\sys_get_temp_dir(), 'monos-fixture-');
-        \copy(self::IMAGE_PATH, $tmp);
+        \copy(self::FILES_DIR . '/' . $fileName, $tmp);
 
         try {
             $media = $this->mediaManager->save(
-                new UploadedFile($tmp, self::IMAGE_NAME, 'image/png', null, true),
-                ['collection' => $collectionId, 'locale' => 'en', 'title' => 'Project 1'],
+                new UploadedFile($tmp, $fileName, 'image/png', null, true),
+                ['collection' => $collectionId, 'locale' => 'en', 'title' => \ucfirst(\str_replace('-', ' ', \pathinfo($fileName, \PATHINFO_FILENAME)))],
                 $userId,
             );
         } finally {

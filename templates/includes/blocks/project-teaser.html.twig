@@ -1,17 +1,28 @@
 {# PROJECT TEASER — Figma F1/F2 desktop (12:66, 1440×900), F14/F15 mobile (51:174, 375×812).
    Desktop: slika L240 T24 540×675 (kolona = 1/6 margine + 37.5% širine), naslov T747 (48px ispod slike),
    podnaslov T811 (16px ispod naslova), „Enter" desno poravnat na desnu ivicu slike (780).
-   Mobile: slika puna širina T48, tekst u gutteru 4px, naslov 93px ispod slike; „Enter" ne postoji u Figmi.
+   Mobile: slika puna širina T48, tekst u gutteru 4px, naslov 93px ispod slike; „Enter" ne postoji u Figmi — slika je link.
    Mirno stanje doslovno Figma: bez podvlačenja — podvlačenje samo na hover/focus-visible.
    Odnos stranica slike je 4:5 na obe širine — jedna slika, različito skalirana. #}
 <section data-block="project-teaser"
          class="mt-[16px] first:mt-[48px] lg:first:mt-[24px]
                 lg:ml-[calc(100%/6)] lg:w-[37.5%] lg:max-w-[540px]">
 
+    {# Slika je link na projekat na OBE širine: na mobilnom je to jedini ulaz, jer „Enter" u Figmi (F15) ne postoji.
+       Link ne menja nijedan piksel u mirovanju — bez podvlačenja, okvira ili posebnog kursora. #}
     {% if content.image %}
-        <img src="{{ content.image.url }}"
-             alt="{{ content.image.title|default('') }}"
-             class="block w-full aspect-[4/5] object-cover">
+        {% set _image %}
+            <img src="{{ content.image.url }}"
+                 alt="{{ content.image.title|default('') }}"
+                 class="block w-full aspect-[4/5] object-cover">
+        {% endset %}
+        {% if content.link|default %}
+            <a href="{{ content.link }}"
+               aria-label="{{ content.title|default('')|split("\n")|first|trim|default('app.teaser.enter'|trans) }}"
+               class="block">{{ _image }}</a>
+        {% else %}
+            {{ _image }}
+        {% endif %}
     {% endif %}
 
     <div class="mx-[4px] lg:mx-0">
