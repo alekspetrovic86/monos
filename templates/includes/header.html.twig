@@ -1,13 +1,19 @@
 {# Monos header — logo + meni. Desktop: desno, baseline 314px. Mobile: dno. #}
-{# Statični skelet — interakcija (menu controller) dolazi u Task 8. #}
-<header data-controller="menu" class="pointer-events-none fixed inset-0 z-50">
+{# Ponašanje: menu_controller.ts (toggle, select, close/Esc). #}
+{# Mirno stanje je doslovno Figma (bez podvlačenja); podvlačenje samo na hover/focus-visible. #}
+<header data-controller="menu"
+        data-action="keydown.esc@document->menu#close"
+        class="pointer-events-none fixed inset-0 z-50">
 
     {# ── Logo / CLOSE ───────────────────────────────────────────── #}
     {# Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371). #}
+    {# Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). #}
     <button type="button"
             data-menu-target="toggle"
             data-action="menu#toggle"
+            aria-expanded="false"
             class="pointer-events-auto absolute cursor-pointer text-nav
+                   hover:underline focus-visible:underline
                    right-[4px] bottom-[68px]
                    lg:right-[2px] lg:bottom-auto lg:top-[314px]">
         <span data-menu-target="logoLabel">Monos</span>
@@ -19,6 +25,7 @@
        data-menu-target="reset"
        hidden
        class="pointer-events-auto absolute u-tracked
+              hover:underline focus-visible:underline
               left-[4px] bottom-[84px]
               lg:left-[2px] lg:bottom-auto lg:top-[314px]">
         <span class="u-fine lg:hidden">RESET</span>
@@ -26,33 +33,75 @@
     </a>
 
     {# ── Beli overlay (samo mobile, 375×728 na T0) ──────────────── #}
+    {# pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova. #}
     <div data-menu-target="overlay"
          hidden
-         class="absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden"></div>
+         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden"></div>
 
     {# ── Navigacija ─────────────────────────────────────────────── #}
     {# Desktop: desna ivica 1345 (1440−95), T314, korak 16px.
-       Mobile: desna ivica 371, redovi T648/664/680/696 → dno 712 = 812−100. #}
+       Mobile: desna ivica 371, redovi T648/664/680/696 → dno 712 = 812−100.
+       Flex kolona sa razmakom 16px: podmeni je na desktopu ISPOD stavki (T394),
+       na mobilnom IZNAD (order-first, dno 632). Desna ivica ista kao nav. #}
     <nav data-menu-target="nav"
          hidden
-         class="pointer-events-auto absolute text-right
+         class="pointer-events-auto absolute flex flex-col gap-[16px] text-right
                 right-[4px] bottom-[100px]
                 lg:right-[95px] lg:bottom-auto lg:top-[314px]">
-        {% for item in [
-            { key: 'material',    label: 'Material'    },
-            { key: 'press',       label: 'Press'       },
-            { key: 'information', label: 'Information' },
-        ] %}
+
+        <div>
+            {% for item in [
+                { key: 'material', label: 'Material' },
+                { key: 'press',    label: 'Press'    },
+            ] %}
+                <button type="button"
+                        data-menu-target="item"
+                        data-menu-key-param="{{ item.key }}"
+                        data-action="menu#select"
+                        aria-expanded="false"
+                        class="block w-full cursor-pointer text-right
+                               hover:underline focus-visible:underline">{{ item.label }}</button>
+            {% endfor %}
+            {# Information nema podmeni — vodi na svoju stranicu (Task 12). #}
+            <a href="/" class="block hover:underline focus-visible:underline">Information</a>
             <button type="button"
                     data-menu-target="item"
-                    data-menu-key-param="{{ item.key }}"
+                    data-menu-key-param="locale"
                     data-action="menu#select"
-                    class="block w-full cursor-pointer text-right">{{ item.label }}</button>
+                    aria-expanded="false"
+                    class="block w-full cursor-pointer text-right
+                           hover:underline focus-visible:underline">{{ app.request.locale|split('_')[0]|capitalize }}</button>
+        </div>
+
+        {# ── Podmeniji — otvoren je najviše jedan ─────────────────── #}
+        {% set submenus = {
+            material: [
+                { label: 'Architecture',   href: '#' },
+                { label: 'Interior',       href: '#' },
+                { label: 'Furniture',      href: '#' },
+                { label: 'Objects',        href: '#' },
+                { label: 'Graphic design', href: '#' },
+            ],
+            press: [
+                { label: 'Publications', href: '#' },
+                { label: 'Awards',       href: '#' },
+                { label: 'Exhibitions',  href: '#' },
+                { label: 'Media',        href: '#' },
+            ],
+            locale: [
+                { label: 'Српски', href: '/'   },
+                { label: '日本語',  href: '/ja' },
+            ],
+        } %}
+        {% for key, links in submenus %}
+            <div data-menu-target="submenu"
+                 data-menu-submenu-key="{{ key }}"
+                 hidden
+                 class="order-first lg:order-none">
+                {% for link in links %}
+                    <a href="{{ link.href }}" class="block hover:underline focus-visible:underline">{{ link.label }}</a>
+                {% endfor %}
+            </div>
         {% endfor %}
-        <button type="button"
-                data-menu-target="item"
-                data-menu-key-param="locale"
-                data-action="menu#select"
-                class="block w-full cursor-pointer text-right">{{ app.request.locale|split('_')[0]|capitalize }}</button>
     </nav>
 </header>
