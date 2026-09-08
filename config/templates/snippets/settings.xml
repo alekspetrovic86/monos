@@ -36,21 +36,6 @@
 			</meta>
             
 			<properties>
-                <property name="header_mode" type="single_select">
-                    <meta>
-                        <title lang="en">Mode</title>
-                    </meta>
-                    <params>
-                        <param name="values" type="collection">
-                            <param name="light" type="collection">
-                                <param name="title" value="Light"/>
-                            </param>
-                            <param name="dark" type="collection">
-                                <param name="title" value="Dark"/>
-                            </param>
-                        </param>
-                    </params>
-                </property>
 
 				<property name="header_logo" type="single_media_selection">
                     <meta>
@@ -86,18 +71,6 @@
                             </param>
                         </param>
                     </params>
-                </property>
-                <property name="show_theme_toggle" type="checkbox">
-                    <meta>
-                        <title lang="en">Show Dark/Light Toggle</title>
-                    </meta>
-                </property>
-
-                <property name="auto_theme_by_time" type="checkbox">
-                    <meta>
-                        <title lang="en">Auto Theme by Sunrise/Sunset</title>
-                        <info_text lang="en">Automatically switches to dark mode at sunset and light mode at sunrise based on the visitor's location.</info_text>
-                    </meta>
                 </property>
 
 

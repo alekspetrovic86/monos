@@ -10,7 +10,7 @@
     <ul class="mt-4">
         {% for i, hit in hits %}
             <li>
-                <a href="{{ hit.document.url }}" class="underline underline-offset-2">
+                <a href="{{ hit.document.url }}" class="hover:underline hover:underline-offset-2 focus-visible:underline focus-visible:underline-offset-2">
                     {{- hit.document.title -}}
                 </a>
             </li>
