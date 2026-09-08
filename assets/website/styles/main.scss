@@ -28,3 +28,12 @@ body {
     line-height: 16px;
     font-weight: 200;
 }
+
+/* Progresivno poboljšanje menija. Bez JS-a nav, Reset i podmeniji su vidljivi (Figma F2').
+   Sa JS-om su sakriveni od prvog crtanja do connect() menu kontrolera, koji doda `menu-ready`
+   na <html> i od tada upravlja `hidden` atributom (preflight: display:none !important). */
+.js:not(.menu-ready) [data-menu-target="nav"],
+.js:not(.menu-ready) [data-menu-target="reset"],
+.js:not(.menu-ready) [data-menu-target="submenu"] {
+    display: none;
+}

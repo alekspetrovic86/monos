@@ -1,8 +1,29 @@
 {# Monos header — logo + meni. Desktop: desno, baseline 314px. Mobile: dno. #}
-{# Ponašanje: menu_controller.ts (toggle, select, close/Esc). #}
+{# Ponašanje: menu_controller.ts (na <body>): toggle, select, close/Esc, inert sadržaja. #}
+{# Bez JS-a: nav, Reset i podmeniji su vidljivi (F2') — `hidden` postavlja kontroler, ne server. #}
 {# Mirno stanje je doslovno Figma (bez podvlačenja); podvlačenje samo na hover/focus-visible. #}
-<header data-controller="menu"
-        data-action="keydown.esc@document->menu#close"
+
+{# Jezici: sve lokalizacije stranice osim aktivne. Van Sulu konteksta (error stranice)
+   `localizations` ne postoji — tada koren svake lokalizacije. #}
+{% set localeNames = { sr: 'Српски', en: 'English', ja: '日本語' } %}
+{% set currentLocale = app.request.locale|split('_')[0] %}
+{% set localeLinks = [] %}
+{% if localizations|default([]) is not empty %}
+    {% for localization in localizations %}
+        {% set code = localization.locale|split('_')[0] %}
+        {% if code != currentLocale %}
+            {% set localeLinks = localeLinks|merge([{ label: localeNames[code]|default(code|capitalize), href: localization.url }]) %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% for code, label in localeNames %}
+        {% if code != currentLocale %}
+            {% set localeLinks = localeLinks|merge([{ label: label, href: sulu_content_root_path(code) }]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<header data-action="keydown.esc@document->menu#close"
         class="pointer-events-none fixed inset-0 z-50">
 
     {# ── Logo / CLOSE ───────────────────────────────────────────── #}
@@ -11,7 +32,8 @@
     <button type="button"
             data-menu-target="toggle"
             data-action="menu#toggle"
-            aria-expanded="false"
+            aria-label="{{ 'app.menu.toggle'|trans }}"
+            aria-controls="menu-nav"
             class="pointer-events-auto absolute cursor-pointer text-nav
                    hover:underline focus-visible:underline
                    right-[4px] bottom-[68px]
@@ -23,7 +45,6 @@
     {# Desktop: L2 T314, 14px/500 tracked. Mobile: L4 T712, 10px/200 (u-fine). #}
     <a href="/"
        data-menu-target="reset"
-       hidden
        class="pointer-events-auto absolute u-tracked
               hover:underline focus-visible:underline
               left-[4px] bottom-[84px]
@@ -33,7 +54,8 @@
     </a>
 
     {# ── Beli overlay (samo mobile, 375×728 na T0) ──────────────── #}
-    {# pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova. #}
+    {# Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni.
+       pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova. #}
     <div data-menu-target="overlay"
          hidden
          class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden"></div>
@@ -43,8 +65,9 @@
        Mobile: desna ivica 371, redovi T648/664/680/696 → dno 712 = 812−100.
        Flex kolona sa razmakom 16px: podmeni je na desktopu ISPOD stavki (T394),
        na mobilnom IZNAD (order-first, dno 632). Desna ivica ista kao nav. #}
-    <nav data-menu-target="nav"
-         hidden
+    <nav id="menu-nav"
+         data-menu-target="nav"
+         aria-label="{{ 'app.menu.nav'|trans }}"
          class="pointer-events-auto absolute flex flex-col gap-[16px] text-right
                 right-[4px] bottom-[100px]
                 lg:right-[95px] lg:bottom-auto lg:top-[314px]">
@@ -58,7 +81,7 @@
                         data-menu-target="item"
                         data-menu-key-param="{{ item.key }}"
                         data-action="menu#select"
-                        aria-expanded="false"
+                        aria-controls="menu-submenu-{{ item.key }}"
                         class="block w-full cursor-pointer text-right
                                hover:underline focus-visible:underline">{{ item.label }}</button>
             {% endfor %}
@@ -68,12 +91,12 @@
                     data-menu-target="item"
                     data-menu-key-param="locale"
                     data-action="menu#select"
-                    aria-expanded="false"
+                    aria-controls="menu-submenu-locale"
                     class="block w-full cursor-pointer text-right
-                           hover:underline focus-visible:underline">{{ app.request.locale|split('_')[0]|capitalize }}</button>
+                           hover:underline focus-visible:underline">{{ currentLocale|capitalize }}</button>
         </div>
 
-        {# ── Podmeniji — otvoren je najviše jedan ─────────────────── #}
+        {# ── Podmeniji — sa JS-om otvoren je najviše jedan ───────── #}
         {% set submenus = {
             material: [
                 { label: 'Architecture',   href: '#' },
@@ -88,15 +111,12 @@
                 { label: 'Exhibitions',  href: '#' },
                 { label: 'Media',        href: '#' },
             ],
-            locale: [
-                { label: 'Српски', href: '/'   },
-                { label: '日本語',  href: '/ja' },
-            ],
+            locale: localeLinks,
         } %}
         {% for key, links in submenus %}
-            <div data-menu-target="submenu"
+            <div id="menu-submenu-{{ key }}"
+                 data-menu-target="submenu"
                  data-menu-submenu-key="{{ key }}"
-                 hidden
                  class="order-first lg:order-none">
                 {% for link in links %}
                     <a href="{{ link.href }}" class="block hover:underline focus-visible:underline">{{ link.label }}</a>

@@ -2,6 +2,8 @@
 <html lang="{{ app.request.locale|split('_')[0] }}">
     <head>
         <meta charset="utf-8">
+        {# Progresivno poboljšanje: `.js` na <html> pre prvog crtanja — bez JS-a meni je otvoren (F2'). #}
+        <script>document.documentElement.classList.add('js')</script>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block meta %}
@@ -59,11 +61,14 @@
             {{ encore_entry_script_tags('website') }}
         {% endblock %}
     </head>
-    <body>
+    {# menu kontroler je na <body>: header (toggle/nav) i sadržaj (inert pod mobilnim overlayem) su mu targeti. #}
+    <body data-controller="menu">
         {% block header %}
             {% include 'includes/header.html.twig' %}
         {% endblock %}
 
-        {% block content %}{% endblock %}
+        <div data-menu-target="content">
+            {% block content %}{% endblock %}
+        </div>
     </body>
 </html>
