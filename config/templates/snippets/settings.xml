@@ -30,6 +30,77 @@
             <tag name="sulu.node.name"/>
         </property>
 
+        <!-- Monos: kontakt i pravni podaci za Information stranicu (F5 12:109 / F19 62:240).
+             Figma ima samo Instagram — bez LinkedIn-a i X-a. -->
+        <section name="contact">
+            <meta>
+                <title lang="en">Contact and legal</title>
+                <title lang="sr">Kontakt i pravno</title>
+                <title lang="ja">連絡先と法的事項</title>
+            </meta>
+            <properties>
+                <property name="contact_name" type="text_line" colspan="6">
+                    <meta>
+                        <title lang="en">Contact name</title>
+                        <title lang="sr">Ime kontakta</title>
+                        <info_text lang="en">e.g. „Nikola Brajović, architect"</info_text>
+                    </meta>
+                </property>
+
+                <property name="contact_phone" type="phone" colspan="6">
+                    <meta>
+                        <title lang="en">Phone</title>
+                        <title lang="sr">Telefon</title>
+                    </meta>
+                </property>
+
+                <property name="contact_email" type="email" colspan="6">
+                    <meta>
+                        <title lang="en">E-mail</title>
+                        <title lang="sr">E-pošta</title>
+                    </meta>
+                </property>
+
+                <property name="contact_email_secondary" type="email" colspan="6">
+                    <meta>
+                        <title lang="en">E-mail (secondary)</title>
+                        <title lang="sr">E-pošta (druga)</title>
+                    </meta>
+                </property>
+
+                <property name="instagram_url" type="url">
+                    <meta>
+                        <title lang="en">Instagram URL</title>
+                        <title lang="sr">Instagram adresa</title>
+                    </meta>
+                </property>
+
+                <property name="terms_link" type="link">
+                    <meta>
+                        <title lang="en">Terms of use link</title>
+                        <title lang="sr">Link ka uslovima korišćenja</title>
+                    </meta>
+                </property>
+
+                <property name="copyright" type="text_line" colspan="6">
+                    <meta>
+                        <title lang="en">Copyright line</title>
+                        <title lang="sr">Copyright red</title>
+                        <info_text lang="en">e.g. „Monos ©2026. All Rights Reserved."</info_text>
+                    </meta>
+                </property>
+
+                <property name="credit" type="text_line" colspan="6">
+                    <meta>
+                        <title lang="en">Credit</title>
+                        <title lang="sr">Kredit</title>
+                        <info_text lang="en">e.g. „Code by Seiora" — shown on all widths.</info_text>
+                        <info_text lang="sr">npr. „Code by Seiora" — na svim širinama.</info_text>
+                    </meta>
+                </property>
+            </properties>
+        </section>
+
         <property name="account" type="single_account_selection">
             <meta>
                 <title lang="en">Organization</title>

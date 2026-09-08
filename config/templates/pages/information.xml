@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<!-- information: stranica „Information" — ista lista kao naslovna, sa otvorenim menijem i tri tekstualne zone.
+     Figma F5 12:109 (desktop 1440×900), F19 62:240 (mobile 375×812). Zone sedaju u kolone koje meni ionako koristi:
+     uvod iznad navigacije, kontakt na mestu podmenija, pravni tekst dole uz „Terms of use" (settings snippet). -->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <key>information</key>
+
+    <view>pages/information</view>
+    <controller>Sulu\Bundle\WebsiteBundle\Controller\DefaultController::indexAction</controller>
+    <cacheLifetime>86400</cacheLifetime>
+
+    <meta>
+        <title lang="en">Information</title>
+        <title lang="sr">Informacije</title>
+        <title lang="ja">インフォメーション</title>
+    </meta>
+
+    <properties>
+        <property name="title" type="text_line" mandatory="true">
+            <meta>
+                <title lang="en">Title</title>
+                <title lang="sr">Naslov</title>
+                <title lang="ja">タイトル</title>
+            </meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="resource_locator" mandatory="true">
+            <meta>
+                <title lang="en">Resourcelocator</title>
+            </meta>
+
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <section name="texts">
+            <meta>
+                <title lang="en">Texts</title>
+                <title lang="sr">Tekstovi</title>
+                <title lang="ja">テキスト</title>
+            </meta>
+            <properties>
+                <property name="intro_text" type="text_editor">
+                    <meta>
+                        <title lang="en">Intro text</title>
+                        <title lang="sr">Uvodni tekst</title>
+                        <title lang="ja">紹介文</title>
+                        <info_text lang="en">Above the navigation (desktop: right column, 642px wide; mobile: top of the page).</info_text>
+                        <info_text lang="sr">Iznad navigacije (desktop: desna kolona, 642px; mobile: vrh stranice).</info_text>
+                    </meta>
+                </property>
+
+                <property name="contact_text" type="text_editor">
+                    <meta>
+                        <title lang="en">Contact text</title>
+                        <title lang="sr">Kontakt tekst</title>
+                        <title lang="ja">連絡先テキスト</title>
+                        <info_text lang="en">Below the contact details from the settings snippet, in the submenu column.</info_text>
+                        <info_text lang="sr">Ispod kontakt podataka iz settings snippet-a, u koloni podmenija.</info_text>
+                    </meta>
+                </property>
+
+                <property name="legal_text" type="text_editor">
+                    <meta>
+                        <title lang="en">Legal text</title>
+                        <title lang="sr">Pravni tekst</title>
+                        <title lang="ja">法的テキスト</title>
+                        <info_text lang="en">Below „Terms of use", copyright and credit from the settings snippet.</info_text>
+                        <info_text lang="sr">Ispod „Terms of use", copyright-a i kredita iz settings snippet-a.</info_text>
+                    </meta>
+                </property>
+            </properties>
+        </section>
+    </properties>
+</template>

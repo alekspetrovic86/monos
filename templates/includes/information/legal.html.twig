@@ -1,0 +1,18 @@
+{# Pravna zona Information stranice — sadržaj bez omotača (desktop T666 R1345, mobile uz dno L4).
+   Redovi: „Terms of use", copyright, prazan red, kredit „Code by Seiora" (F19; na desktopu ga je dizajner propustio —
+   vlasnik potvrdio da ide na obe širine). `text` = legal_text stranice, ispod svega.
+   Mirno stanje bez podvlačenja — podvlačenje samo hover/focus-visible. #}
+{% set s = settings.content|default({}) %}
+
+{% if s.terms_link|default %}
+    <p><a href="{{ s.terms_link }}" class="hover:underline focus-visible:underline">{{ 'app.information.terms'|trans }}</a></p>
+{% endif %}
+{% if s.copyright|default %}
+    <p>{{ s.copyright }}</p>
+{% endif %}
+{% if s.credit|default %}
+    <p class="mt-[16px]">{{ s.credit }}</p>
+{% endif %}
+{% if text|default %}
+    <div class="rich-text rich-text--tight mt-[16px]">{{ text|raw }}</div>
+{% endif %}

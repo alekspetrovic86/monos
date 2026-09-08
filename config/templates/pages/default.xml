@@ -32,6 +32,17 @@
 
             <tag name="sulu.rlp"/>
         </property>
+
+        <!-- Ruta u pripremi: u meniju se vidi samo naziv — svetlije sivo, bez linka (header.html.twig). -->
+        <property name="in_preparation" type="checkbox">
+            <meta>
+                <title lang="en">In preparation</title>
+                <title lang="sr">U pripremi</title>
+                <title lang="ja">準備中</title>
+                <info_text lang="en">Shown in the menu by name only — greyed out, not a link.</info_text>
+                <info_text lang="sr">U meniju se vidi samo naziv — sivo, bez linka.</info_text>
+            </meta>
+        </property>
         <section name="content">
             <meta>
                 <title lang="en">Content</title>

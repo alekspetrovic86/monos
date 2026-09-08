@@ -2,6 +2,20 @@
 {# Ponašanje: menu_controller.ts (na <body>): toggle, select, close/Esc, inert sadržaja. #}
 {# Bez JS-a: nav, Reset i podmeniji su vidljivi (F2') — `hidden` postavlja kontroler, ne server. #}
 {# Mirno stanje je doslovno Figma (bez podvlačenja); podvlačenje samo na hover/focus-visible. #}
+{#
+   DVA NIVOA iz Sulu navigacije (kontekst „main", dubina 2):
+     nivo 1   stranice sa kontekstom „main" (Material, Press, Information …) + jezik (nije stranica, uvek poslednji)
+     nivo 2   deca stavke nivoa 1 — Material → „All" (interni link na naslovnu); kasnije Architecture, Interior…
+   Stavka sa decom je dugme koje otvara podmeni (najviše jedan otvoren); bez dece je link.
+   `in_preparation` (checkbox na stranici): naziv se vidi svetlije sivo i NIJE link — na oba nivoa.
+
+   INFORMATION (uključeno sa `information`): meni je otvoren, a tri tekstualne zone su podmeni sa ključem „information":
+     uvod      iznad navigacije   L796 T10, 642 široko (desna kolona kao na stranici projekta)
+     kontakt   u koloni podmenija T394 R1345 (isti flex slot kao deca Material-a)
+     pravno    dole               T666 R1345 (Terms of use, copyright, „Code by Seiora")
+   Klik na Material zamenjuje kontakt njegovom decom, kao svaki podmeni. Na mobilnom (F19) menija nema:
+   umesto logo/CLOSE stoji „Back", a zone su u toku stranice (pages/information.html.twig).
+#}
 
 {# Jezici: sve lokalizacije stranice osim aktivne. Van Sulu konteksta (error stranice)
    `localizations` ne postoji — tada koren svake lokalizacije. #}
@@ -23,6 +37,36 @@
     {% endfor %}
 {% endif %}
 
+{# Stavke iz Sulu stabla. `in_preparation` nije deo navigacionog upita, pa se čita po stranici (jedno lako učitavanje
+   po stavci — tri-četiri po zahtevu, iza HTTP keša). Van Sulu zahteva (error stranice) stabla nema. #}
+{% set navItems = [] %}
+{% if app.request.attributes.has('_sulu') %}
+    {% for node in sulu_navigation_root_tree('main', 2) %}
+        {% set flags = sulu_content_load(node.uuid, ['in_preparation']) %}
+        {% set children = [] %}
+        {% for child in node.children|default([]) %}
+            {% set childFlags = sulu_content_load(child.uuid, ['in_preparation']) %}
+            {% set children = children|merge([{
+                label: child.title,
+                href: sulu_content_path(child.url),
+                prep: childFlags.content.in_preparation|default(false),
+            }]) %}
+        {% endfor %}
+        {% set navItems = navItems|merge([{
+            key: node.uuid,
+            label: node.title,
+            href: sulu_content_path(node.url),
+            prep: flags.content.in_preparation|default(false),
+            current: node.uuid == uuid|default(''),
+            children: children,
+        }]) %}
+    {% endfor %}
+{% endif %}
+
+{% set _info = information|default(null) %}
+{# Information na mobilnom (F19): bez logo/CLOSE, Reset, nav i overlay-a — samo „Back". #}
+{% set _mobileHidden = _info ? ' max-lg:hidden' : '' %}
+
 {# Fiksiran, ali prati kontejner: levo = --container-offset, širina najviše 1440 (main.scss). #}
 <header data-action="keydown.esc@document->menu#close"
         class="pointer-events-none fixed inset-y-0 left-[var(--container-offset)] z-50 w-[min(100%,1440px)]">
@@ -38,7 +82,7 @@
             class="pointer-events-auto absolute cursor-pointer text-nav
                    hover:underline focus-visible:underline
                    right-[4px] bottom-[68px]
-                   lg:right-[2px] lg:bottom-auto lg:top-[314px]">
+                   lg:right-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
         <span data-menu-target="logoLabel">Monos</span>
     </button>
 
@@ -49,17 +93,36 @@
        class="pointer-events-auto absolute u-tracked
               hover:underline focus-visible:underline
               left-[4px] bottom-[84px]
-              lg:left-[2px] lg:bottom-auto lg:top-[314px]">
+              lg:left-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
         <span class="u-fine lg:hidden">RESET</span>
         <span class="hidden lg:inline">Reset</span>
     </a>
+
+    {% if _info %}
+        {# ── „Back" (samo Information, mobile) — na mestu logoa: R371 T728. Vraća listu kako je ostavljena (scroll-memory). #}
+        <a href="{{ sulu_content_root_path() }}"
+           data-controller="scroll-memory"
+           data-action="scroll-memory#back"
+           class="pointer-events-auto absolute right-[4px] bottom-[68px]
+                  hover:underline focus-visible:underline
+                  lg:hidden">{{ 'app.menu.back'|trans }}</a>
+    {% endif %}
 
     {# ── Beli overlay (samo mobile, 375×728 na T0) ──────────────── #}
     {# Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni.
        pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova. #}
     <div data-menu-target="overlay"
          hidden
-         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden"></div>
+         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobileHidden }}"></div>
+
+    {% if _info %}
+        {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information". #}
+        <div data-menu-target="submenu"
+             data-menu-submenu-key="information"
+             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] w-[642px] max-lg:hidden">
+            {{- content.intro_text|default('')|raw -}}
+        </div>
+    {% endif %}
 
     {# ── Navigacija ─────────────────────────────────────────────── #}
     {# Desktop: desna ivica 1345 (1440−95), T314, korak 16px.
@@ -71,23 +134,28 @@
          aria-label="{{ 'app.menu.nav'|trans }}"
          class="pointer-events-auto absolute flex flex-col gap-[16px] text-right
                 right-[4px] bottom-[100px]
-                lg:right-[95px] lg:bottom-auto lg:top-[314px]">
+                lg:right-[95px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
 
+        {# ── Nivo 1 ─────────────────────────────────────────────── #}
         <div>
-            {% for item in [
-                { key: 'material', label: 'Material' },
-                { key: 'press',    label: 'Press'    },
-            ] %}
-                <button type="button"
-                        data-menu-target="item"
-                        data-menu-key-param="{{ item.key }}"
-                        data-action="menu#select"
-                        aria-controls="menu-submenu-{{ item.key }}"
-                        class="block w-full cursor-pointer text-right
-                               hover:underline focus-visible:underline">{{ item.label }}</button>
+            {% for item in navItems %}
+                {% if item.prep %}
+                    {# U pripremi: naziv se vidi, ponašanje ne postoji. Nijansa = ink token na 40% (nema sivog tokena). #}
+                    <span class="block text-ink/40">{{ item.label }}<span class="sr-only"> ({{ 'app.menu.in_preparation'|trans }})</span></span>
+                {% elseif item.children is not empty %}
+                    <button type="button"
+                            data-menu-target="item"
+                            data-menu-key-param="{{ item.key }}"
+                            data-action="menu#select"
+                            aria-controls="menu-submenu-{{ item.key }}"
+                            class="block w-full cursor-pointer text-right
+                                   hover:underline focus-visible:underline">{{ item.label }}</button>
+                {% else %}
+                    <a href="{{ item.href }}"
+                       {% if item.current %}aria-current="page"{% endif %}
+                       class="block hover:underline focus-visible:underline">{{ item.label }}</a>
+                {% endif %}
             {% endfor %}
-            {# Information nema podmeni — vodi na svoju stranicu (Task 12). #}
-            <a href="/" class="block hover:underline focus-visible:underline">Information</a>
             <button type="button"
                     data-menu-target="item"
                     data-menu-key-param="locale"
@@ -97,32 +165,52 @@
                            hover:underline focus-visible:underline">{{ currentLocale|capitalize }}</button>
         </div>
 
-        {# ── Podmeniji — sa JS-om otvoren je najviše jedan ───────── #}
-        {% set submenus = {
-            material: [
-                { label: 'Architecture',   href: '#' },
-                { label: 'Interior',       href: '#' },
-                { label: 'Furniture',      href: '#' },
-                { label: 'Objects',        href: '#' },
-                { label: 'Graphic design', href: '#' },
-            ],
-            press: [
-                { label: 'Publications', href: '#' },
-                { label: 'Awards',       href: '#' },
-                { label: 'Exhibitions',  href: '#' },
-                { label: 'Media',        href: '#' },
-            ],
-            locale: localeLinks,
-        } %}
-        {% for key, links in submenus %}
-            <div id="menu-submenu-{{ key }}"
+        {# ── Nivo 2 — podmeniji; sa JS-om otvoren je najviše jedan ── #}
+        {% if _info %}
+            {# Information: kontakt u slotu podmenija (T394 R1345) — podaci iz settings snippet-a + contact_text stranice. #}
+            <div id="menu-submenu-information"
                  data-menu-target="submenu"
-                 data-menu-submenu-key="{{ key }}"
+                 data-menu-submenu-key="information"
+                 class="max-lg:hidden">
+                {% include 'includes/information/contact.html.twig' with {
+                    settings: _info.settings,
+                    text: content.contact_text|default(''),
+                } only %}
+            </div>
+        {% endif %}
+        {% for item in navItems|filter(item => item.children is not empty and not item.prep) %}
+            <div id="menu-submenu-{{ item.key }}"
+                 data-menu-target="submenu"
+                 data-menu-submenu-key="{{ item.key }}"
                  class="order-first lg:order-none">
-                {% for link in links %}
-                    <a href="{{ link.href }}" class="block hover:underline focus-visible:underline">{{ link.label }}</a>
+                {% for child in item.children %}
+                    {% if child.prep %}
+                        <span class="block text-ink/40">{{ child.label }}<span class="sr-only"> ({{ 'app.menu.in_preparation'|trans }})</span></span>
+                    {% else %}
+                        <a href="{{ child.href }}" class="block hover:underline focus-visible:underline">{{ child.label }}</a>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% endfor %}
+        <div id="menu-submenu-locale"
+             data-menu-target="submenu"
+             data-menu-submenu-key="locale"
+             class="order-first lg:order-none">
+            {% for link in localeLinks %}
+                <a href="{{ link.href }}" class="block hover:underline focus-visible:underline">{{ link.label }}</a>
+            {% endfor %}
+        </div>
     </nav>
+
+    {% if _info %}
+        {# ── Information: pravno dole — T666 R1345 (F5): Terms of use, copyright, „Code by Seiora" (+ legal_text). #}
+        <div data-menu-target="submenu"
+             data-menu-submenu-key="information"
+             class="pointer-events-auto absolute right-[95px] top-[666px] text-right max-lg:hidden">
+            {% include 'includes/information/legal.html.twig' with {
+                settings: _info.settings,
+                text: content.legal_text|default(''),
+            } only %}
+        </div>
+    {% endif %}
 </header>

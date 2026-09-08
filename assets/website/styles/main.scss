@@ -98,6 +98,11 @@ picture {
     text-decoration: underline;
 }
 
+/* Rich text bez razmaka između pasusa (Figma: prelom reda, ne prazan red) — zone Information stranice. */
+.rich-text--tight p + p {
+    margin-top: 0;
+}
+
 /* ── Stranica projekta (F7–F11 desktop, F21–F24 mobile) ────────────────────────────────────────────
    Desktop: grid 240 | 540 | 16 | 642 (= 1438). Tekst desno zauzima sve redove; četvrti red (1fr) upija
    višak visine da naslov i podnaslov ostanu na T725/T789 bez obzira na dužinu teksta.
