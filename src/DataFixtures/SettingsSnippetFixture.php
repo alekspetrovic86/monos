@@ -39,9 +39,14 @@ final readonly class SettingsSnippetFixture implements DocumentFixtureInterface
         'credit' => '<p>Code by Seiora</p>',
     ];
 
+    // Podrazumevana slika za deljenje. Ovde je test fotografija samo da bi mehanizam bio proveren;
+    // u produkciji urednik postavlja pravu (1200×630) kroz admin i ovo je nikad ne dodiruje.
+    private const OG_IMAGE = 'photo-wide.jpg';
+
     public function __construct(
         #[Autowire(service: 'sulu_snippet.default_snippet.manager')]
         private DefaultSnippetManagerInterface $defaultSnippetManager,
+        private FixtureMedia $media,
     ) {
     }
 
@@ -69,6 +74,7 @@ final readonly class SettingsSnippetFixture implements DocumentFixtureInterface
                 // Uslovi korišćenja još nemaju stranicu — spoljni link na koren dok ne dobiju svoju rutu.
                 // `link` tip traži i locale u vrednosti (Link::getViewData).
                 'terms_link' => ['provider' => 'external', 'href' => 'https://monos.rs/', 'locale' => $locale],
+                'og_image' => ['id' => $this->media->mediaId(self::OG_IMAGE), 'displayOption' => null],
             ]);
 
             // Putanju i ime daje Sulu (filing po template-u, ime iz naslova) — zato bez parent_path/node_name.
