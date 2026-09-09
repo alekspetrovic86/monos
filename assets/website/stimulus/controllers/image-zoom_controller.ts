@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import GLightbox from 'glightbox';
 import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
+import { DESKTOP } from '../breakpoints';
 
 // GLightbox-ov `index.d.ts` tipizira `on` kao `(eventName, callback: () => void)`, iako isti fajl definiše
 // `Payload<T>` mapu i biblioteka stvarno prosleđuje podatke handleru. Ta mapa nije eksportovana (`export = GLightbox`
@@ -19,7 +20,7 @@ const onSlideLoaded = (lightbox: Lightbox, callback: (data: SlideLoaded) => void
 //
 // Samostalan: radi nad bilo kojom slikom čiji URL prima kroz data-image-zoom-src-value (w2400 — tek se ovde
 // učitava; lista i slajder koriste umanjene formate) i ne zna ništa o slajderu. Element je link na istu sliku, pa bez
-// JS-a, ili ispod 1024px, link prosto vodi na nju.
+// JS-a, ili ispod 1200px, link prosto vodi na nju.
 //
 // GLightbox daje overlay, zaključavanje skrola i Escape; Panzoom daje zoom do 6x točkićem i prevlačenje
 // (contain 'outside': slika nikad ne otkriva prazninu u svom okviru). Ovo je spaseno iz legacy-v1
@@ -35,7 +36,7 @@ const onSlideLoaded = (lightbox: Lightbox, callback: (data: SlideLoaded) => void
 // veličini (klik ili točkić uvećava), `grab` kad je uvećana (može da se pomera), `grabbing` dok se vuče.
 // Stanje vode panzoomchange (scale) i panzoomstart/panzoomend.
 //
-// DESKTOP-ONLY: ispod 1024px se ne montira — na mobilnom se koristi nativni pinch-zoom (odluka vlasnika).
+// DESKTOP-ONLY: ispod 1200px se ne montira — na mobilnom se koristi nativni pinch-zoom (odluka vlasnika).
 export default class ImageZoomController extends Controller<HTMLElement> {
     static values = {
         src: String,
@@ -49,7 +50,7 @@ export default class ImageZoomController extends Controller<HTMLElement> {
     // Posle točkića napred-nazad Panzoom vrati 1.0000000000000002, ne 1 — „osnovna veličina" je zato sa tolerancijom.
     private static readonly ZOOMED_ABOVE = 1.001;
 
-    private readonly desktop = window.matchMedia('(min-width: 1024px)');
+    private readonly desktop = window.matchMedia(DESKTOP);
     private readonly onResize = (): void => this.fit();
     private readonly onChange = (event: Event): void => this.setCursor((event as CustomEvent<{ scale: number }>).detail.scale);
     private readonly onStart = (): void => {

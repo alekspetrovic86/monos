@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 @theme {
+    /* Prag desktop rasporeda. 1200, a ne Tailwind podrazumevanih 1024: desktop kompozicija potroši
+       240 + 540 + 16 = 796px pre nego što tekstualna kolona počne, pa na 1024 ostane 226px (~31 znak u
+       redu), na 1080 282px (~39). Tek od ~1196 kolona stigne do ~55 znakova. Ispod toga važi tablet
+       raspored — jedna kolona. MORA se poklapati sa media query-jima u main.scss i sa stimulus/breakpoints.ts. */
+    --breakpoint-lg: 1200px;
+
     /* Monos — cela paleta iz Figme su četiri boje. */
     /* --color-ink:   #000000;   ← pre zvanične kartice */
     --color-ink:   #191c1e;   /* primarni tekst — zvanična kartica; ista vrednost kao --color-nav */
