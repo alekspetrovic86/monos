@@ -34,7 +34,7 @@ final readonly class SettingsSnippetFixture implements DocumentFixtureInterface
         'contact_email_secondary' => 'nikola@monos.rs',
         'instagram_url' => 'https://www.instagram.com/monos.rs/',
         'copyright' => 'Monos ©2026. All Rights Reserved.',
-        'credit' => 'Code by Seiora',
+        'credit' => '<p>Code by Seiora</p>',
     ];
 
     public function __construct(
