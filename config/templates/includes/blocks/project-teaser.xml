@@ -14,6 +14,16 @@
                 </meta>
 
                 <properties>
+                    <property name="group_title" type="text_editor">
+                        <meta>
+                            <title lang="en">Projects group title</title>
+                            <title lang="sr">Naslov grupe projekata</title>
+                            <title lang="ja">プロジェクトグループのタイトル</title>
+                            <info_text lang="en">Optional. Stands ABOVE the image, its last line resting on the image top edge; starts with the label (e.g. "1.2") typed here. Leave empty and the image follows the previous one immediately.</info_text>
+                            <info_text lang="sr">Opciono. Stoji IZNAD slike, poslednjim redom naslonjen na njen vrh; oznaka (npr. „1.2") se kuca ovde. Ako je prazno, slika dolazi odmah posle prethodne.</info_text>
+                        </meta>
+                    </property>
+
                     <property name="image" type="single_media_selection" mandatory="true">
                         <meta>
                             <title lang="en">Image</title>
@@ -37,15 +47,6 @@
                         </meta>
                     </property>
 
-                    <property name="description" type="text_editor">
-                        <meta>
-                            <title lang="en">Description</title>
-                            <title lang="sr">Dugi opis</title>
-                            <title lang="ja">説明</title>
-                            <info_text lang="en">Optional. Stands ABOVE the image, its last line resting on the image top edge; starts with the label (e.g. "1.2") typed here. Leave empty and the image follows the previous one immediately.</info_text>
-                            <info_text lang="sr">Opciono. Stoji IZNAD slike, poslednjim redom naslonjen na njen vrh; oznaka (npr. „1.2") se kuca ovde. Ako je prazno, slika dolazi odmah posle prethodne.</info_text>
-                        </meta>
-                    </property>
 
                     <property name="link" type="link" mandatory="true">
                         <meta>
