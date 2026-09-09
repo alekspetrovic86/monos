@@ -1,11 +1,17 @@
 /* --------------------------------------------------------------------
    FONTS
 -------------------------------------------------------------------- */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap");
+/* Zvanična tipografija (kartica vlasnika): Inter Tight, Medium 14/16, tracking 10, boja #191c1e.
+   Figma fajl je crtan u običnom Interu — Inter Tight se u njemu nije mogao izabrati — pa Figma izvozi
+   NE prikazuju ovaj font. Zato je prag u tools/figma/diff.mjs podignut; vidi komentar tamo.
+   Prethodno stanje ostavljeno zakomentarisano, da se može vratiti jednim potezom. */
+/* @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&display=swap");
 
 :root {
-    --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; */
+    --font-inter: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 html {
@@ -15,5 +21,6 @@ html {
 
 // Japanese locale — Inter covers Latin glyphs, JP fonts fill in CJK characters
 html[lang="ja"] {
-    font-family: 'Inter', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+    /* font-family: 'Inter', 'Noto Sans JP', …; */
+    font-family: 'Inter Tight', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
 }

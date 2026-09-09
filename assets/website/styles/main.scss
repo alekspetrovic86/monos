@@ -14,10 +14,14 @@ body {
     font-size: 14px;
     line-height: 16px;
     font-weight: 500;
+    /* Tracking 10 sa zvanične kartice = 10/1000 em = 0.14px na 14px. Ranije ga je nosila samo `.u-tracked`. */
+    letter-spacing: 0.14px;
     -webkit-font-smoothing: antialiased;
 }
 
-/* Varijanta sa trackingom — „Reset", „CLOSE" */
+/* Varijanta sa trackingom — „Reset", „CLOSE". Otkad je tracking sa zvanične kartice globalan (body),
+   ova klasa je ista vrednost i ne menja ništa. Ostaje zato što kartica još može da se podešava: ako
+   „Reset"/„CLOSE" dobiju drugačiji tracking od ostatka, menja se samo ovde. */
 .u-tracked {
     letter-spacing: 0.14px;
 }
@@ -181,14 +185,10 @@ body {
 
 /* Na mobilnom tekst projekta se skroluje ISPOD ovih natpisa, pa se i oni mesaju sa onim sto prolazi iza —
    isto kao logo. Izvorna boja je inverzija boje mirovanja, da `difference` nad belom stranom vrati tacno
-   tu boju: „Drawings" nasledjuje `--color-ink` (#000 → izvor belo), „Back" nosi `--color-nav` (#191c1e →
-   izvor #e6e3e1). Na desktopu natpisi stoje na beloj margini — tamo mesanja nema. */
+   tu boju. Otkad je `--color-ink` #191c1e (zvanicna kartica), oba natpisa miruju u istoj boji, pa im je i
+   izvor isti: 255 − #191c1e = #e6e3e1. Na desktopu natpisi stoje na beloj margini — tamo mesanja nema. */
 @media (max-width: 1023px) {
-    .js .project-link--drawings {
-        color: var(--color-paper);
-        mix-blend-mode: difference;
-    }
-
+    .js .project-link--drawings,
     .js .project-link--back {
         color: #e6e3e1;
         mix-blend-mode: difference;

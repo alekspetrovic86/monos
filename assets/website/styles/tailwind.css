@@ -2,7 +2,8 @@
 
 @theme {
     /* Monos — cela paleta iz Figme su četiri boje. */
-    --color-ink:   #000000;   /* primarni tekst */
+    /* --color-ink:   #000000;   ← pre zvanične kartice */
+    --color-ink:   #191c1e;   /* primarni tekst — zvanična kartica; ista vrednost kao --color-nav */
     --color-paper: #ffffff;   /* pozadina */
     --color-nav:   #191c1e;   /* logo, CLOSE, nav akcenat */
 
