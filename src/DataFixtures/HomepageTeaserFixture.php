@@ -33,8 +33,10 @@ final readonly class HomepageTeaserFixture implements DocumentFixtureInterface
     private const IMAGES = ['project-2.jpg', 'project-1.jpg', 'project-3-wide.jpg', 'project-4.jpg', 'photo-wide.jpg'];
 
     // Tekst doslovno iz Figme (isti na sve tri lokalizacije i na svim tizerima — test podatak).
-    private const TITLE = "Lorem ipsum dolor sit amet\nDuis autem vel eum iriure dolor\nMolestie";
-    private const SUBTITLE = 'Sed diam nonummy nibh euismod tincidunt ut laoreet';
+    // Jedno polje (text_editor): prvi pasus je naslov sa prelomima reda, drugi je red ispod njega.
+    // Razmak između njih daje `.rich-text p + p` (16px) — isti koji je ranije bio zadat u šablonu.
+    private const TITLE = '<p>Lorem ipsum dolor sit amet<br>Duis autem vel eum iriure dolor<br>Molestie</p>'
+        . '<p>Sed diam nonummy nibh euismod tincidunt ut laoreet</p>';
 
     /**
      * Dugi opis po stavci (F1: L240 T928, 540×336 — počinje oznakom „1.2", pa pasusi). Oznaka je deo teksta.
@@ -89,7 +91,6 @@ final readonly class HomepageTeaserFixture implements DocumentFixtureInterface
                     'type' => 'project-teaser',
                     'image' => ['id' => $mediaId, 'displayOption' => null],
                     'title' => self::TITLE,
-                    'subtitle' => self::SUBTITLE,
                     'description' => self::DESCRIPTIONS[$index],
                     'link' => ['provider' => 'page', 'href' => $project->getUuid(), 'locale' => $locale],
                 ];

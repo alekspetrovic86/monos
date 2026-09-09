@@ -1,16 +1,20 @@
 {# PROJECT TEASER — stavka liste projekata (F1 22:75 / F2 12:66 desktop 1440×900; F14 51:155 / F15 51:174 mobile 375×812).
    Dva stanja, prekidač je `data-expanded` na <article> (postavlja project-list kontroler):
-     obična      slika 480 (mobile 292); ispod, ako postoji, dugi opis (razmak 14). Naslov/podnaslov/„Enter" se ne vide.
-     istaknuta   slika 540 (mobile 375 = puna širina), 48px (mobile 93) ispod naslov (3 reda, 392), 16px ispod podnaslov (356)
-                 i „Enter" desno poravnat na desnu ivicu slike (780 = 240 + 540). Dugi opis ostaje ISPOD toga.
-   Razmaci između stavki: slika → sledeća slika 2px (F2: prethodna do 22, sledeća od 24); tekst → sledeća slika 16px.
+     obična      samo slika 480 (mobile 292). Naslov i „Enter" se ne vide.
+     istaknuta   slika 540 (mobile 375 = puna širina), 48px (mobile 93) ispod naslov (392 širok)
+                 i „Enter" desno poravnat na desnu ivicu slike (780 = 240 + 540).
+   Naslov je JEDNO editor polje: prazan red u njemu pravi novi pasus, a razmak između pasusa (16px, .rich-text)
+   je isti onaj koji je ranije delio naslov od podnaslova. „Enter" se poravnava uz DNO tog bloka (`items-end`),
+   pa ostaje u redu sa poslednjim pasusom bez obzira koliko ih ima.
+   Dugi opis stoji IZNAD slike, poslednjim redom naslonjen na njen vrh (bez razmaka), a od prethodne slike ga
+   deli 16px. Razmaci između stavki: slika → sledeća slika 2px (F2: prethodna do 22, sledeća od 24).
    Slika je link na projekat: prvi klik širi (kontroler ga preseče), drugi klik ulazi — na mobilnom „Enter" u Figmi ne postoji.
    Bez JS-a: detalji su vidljivi (CSS ih krije samo do connect()-a), slika vodi pravo na projekat.
    Mirno stanje doslovno Figma: bez podvlačenja — podvlačenje samo na hover/focus-visible. Slika zadržava svoj format (h-auto).
    Slika je umanjeni Sulu format (includes/picture.html.twig), ne original: obična 480/292 (2x 960/584), istaknuta
    540/375 (2x 1080/750) — `sizes` prati stanje (project-list ga menja iz data-sizes / data-sizes-expanded). #}
 {% set _href = content.link|default('/') %}
-{% set _label = content.title|default('')|split('\n')|first|trim %}
+{% set _label = content.title|default('')|striptags|trim %}
 
 {# data-scroll-memory-id: po njemu scroll-memory vraća raširenu stavku pri povratku sa projekta. #}
 <article data-block="project-teaser"
@@ -19,6 +23,14 @@
          data-sizes="(min-width: 1024px) 480px, 292px"
          data-sizes-expanded="(min-width: 1024px) 540px, 375px"
          class="group mt-[2px] first:mt-0 lg:ml-[240px]">
+
+    {# Dugi opis (F1: L240 T928, 540 široko) — vidljiv u oba stanja. Oznaka „1.2" je deo teksta.
+       IZNAD slike i bez razmaka do nje: kraj teksta je naslonjen na vrh slike. Gornjih 16px se sudara sa
+       `mt-[2px]` same stavke i pobeđuje (margine se sažimaju u veću), pa je od prethodne slike tačno 16.
+       Ako opisa nema, slika dolazi odmah posle prethodne (2px). #}
+    {% if content.description|default %}
+        <div class="rich-text mx-[4px] mt-[16px] max-w-[600px] lg:mx-0 lg:w-[540px] lg:max-w-none">{{ content.description|raw }}</div>
+    {% endif %}
 
     {# Okvir slike — širina je ono što se animira (480→540 / 292→375). #}
     <a href="{{ _href }}"
@@ -42,10 +54,8 @@
     <div data-project-list-target="detail" class="project-teaser__detail">
         <div class="project-teaser__detail-clip">
             <div class="mx-[4px] pb-[14px] lg:mx-0 lg:w-[540px]">
-                <p class="mt-[93px] max-w-[392px] whitespace-pre-line lg:mt-[48px]">{{ content.title }}</p>
-
-                <div class="mt-[16px] flex justify-between gap-[16px]">
-                    <p class="max-w-[356px]">{{ content.subtitle }}</p>
+                <div class="mt-[93px] flex items-end justify-between gap-[16px] lg:mt-[48px]">
+                    <div class="rich-text max-w-[392px]">{{ content.title|raw }}</div>
                     <a href="{{ _href }}"
                        class="hidden shrink-0 hover:underline focus-visible:underline lg:block">{{ 'app.teaser.enter'|trans }}</a>
                 </div>
@@ -53,9 +63,4 @@
         </div>
     </div>
 
-    {# Dugi opis (F1: L240 T928, 540 široko) — vidljiv u oba stanja. Oznaka „1.2" je deo teksta.
-       Obično: 14 ispod slike; istaknuto: 2 ispod detalja (14 + 2 = 16). Ako ga nema, sledeća slika dolazi odmah (2px). #}
-    {% if content.description|default %}
-        <div class="rich-text mx-[4px] mt-[14px] max-w-[600px] pb-[14px] group-data-expanded:mt-[2px] lg:mx-0 lg:w-[540px] lg:max-w-none">{{ content.description|raw }}</div>
-    {% endif %}
 </article>

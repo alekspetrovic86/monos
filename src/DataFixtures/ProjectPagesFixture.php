@@ -35,9 +35,11 @@ final readonly class ProjectPagesFixture implements DocumentFixtureInterface
     public const PROJECTS = ['project-corridor', 'project-wardrobe', 'project-bedroom-wide', 'project-bedroom', 'project-photos'];
     private const DRAWINGS_NODE = 'drawings';
 
-    // Naslov i podnaslov doslovno iz Figme (tri reda naslova = prelomi se čuvaju), isti na svim projektima.
+    // Naslov doslovno iz Figme, isti na svim projektima. `title` je ime stranice i izvor URL-a (prelomi se čuvaju),
+    // `heading` je prikazani naslov: prvi pasus su ista tri reda, drugi je red koji je ranije bio podnaslov.
     private const TITLE = "Lorem ipsum dolor sit amet\nDuis autem vel eum iriure dolor\nMolestie";
-    private const SUBTITLE = 'Sed diam nonummy nibh euismod tincidunt ut laoreet';
+    private const HEADING = '<p>Lorem ipsum dolor sit amet<br>Duis autem vel eum iriure dolor<br>Molestie</p>'
+        . '<p>Sed diam nonummy nibh euismod tincidunt ut laoreet</p>';
 
     /**
      * @var array<string, array{images: list<string>, body: string, drawings: bool}>
@@ -243,7 +245,7 @@ final readonly class ProjectPagesFixture implements DocumentFixtureInterface
             $document->setResourceSegment($resourceSegment);
             $document->getStructure()->bind([
                 'images' => ['ids' => $mediaIds, 'displayOption' => null],
-                'subtitle' => self::SUBTITLE,
+                'heading' => self::HEADING,
                 'body' => $body,
             ]);
 
