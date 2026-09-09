@@ -10,11 +10,14 @@ import { Controller } from '@hotwired/stimulus';
 //   2. raširena stavka → link prolazi, ulazi se u projekat (isto što i „Enter").
 //
 // Animacija je FLIP: novo stanje se primeni odmah (layout je odmah konačan, pa se cilj skrola meri tačno),
-// a zatim se širina okvira slike animira od stare do nove vrednosti (Web Animations), detalji se pojave
-// prelivom, a skrol se vodi kroz rAF ka CILJU KOJI SE MERI SVAKOG KADRA — stavka iznad koja se skuplja
-// pomera cilj, i ovako se sleće tačno bez obzira na to. Bez poskakivanja, bez efekata.
+// a zatim se širina okvira slike animira od stare do nove vrednosti (Web Animations), a skrol se vodi
+// kroz rAF ka CILJU KOJI SE MERI SVAKOG KADRA — stavka iznad koja se skuplja pomera cilj, i ovako se sleće
+// tačno bez obzira na to. Bez poskakivanja, bez efekata.
 //
-// Bez JS-a: detalji su vidljivi (CSS ih krije samo na html.js:not(.project-list-ready)), slika je običan link.
+// Detalji se otvaraju i zatvaraju kao harmonika, ali to radi CSS (main.scss, `data-expanded` → grid red
+// 0fr ↔ 1fr, isto trajanje i kriva). Ovde se samo prati pristupačnost: zatvoren blok je `inert`.
+//
+// Bez JS-a: detalji su vidljivi (CSS ih zatvara samo pod `html.js`), slika je običan link.
 export default class ProjectListController extends Controller<HTMLElement> {
     static targets = ['item', 'trigger', 'detail'];
 
@@ -31,12 +34,10 @@ export default class ProjectListController extends Controller<HTMLElement> {
     connect(): void {
         // Stanje može stići iz Turbo snapshota (povratak sa projekta) — samo se uskladi, ne resetuje.
         this.itemTargets.forEach((item) => this.sync(item));
-        document.documentElement.classList.add('project-list-ready');
     }
 
     disconnect(): void {
         cancelAnimationFrame(this.scrollFrame);
-        document.documentElement.classList.remove('project-list-ready');
     }
 
     // Povratak na listu (scroll-memory:restore — Back sa projekta, Information, CLOSE): stavka se raširi odmah,
@@ -48,10 +49,15 @@ export default class ProjectListController extends Controller<HTMLElement> {
         const item = event.detail?.item ?? null;
         if (!item || !this.itemTargets.includes(item)) return;
 
+        // Zatečena stavka se ne otvara pred korisnikom — prelaz se gasi za tačno jedan preračun rasporeda.
+        this.element.classList.add('project-list--instant');
         this.itemTargets.forEach((candidate) => {
             candidate.toggleAttribute('data-expanded', candidate === item);
             this.sync(candidate);
         });
+        void this.element.offsetHeight;
+        this.element.classList.remove('project-list--instant');
+
         this.reserveTail(item);
     }
 
@@ -94,7 +100,6 @@ export default class ProjectListController extends Controller<HTMLElement> {
                     easing: ProjectListController.EASING,
                 });
             });
-            this.detail(item).animate([{ opacity: 0 }, { opacity: 1 }], { duration, easing: 'ease-out' });
         }
 
         this.scrollTo(item, duration);
@@ -102,7 +107,9 @@ export default class ProjectListController extends Controller<HTMLElement> {
 
     private sync(item: HTMLElement): void {
         const expanded = item.hasAttribute('data-expanded');
-        this.detail(item).hidden = !expanded;
+        // Zatvoren blok ostaje u dokumentu jer se kliza — iz tab reda i sa čitača ekrana ga sklanja `inert`.
+        // `hidden` bi bio `display: none` i presekao bi klizanje.
+        this.detail(item).toggleAttribute('inert', !expanded);
         this.frame(item).setAttribute('aria-expanded', String(expanded));
 
         // Responzivna slika: `sizes` prati stanje (480/292 obična → 540/375 istaknuta), pa browser po potrebi

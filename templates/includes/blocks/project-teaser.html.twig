@@ -35,15 +35,21 @@
         }, with_context: false) }}
     </a>
 
-    {# Detalji — samo u istaknutom stanju. pb 14 + mt 2 sledeće stavke = 16 do sledeće slike. #}
-    <div data-project-list-target="detail"
-         class="project-teaser__detail mx-[4px] pb-[14px] lg:mx-0 lg:w-[540px]">
-        <p class="mt-[93px] max-w-[392px] whitespace-pre-line lg:mt-[48px]">{{ content.title }}</p>
+    {# Detalji — samo u istaknutom stanju. pb 14 + mt 2 sledeće stavke = 16 do sledeće slike.
+       Tri sloja, svaki sa jednim poslom: spoljni je harmonika (grid red 0fr↔1fr, main.scss), srednji seče
+       (`overflow: hidden`) i nema ništa svoje — da bi red mogao do nule, jer padding sopstvenog sloja bi mu
+       bio pod — a unutrašnji nosi sadržaj i razmake, pa i oni ulaze u pokret umesto da odskoče pre njega. #}
+    <div data-project-list-target="detail" class="project-teaser__detail">
+        <div class="project-teaser__detail-clip">
+            <div class="mx-[4px] pb-[14px] lg:mx-0 lg:w-[540px]">
+                <p class="mt-[93px] max-w-[392px] whitespace-pre-line lg:mt-[48px]">{{ content.title }}</p>
 
-        <div class="mt-[16px] flex justify-between gap-[16px]">
-            <p class="max-w-[356px]">{{ content.subtitle }}</p>
-            <a href="{{ _href }}"
-               class="hidden shrink-0 hover:underline focus-visible:underline lg:block">{{ 'app.teaser.enter'|trans }}</a>
+                <div class="mt-[16px] flex justify-between gap-[16px]">
+                    <p class="max-w-[356px]">{{ content.subtitle }}</p>
+                    <a href="{{ _href }}"
+                       class="hidden shrink-0 hover:underline focus-visible:underline lg:block">{{ 'app.teaser.enter'|trans }}</a>
+                </div>
+            </div>
         </div>
     </div>
 
