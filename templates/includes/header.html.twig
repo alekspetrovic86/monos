@@ -120,10 +120,11 @@
          class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobileHidden }}"></div>
 
     {% if _info %}
-        {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information". #}
+        {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information".
+           Ispod 1440 kolona se skuplja da stane (kao tekst projekta): širina = min(642, 100% − 798), na 1280 je 482. #}
         <div data-menu-target="submenu"
              data-menu-submenu-key="information"
-             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] w-[642px] max-lg:hidden">
+             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] w-[min(642px,calc(100%_-_798px))] max-lg:hidden">
             {{- content.intro_text|default('')|raw -}}
         </div>
     {% endif %}

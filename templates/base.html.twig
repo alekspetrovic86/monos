@@ -72,6 +72,9 @@
     {# menu kontroler je na <body>: header (toggle/nav) i sadržaj (inert pod mobilnim overlayem) su mu targeti.
        Stranica projekta (F7–F11) nema meni — prazni i `header` i `body_attributes`. #}
     <body {% block body_attributes %}data-controller="menu"{% endblock %}>
+        {# Traka učitavanja: 1px na vrhu, puni se tokom Turbo navigacije (loader_controller.ts, .global-loader u main.scss). #}
+        <div class="global-loader" data-controller="loader"></div>
+
         {% block header %}
             {% include 'includes/header.html.twig' %}
         {% endblock %}
