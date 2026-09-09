@@ -114,7 +114,7 @@
     {# z-10: mobilni overlay (375×728) je kasniji sibling i bez ovoga se crta PREKO Reseta (y711–728). #}
     <a href="{{ sulu_content_root_path() }}"
        data-menu-target="reset"
-       class="pointer-events-auto absolute z-10 u-tracked
+       class="menu-plate pointer-events-auto absolute z-10 u-tracked
               hover:underline focus-visible:underline
               left-[4px] bottom-[84px]
               lg:left-[2px] lg:bottom-auto lg:top-[314px]{{ _mobile_hidden }}">
@@ -132,13 +132,13 @@
                   lg:hidden">{{ 'app.menu.back'|trans }}</a>
     {% endif %}
 
-    {# ── Overlay menija (samo mobile, 375×728 na T0) ────────────── #}
-    {# PROVIDAN, po odluci vlasnika: u Figmi (F16 62:193) je ovo belo polje preko skoro celog ekrana, ali sajt
-       treba da se vidi kroz meni. Sloj i dalje postoji jer hvata klikove — sadržaj iza je uz to `inert`.
-       Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni. #}
+    {# ── Beli overlay menija (samo mobile, 375×728 na T0) ───────── #}
+    {# pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova.
+       Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni.
+       `menu-plate`: sa nav-om i Resetom čini ploču koja se na mobilnom spušta odozgo (main.scss). #}
     <div data-menu-target="overlay"
          hidden
-         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] lg:hidden{{ _mobile_hidden }}"></div>
+         class="menu-plate pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobile_hidden }}"></div>
 
     {% if _info %}
         {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information".
@@ -158,7 +158,7 @@
     <nav id="menu-nav"
          data-menu-target="nav"
          aria-label="{{ 'app.menu.nav'|trans }}"
-         class="pointer-events-auto absolute flex flex-col gap-[16px] text-right
+         class="menu-plate pointer-events-auto absolute flex flex-col gap-[16px] text-right
                 right-[4px] bottom-[100px]
                 lg:right-[95px] lg:bottom-auto lg:top-[314px]{{ _mobile_hidden }}">
 
