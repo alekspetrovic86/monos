@@ -18,7 +18,8 @@
    „Code by Seiora" je u Figmi samo na mobilnom — kredit je legitiman (Seiora je izradila sajt), izostanak
    na desktopu je previd dizajnera: ide na OBE širine (includes/information/legal.html.twig). #}
 
-{% block body_attributes %}data-controller="menu" data-menu-open-value="true" data-menu-active-key-value="information"{% endblock %}
+{# `page-information`: na mobilnom stranica ulazi klizanjem odozgo (main.scss). #}
+{% block body_attributes %}class="page-information" data-controller="menu" data-menu-open-value="true" data-menu-active-key-value="information"{% endblock %}
 
 {% block header %}
     {# Namerno postavljeno u svakom bloku koji je koristi: Sulu preview renderuje
