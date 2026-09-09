@@ -1,6 +1,9 @@
 {# PROJECT TEASER — stavka liste projekata (F1 22:75 / F2 12:66 desktop 1440×900; F14 51:155 / F15 51:174 mobile 375×812).
    Dva stanja, prekidač je `data-expanded` na <article> (postavlja project-list kontroler):
-     obična      samo slika 480 (mobile 292). Naslov i „Enter" se ne vide.
+     obična      samo slika 480 (mobile 292, tableti 467). Naslov i „Enter" se ne vide.
+                 467 = odnos iz mobilne Figme (292/375 = 0,78) primenjen na tabletsko ograničenje od 600.
+                 Bez toga bi mirna slika ostala na mobilnih 292 dok je sve oko nje naraslo na 600, pa bi
+                 klik uvećavao za 105% umesto za 34% (mobile) odnosno 13% (desktop).
      istaknuta   slika 540 (mobile puna širina, tableti najviše 600 — vidi `project__stage` u main.scss),
                  48px (mobile 93) ispod naslov (392 širok)
                  i „Enter" desno poravnat na desnu ivicu slike (780 = 240 + 540).
@@ -39,7 +42,7 @@
        data-action="project-list#activate"
        aria-expanded="false"
        aria-label="{{ _label|default('app.teaser.enter'|trans) }}"
-       class="block w-[min(292px,100%)] group-data-expanded:w-[min(600px,100%)] lg:w-[480px] lg:group-data-expanded:w-[540px]">
+       class="block w-[min(292px,100%)] min-[600px]:w-[467px] group-data-expanded:w-[min(600px,100%)] lg:w-[480px] lg:group-data-expanded:w-[540px]">
         {{ include('includes/picture.html.twig', {
             image: content.image,
             widths: [292, 375, 480, 540, 584, 750, 960, 1080],
