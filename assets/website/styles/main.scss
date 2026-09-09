@@ -129,6 +129,40 @@ body {
     outline: none;
 }
 
+/* Meni na mobilnom se spusta odozgo i vraca nagore, isti pokret kao Information popup. Ploca su tri sloja
+   koja se krecu zajedno: belo polje (375×728 na T0), navigacija uz njegovu donju ivicu i „Reset" — pomeraj je
+   zato visina polja, ne visina prozora. Logo/CLOSE ostaje na mestu: to je dugme koje se pritiska, ne sadrzaj.
+   Iznad 1024 nema ni belog polja ni klizanja — tamo je meni stalno stanje stranice, ne popup.
+   Zatvaranje vodi menu kontroler (`menu-closing` na <body>): sloj mora ostati iscrtan dok animacija traje,
+   pa `hidden` stize tek posle nje. Otvaranje ne ceka — animacija krene cim se sloj pojavi. */
+@keyframes menu-drop {
+    from {
+        transform: translateY(-728px);
+    }
+}
+
+@keyframes menu-lift {
+    to {
+        transform: translateY(-728px);
+    }
+}
+
+@media (max-width: 1023px) {
+    .js .menu-plate {
+        animation: menu-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .js .menu-closing .menu-plate {
+        animation: menu-lift 320ms cubic-bezier(0.65, 0, 0.35, 1) both;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .menu-plate {
+        animation: none;
+    }
+}
+
 /* Information na mobilnom ulazi kao popup — spusti se odozgo, a na „Back" se podigne nazad (F19 62:240).
    Iznad 1024 Information nije stranica nego stanje nad listom (meni sa zonama), pa tamo ne klizi ništa.
    Pomeraju se oba sloja stranice — header (fiksni sloj sa „Back") i sadržaj — istim pomerajem, punom
