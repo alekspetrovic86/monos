@@ -16,8 +16,10 @@
 {% if s.copyright|default %}
     <p>{{ s.copyright }}</p>
 {% endif %}
+{# Kredit je rich text (može da nosi link), pa ide u omotač kao i `text` ispod — `<p>` iz editora
+   ne sme da završi unutar `<p>`. `--tight`: pasusi bez razmaka, kao ostale zone Information stranice. #}
 {% if s.credit|default %}
-    <p class="mt-[16px]">{{ s.credit }}</p>
+    <div class="rich-text rich-text--tight mt-[16px]">{{ s.credit|raw }}</div>
 {% endif %}
 {% if text|default %}
     <div class="rich-text rich-text--tight mt-[16px]">{{ text|raw }}</div>

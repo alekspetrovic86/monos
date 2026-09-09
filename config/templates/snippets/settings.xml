@@ -87,12 +87,13 @@
                     </meta>
                 </property>
 
-                <property name="credit" type="text_line" colspan="6">
+                <!-- text_editor, ne text_line: kredit nosi link (npr. reč „Seiora" vodi na sajt izrađivača). -->
+                <property name="credit" type="text_editor" colspan="6">
                     <meta>
                         <title lang="en">Credit</title>
                         <title lang="sr">Kredit</title>
-                        <info_text lang="en">e.g. „Code by Seiora" — shown on all widths.</info_text>
-                        <info_text lang="sr">npr. „Code by Seiora" — na svim širinama.</info_text>
+                        <info_text lang="en">e.g. „Code by Seiora" — shown on all widths. A word can be linked.</info_text>
+                        <info_text lang="sr">npr. „Code by Seiora" — na svim širinama. Reč može da nosi link.</info_text>
                     </meta>
                 </property>
             </properties>
