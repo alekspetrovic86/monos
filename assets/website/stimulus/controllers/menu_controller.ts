@@ -1,4 +1,5 @@
 import { ActionEvent, Controller } from '@hotwired/stimulus';
+import { DESKTOP } from '../breakpoints';
 
 // data-controller="menu" — na <body>. Header: logo/CLOSE, Reset, nav, podmeniji.
 // Sadržaj stranice (target `content`) je `inert` dok je meni otvoren pod mobilnim overlayem.
@@ -40,7 +41,7 @@ export default class MenuController extends Controller<HTMLElement> {
     private activeKey: string | null = null;
 
     // Isti prag kao Tailwind `lg:` (64rem) — ispod njega postoji overlay.
-    private readonly desktop = window.matchMedia('(min-width: 1024px)');
+    private readonly desktop = window.matchMedia(DESKTOP);
     private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // Mora se poklapati sa trajanjem `menu-lift` u main.scss.

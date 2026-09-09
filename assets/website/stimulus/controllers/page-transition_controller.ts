@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import { BELOW_DESKTOP } from '../breakpoints';
 
 // data-controller="page-transition" — na linku koji NAPUŠTA stranicu što je ušla klizanjem
 // (mobilni Information, „Back"). Ulazak crta CSS (`.page-information`, main.scss); izlazak ne može,
@@ -12,7 +13,7 @@ import { Controller } from '@hotwired/stimulus';
 export default class PageTransitionController extends Controller<HTMLAnchorElement> {
     private static readonly DURATION = 320;
 
-    private readonly mobile = window.matchMedia('(max-width: 1023px)');
+    private readonly mobile = window.matchMedia(BELOW_DESKTOP);
     private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     private left = false;

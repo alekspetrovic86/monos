@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import { DESKTOP } from '../breakpoints';
 
 // data-controller="read-more" — tekst desno od slike na stranici projekta (F7 16:2 → F8 17:21).
 // Kadar (target `excerpt`) je na desktopu sečen na 19 redova (CSS, samo sa JS-om). Ako tekst ne stane,
@@ -15,7 +16,7 @@ export default class ReadMoreController extends Controller<HTMLElement> {
     declare readonly lessValue: string;
 
     private expanded = false;
-    private readonly desktop = window.matchMedia('(min-width: 1024px)');
+    private readonly desktop = window.matchMedia(DESKTOP);
 
     connect(): void {
         this.render();

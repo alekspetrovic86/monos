@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import { DESKTOP } from '../breakpoints';
 
 // data-controller="project-list" — lista projekata na naslovnoj (F1 → klik → F2).
 // Stavka (<article>) ima dva stanja; `data-expanded` na stavci je jedini prekidač, CSS iz njega
@@ -23,7 +24,7 @@ export default class ProjectListController extends Controller<HTMLElement> {
 
     declare readonly itemTargets: HTMLElement[];
 
-    private readonly desktop = window.matchMedia('(min-width: 1024px)');
+    private readonly desktop = window.matchMedia(DESKTOP);
     private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     private static readonly DURATION = 600;
