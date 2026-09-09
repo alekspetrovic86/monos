@@ -5,12 +5,14 @@ import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
 // GLightbox-ov `index.d.ts` tipizira `on` kao `(eventName, callback: () => void)`, iako isti fajl definiše
 // `Payload<T>` mapu i biblioteka stvarno prosleđuje podatke handleru. Ta mapa nije eksportovana (`export = GLightbox`
 // izvozi samo funkciju), pa se ovde opisuje jedino ono što koristimo, i to na jednom mestu.
+//
+// `on` se MORA pozvati na instanci: unutra čita `this.apiEvents`. Otkačena u promenljivu baca
+// „Cannot read properties of undefined". Zato se ispravlja tip povratnog poziva, a ne tip metode.
 type Lightbox = ReturnType<typeof GLightbox>;
 type SlideLoaded = { slideNode?: Element };
 
 const onSlideLoaded = (lightbox: Lightbox, callback: (data: SlideLoaded) => void): void => {
-    const on = lightbox.on as unknown as (event: 'slide_after_load', cb: (data: SlideLoaded) => void) => void;
-    on('slide_after_load', callback);
+    lightbox.on('slide_after_load', callback as () => void);
 };
 
 // data-controller="image-zoom" — „Expand view" (F12 17:80 / F13 17:93): slika preko celog ekrana sa dubinskim zoom-om.
