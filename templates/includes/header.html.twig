@@ -15,6 +15,10 @@
      pravno    dole               T666 R1345 (Terms of use, copyright, „Code by Seiora")
    Klik na Material zamenjuje kontakt njegovom decom, kao svaki podmeni. Na mobilnom (F19) menija nema:
    umesto logo/CLOSE stoji „Back", a zone su u toku stranice (pages/information.html.twig).
+
+   Information je STANJE NAD LISTOM, ne nova stranica (F5: lista je iza, raširena stavka vidljiva). Zato link
+   „Information" u meniju i CLOSE na Information stranici nose scroll-memory#carry — lista ostaje na istom skrolu
+   sa istom raširenom stavkom u oba smera (Turbo bi je inače vratio na vrh). CLOSE je tamo link na listu, ne dugme.
 #}
 
 {# Jezici: sve lokalizacije stranice osim aktivne. Van Sulu konteksta (error stranice)
@@ -58,6 +62,7 @@
             href: sulu_content_path(node.url),
             prep: flags.content.in_preparation|default(false),
             current: node.uuid == uuid|default(''),
+            carry: flags.template|default('') == 'information',
             children: children,
         }]) %}
     {% endfor %}
@@ -75,19 +80,34 @@
     {# Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371). #}
     {# Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). Oba natpisa su na span-u (data-label-*) da bi
        kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
-    <button type="button"
-            data-menu-target="toggle"
-            data-action="menu#toggle"
-            aria-label="{{ 'app.menu.toggle'|trans }}"
-            aria-controls="menu-nav"
-            class="pointer-events-auto absolute cursor-pointer text-nav
+    {% set _toggleClass = 'pointer-events-auto absolute cursor-pointer text-nav
                    hover:underline focus-visible:underline
                    right-[4px] bottom-[68px]
-                   lg:right-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
-        <span data-menu-target="logoLabel"
-              data-label-open="{{ 'app.menu.close'|trans }}"
-              data-label-closed="Monos">Monos</span>
-    </button>
+                   lg:right-[2px] lg:bottom-auto lg:top-[314px]' ~ _mobileHidden %}
+    {% if _info %}
+        {# Information: CLOSE je LINK na listu (koren jezika) — Information bez menija nema smisla (zone sede u kolonama
+           menija). scroll-memory#carry: lista ostaje na istom skrolu sa istom raširenom stavkom. Bez JS-a: obična navigacija. #}
+        <a href="{{ sulu_content_root_path() }}"
+           data-menu-target="toggle"
+           data-controller="scroll-memory"
+           data-action="scroll-memory#carry"
+           class="{{ _toggleClass }}">
+            <span data-menu-target="logoLabel"
+                  data-label-open="{{ 'app.menu.close'|trans }}"
+                  data-label-closed="Monos">{{ 'app.menu.close'|trans }}</span>
+        </a>
+    {% else %}
+        <button type="button"
+                data-menu-target="toggle"
+                data-action="menu#toggle"
+                aria-label="{{ 'app.menu.toggle'|trans }}"
+                aria-controls="menu-nav"
+                class="{{ _toggleClass }}">
+            <span data-menu-target="logoLabel"
+                  data-label-open="{{ 'app.menu.close'|trans }}"
+                  data-label-closed="Monos">Monos</span>
+        </button>
+    {% endif %}
 
     {# ── Reset ──────────────────────────────────────────────────── #}
     {# Desktop: L2 T314, 14px/500 tracked. Mobile: L4 T712, 10px/200 (u-fine). Koren TEKUĆEG jezika (/, /en, /ja). #}
@@ -120,10 +140,11 @@
          class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobileHidden }}"></div>
 
     {% if _info %}
-        {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information". #}
+        {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information".
+           Ispod 1440 kolona se skuplja da stane (kao tekst projekta): širina = min(642, 100% − 798), na 1280 je 482. #}
         <div data-menu-target="submenu"
              data-menu-submenu-key="information"
-             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] w-[642px] max-lg:hidden">
+             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] w-[min(642px,calc(100%_-_798px))] max-lg:hidden">
             {{- content.intro_text|default('')|raw -}}
         </div>
     {% endif %}
@@ -155,8 +176,10 @@
                             class="block w-full cursor-pointer text-right
                                    hover:underline focus-visible:underline">{{ item.label }}</button>
                 {% else %}
+                    {# Information (šablon `information`): odredište crta istu listu — nosi njeno stanje (scroll-memory#carry). #}
                     <a href="{{ item.href }}"
                        {% if item.current %}aria-current="page"{% endif %}
+                       {% if item.carry %}data-controller="scroll-memory" data-action="scroll-memory#carry"{% endif %}
                        class="block hover:underline focus-visible:underline">{{ item.label }}</a>
                 {% endif %}
             {% endfor %}

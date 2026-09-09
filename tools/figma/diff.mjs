@@ -150,8 +150,9 @@ await page.evaluate(() => {
     document.querySelectorAll('.sf-minitoolbar').forEach((el) => el.remove());
     // Cookie consent banner — nije u Figma frame-u
     document.querySelectorAll('[data-controller~="cookie-consent"]').forEach((el) => el.remove());
-    // Turbo progress bar — animiran, pravi šum između pokretanja
+    // Turbo progress bar i naša traka učitavanja (.global-loader) — animirani, prave šum između pokretanja
     document.querySelectorAll('.turbo-progress-bar').forEach((el) => el.remove());
+    document.querySelectorAll('.global-loader').forEach((el) => el.remove());
 });
 await page.screenshot({ path: shotPng, animations: 'disabled' });
 await browser.close();

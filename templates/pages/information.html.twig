@@ -7,7 +7,8 @@
      uvod      L796 T10  642×176   iznad navigacije, desna kolona kao tekst projekta
      kontakt   T394 R1345          slot podmenija (Material ga zamenjuje svojom decom)
      pravno    T666 R1345          Terms of use · copyright · (prazno) · „Code by Seiora"
-   CLOSE/Esc zatvaraju meni zajedno sa zonama — ostaje gola lista; „Information" u meniju vraća sve.
+   Information je STANJE NAD LISTOM: dolazak sa liste („Information" u meniju) i povratak (CLOSE/Esc — link na koren
+   jezika, ne gašenje menija: bez zona nema Information stranice) čuvaju skrol i raširenu stavku (scroll-memory#carry).
 
    MOBILE: menija i liste nema (F19) — „Back" na mestu logoa (R371 T728, header). Zone su u toku stranice:
      uvod      L4 T48, 367 široko (18 redova u Figmi → kraj 336)
@@ -17,16 +18,24 @@
    „Code by Seiora" je u Figmi samo na mobilnom — kredit je legitiman (Seiora je izradila sajt), izostanak
    na desktopu je previd dizajnera: ide na OBE širine (includes/information/legal.html.twig). #}
 
-{% set _settings = sulu_snippet_load_by_area('webspace_settings') %}
-{% set _home = sulu_content_load_parent(uuid, ['blocks']) %}
-
 {% block body_attributes %}data-controller="menu" data-menu-open-value="true" data-menu-active-key-value="information"{% endblock %}
 
 {% block header %}
+    {# Namerno postavljeno u svakom bloku koji je koristi: Sulu preview renderuje
+       blokove izolovano (renderBlock), pa se `set` sa vrha šablona ne izvrši.
+       Snippet je keširan — drugi poziv ne ide u bazu. #}
+    {% set _settings = sulu_snippet_load_by_area('webspace_settings') %}
     {% include 'includes/header.html.twig' with { information: { settings: _settings } } %}
 {% endblock %}
 
 {% block content %}
+    {# Namerno postavljeno u svakom bloku koji je koristi: Sulu preview renderuje
+       blokove izolovano (renderBlock), pa se `set` sa vrha šablona ne izvrši.
+       Snippet je keširan — drugi poziv ne ide u bazu. #}
+    {% set _settings = sulu_snippet_load_by_area('webspace_settings') %}
+    {# `_home` iz istog razloga: `set` iznad bloka u izolovanom renderu (`?partial=true`, tools/preview-check.sh) ne postoji. #}
+    {% set _home = sulu_content_load_parent(uuid, ['blocks']) %}
+
     {# ── Mobile: zone u toku ──────────────────────────────────── #}
     {# max-w 600: ispod lg (tableti) tekstualne zone ne prelaze 600px — spec; na 375 je i dalje puna širina (367). #}
     <div class="flex min-h-dvh max-w-[600px] flex-col px-[4px] pt-[48px] pb-[100px] lg:hidden">
@@ -39,8 +48,10 @@
         </div>
     </div>
 
-    {# ── Desktop: lista naslovne iza menija — isti kontroleri i isto podizanje kao na naslovnoj ── #}
+    {# ── Desktop: lista naslovne iza menija — isti kontroleri kao na naslovnoj; isti ključ scroll-memory zapisa (koren
+       jezika), pa ulazak u projekat odavde i „Back" vraćaju listu na naslovnoj kako je ovde ostavljena. ── #}
     <div data-controller="project-list scroll-memory"
+         data-scroll-memory-key-value="{{ sulu_content_root_path() }}"
          data-action="click->scroll-memory#store scroll-memory:restore->project-list#restore"
          class="project-list hidden pt-[314px] lg:block">
         {% include 'includes/blocks.html.twig' with { content: _home.content|default({}), view: _home.view|default({}) } only %}

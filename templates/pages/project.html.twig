@@ -10,10 +10,13 @@
      slika        L240 T2  540×675 — DNO na 677 je fiksno, slika drugog formata raste naviše (poravnanje po dnu)
      brojač       R780 T677        tekst desno   L796 T10 642×304 (19 redova) — ako je duži, seče se
      →Drawings    L2   T314        Expand view   L796 T314        Read more   R1438 T314   ← baseline kao nav i logo
-     naslov       L240 T725 (3 reda)   podnaslov L240 T789   Back R780 T789
+     naslov       L240 T725 (3 reda)   podnaslov L240 T789   Back R780 T789 — ispod reda 95px vazduha (805 + 95 = 900)
      „Read more": nastavak teksta od T330 (F8), „Read less" vraća. Isti tekst je dva puta u DOM-u: kadar (sečen na 304)
      i nastavak (ista širina, pomeren za −304 pa sečen) — prelom je identičan, pa se tekst nastavlja tačno od 20. reda.
      Bez JS-a kadar nije sečen (min-height), nastavak je sakriven — ceo tekst se čita.
+
+   1024–1440: slika ostaje 540 (nosilac kompozicije), tekstualna kolona se skuplja (grid u main.scss) — na 1280 je 482.
+   Tipografija se nikad ne skalira. Iznad 1440 sve ostaje kako jeste.
 
    MOBILE (blok tok; stage je sticky)
      slika T48–517 (dno fiksno) + brojač T517 R371 = sticky blok sa belom pozadinom: tekst skroluje IZA njega,
@@ -23,16 +26,18 @@
 
    Mirno stanje doslovno Figma: bez podvlačenja, podvlačenje samo na hover/focus-visible. #}
 
-{% set _images = content.images|default([]) %}
-{% set _parent = sulu_content_load_parent(uuid, ['url']) %}
-{% set _isDrawings = _parent.template|default('') == 'project' %}
-{% set _drawings = _isDrawings ? null : sulu_navigation_tree(uuid)|filter(item => item.template|default('') == 'project')|first %}
-{% set _listHref = sulu_content_root_path() %}
-
 {% block body_attributes %}{% endblock %}
 {% block header %}{% endblock %}
 
 {% block content %}
+    {# Promenljive su UNUTAR bloka: Sulu preview (i `?partial=true`) renderuje samo `content` kroz Template::renderBlock,
+       pa se vrh šablona ne izvršava — `set` iznad bloka tamo ne postoji. Redosled je bitan (_isDrawings ← _parent, _drawings ← _isDrawings). #}
+    {% set _images = content.images|default([]) %}
+    {% set _parent = sulu_content_load_parent(uuid, ['url']) %}
+    {% set _isDrawings = _parent.template|default('') == 'project' %}
+    {% set _drawings = _isDrawings ? null : sulu_navigation_tree(uuid)|filter(item => item.template|default('') == 'project')|first %}
+    {% set _listHref = sulu_content_root_path() %}
+
     {# project-slider je na korenu: slajder je u stage-u, a „Expand view" (target expand) u koloni teksta. #}
     <article class="project" data-controller="project-slider">
 
@@ -77,7 +82,8 @@
         {# Naslov: tri reda (prelomi iz urednika); min-h 48 drži tekst ispod na istom mestu i sa kraćim naslovom. #}
         <h1 class="project__title mx-[4px] -mt-[3px] min-h-[48px] max-w-[392px] whitespace-pre-line lg:mx-0 lg:mt-[32px]">{{ content.title }}</h1>
 
-        <div class="project__meta hidden lg:mt-[16px] lg:flex lg:justify-between lg:gap-[16px]">
+        {# pb 95: posle reda „Back" (T789–805) ostaje 95px vazduha do dna kadra 900 (F7) — i kad stranica skroluje. #}
+        <div class="project__meta hidden lg:mt-[16px] lg:flex lg:justify-between lg:gap-[16px] lg:pb-[95px]">
             <p class="max-w-[356px]">{{ content.subtitle|default('') }}</p>
             <a href="{{ _listHref }}"
                data-controller="scroll-memory"

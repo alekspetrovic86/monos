@@ -4,9 +4,11 @@
    Pri učitavanju lista krene malo niže i podigne se (CSS animacija `project-list-rise`).
    project-list kontroler: klik na sliku širi stavku i podiže je na vrh; najviše jedna raširena.
    scroll-memory: pri odlasku na projekat pamti skrol i raširenu stavku; „Back" sa projekta ih vraća
-   (scroll-memory:restore → project-list#restore, bez animacije). #}
+   (scroll-memory:restore → project-list#restore, bez animacije). Isto i Information ↔ lista (menu „Information" / CLOSE):
+   ključ zapisa je koren jezika — naslovna i Information crtaju istu listu i dele ga. #}
 {% block content %}
     <div data-controller="project-list scroll-memory"
+         data-scroll-memory-key-value="{{ sulu_content_root_path() }}"
          data-action="click->scroll-memory#store scroll-memory:restore->project-list#restore"
          class="project-list pt-[456px] lg:pt-[314px]">
         {% include 'includes/blocks.html.twig' %}

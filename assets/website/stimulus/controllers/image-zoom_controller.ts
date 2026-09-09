@@ -18,6 +18,10 @@ import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
 // mora biti TAČNO veličine slike — Panzoom contain računa prema roditelju.
 // „Esc" dugme na L2 T314 kao ostali elementi tog baseline-a.
 //
+// Kursor prati stanje: `zoom-in` dok je slika u osnovnoj veličini (klik ili točkić uvećava), `grab` kad je uvećana
+// (može da se pomera), `grabbing` dok se vuče. Panzoom-ov `cursor` je samo početna vrednost — dalje ga vode
+// panzoomchange (scale) i panzoomstart/panzoomend.
+//
 // DESKTOP-ONLY: ispod 1024px se ne montira — na mobilnom se koristi nativni pinch-zoom (odluka vlasnika).
 export default class ImageZoomController extends Controller<HTMLElement> {
     static values = {
@@ -29,9 +33,21 @@ export default class ImageZoomController extends Controller<HTMLElement> {
     declare closeValue: string;
 
     private static readonly MAX_SCALE = 6;
+    // Posle točkića napred-nazad Panzoom vrati 1.0000000000000002, ne 1 — „osnovna veličina" je zato sa tolerancijom.
+    private static readonly ZOOMED_ABOVE = 1.001;
 
     private readonly desktop = window.matchMedia('(min-width: 1024px)');
     private readonly onResize = (): void => this.fit();
+    private readonly onChange = (event: Event): void => this.setCursor((event as CustomEvent<{ scale: number }>).detail.scale);
+    private readonly onStart = (): void => {
+        if (this.zoomed(this.scale())) this.cursor('grabbing');
+    };
+    private readonly onEnd = (): void => this.setCursor(this.scale());
+    // Klik u osnovnoj veličini uvećava na 2x oko tačke klika — ono što kursor `zoom-in` obećava. Uvećana slika se
+    // klikom ne menja (klik je tada kraj prevlačenja).
+    private readonly onClick = (event: MouseEvent): void => {
+        if (this.panzoom && !this.zoomed(this.scale())) this.panzoom.zoomToPoint(2, event);
+    };
 
     private lightbox: ReturnType<typeof GLightbox> | null = null;
     private panzoom: PanzoomObject | null = null;
@@ -116,11 +132,15 @@ export default class ImageZoomController extends Controller<HTMLElement> {
             maxScale: ImageZoomController.MAX_SCALE,
             minScale: 1,
             contain: 'outside',
-            cursor: 'grab',
+            cursor: 'zoom-in',
         });
 
         const wrapper = image.parentElement;
         wrapper?.addEventListener('wheel', this.panzoom.zoomWithWheel, { passive: false });
+        image.addEventListener('panzoomchange', this.onChange);
+        image.addEventListener('panzoomstart', this.onStart);
+        image.addEventListener('panzoomend', this.onEnd);
+        image.addEventListener('click', this.onClick);
         window.addEventListener('resize', this.onResize);
     }
 
@@ -128,10 +148,30 @@ export default class ImageZoomController extends Controller<HTMLElement> {
         window.removeEventListener('resize', this.onResize);
         if (this.panzoom && this.image) {
             this.image.parentElement?.removeEventListener('wheel', this.panzoom.zoomWithWheel);
+            this.image.removeEventListener('panzoomchange', this.onChange);
+            this.image.removeEventListener('panzoomstart', this.onStart);
+            this.image.removeEventListener('panzoomend', this.onEnd);
+            this.image.removeEventListener('click', this.onClick);
             this.panzoom.destroy();
         }
         this.panzoom = null;
         this.image = null;
+    }
+
+    private scale(): number {
+        return this.panzoom?.getScale() ?? 1;
+    }
+
+    private zoomed(scale: number): boolean {
+        return scale > ImageZoomController.ZOOMED_ABOVE;
+    }
+
+    private setCursor(scale: number): void {
+        this.cursor(this.zoomed(scale) ? 'grab' : 'zoom-in');
+    }
+
+    private cursor(value: 'zoom-in' | 'grab' | 'grabbing'): void {
+        if (this.image) this.image.style.cursor = value;
     }
 
     // Uklapanje u okvir: skala = min(okvir/slika po širini, po visini) — bez gornje granice, slika uvek ispuni
