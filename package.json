@@ -27,7 +27,8 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress",
-        "figma-diff": "node tools/figma/diff.mjs"
+        "figma-diff": "node tools/figma/diff.mjs",
+        "dpr-check": "node tools/figma/dpr-check.mjs"
     },
     "dependencies": {
         "@hotwired/stimulus": "^3.2.2",

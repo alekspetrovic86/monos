@@ -153,12 +153,16 @@ picture {
     justify-content: flex-start;
 }
 
+/* Slika POPUNJAVA kadar, ne koristi intrinzičnu veličinu. Sa srcset + w deskriptorima intrinzična veličina je
+   izvor ÷ gustina (540 @1x, 270 @2x, 195 @3x) — `width: auto; max-width: 100%` je zato na retini davala sliku
+   od 1/DPR kadra. `object-fit: contain` čuva format, `left bottom` je poravnanje po dnu i uz levu ivicu:
+   4:5 popunjava kadar tačno, pejzažna je puna širina uz dno, uspravna puna visina uz levu ivicu. */
 .project__image {
     display: block;
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left bottom;
 }
 
 /* Polovine slike: leva = prethodna, desna = sledeća. Postoje samo sa JS-om. */
