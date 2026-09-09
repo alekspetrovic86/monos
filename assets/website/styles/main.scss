@@ -350,10 +350,21 @@ picture {
 }
 
 /* Kadar slike je 4:5 od svoje širine: 540 → 675 (dno na 677), 375 → 469 (dno na 517).
-   round() drži celobrojnu visinu da tekst ispod ne padne na polupiksel; bez round() (stariji browseri)
+   round() drži celobrojnu visinu da tekst ispod ne padne na polupiksel; bez br. round() (stariji browseri)
    ostaje 125cqw. Slika je poravnata po DNU kadra — drugi format raste naviše, dno ostaje. */
 .project__stage {
     container-type: inline-size;
+}
+
+/* TABLETI (768–1023, nemaju Figma frame). Mobilno pravilo „4:5 pune širine" je crtano za 375 i van tog
+   opsega pobegne: na 1023 slika ispadne 1023×1279 i viri 627px preko ekrana. Ograničenje na 600 je drži
+   na 600×750 na celom opsegu — ista mera koju tekstualna kolona ispod `lg` već koristi (`max-w-[600px]`).
+   Praznina ostaje DESNO, kao i u listi gde je tizer 292px uz levu ivicu. Na 375 ograničenje ne dodiruje
+   ništa (puna širina je manja), pa je mobilna verzija netaknuta. */
+@media (max-width: 1023px) {
+    .project__stage {
+        max-width: 600px;
+    }
 }
 
 .project__frame {
