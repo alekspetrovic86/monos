@@ -17,13 +17,15 @@
 
 {% set is5xx = status_code >= 500 %}
 
-{# Monos: belo, crn tekst 14px/16px, bez zaobljenja i senki. Nema Figma dizajna
-   za ovu stranicu — tekst sedi na istoj osi kao header (desktop L2/T314,
-   mobile L4), a donji padding ostavlja mesto za mobilni meni na dnu. #}
+{# Monos: belo, mastilo 14px/16px, bez zaobljenja i senki. Nema Figma dizajna za ovu stranicu.
+   Desktop L240/T314 — ista kolona u kojoj je sav ostali sadržaj (tizeri, slika projekta), NE L2.
+   L2 je kolona navigacije: tamo stoje „Reset" i „→Drawings". Dok je meni zatvoren „Reset" se ne vidi,
+   pa se sudar ne primeti; čim se meni otvori, „Reset" padne tačno preko broja greške (izmereno: oba
+   na x2 y314). Mobile L4, a donji padding ostavlja mesto za meni na dnu. #}
 <section data-controller="error"
          class="min-h-screen bg-paper text-ink
                 px-[4px] pt-[16px] pb-[116px]
-                lg:pl-[2px] lg:pr-[95px] lg:pt-[314px] lg:pb-[80px]">
+                lg:pl-[240px] lg:pr-[95px] lg:pt-[314px] lg:pb-[80px]">
 
     <p class="u-tracked">{{ status_code }}</p>
     <h1 class="mt-4">{{ title_trans }}</h1>
