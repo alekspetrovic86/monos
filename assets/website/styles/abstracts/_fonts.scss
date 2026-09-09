@@ -14,12 +14,14 @@
      latin-ext  srpska latinica (č, ć, ž, š, đ)
      cyrillic   srpska ćirilica
 
-   Japanski nema svoj font: Noto Sans JP je 124 podskupa, oko 5,3 MB, što je
-   nesrazmerno količini japanskog teksta na sajtu. Pada na sistemski (Hiragino
-   na Apple uređajima, Yu Gothic / Meiryo na Windows-u).
+   Japanski koristi Noto Sans JP, takođe lokalno (_fonts-jp.scss). Njegovih 124
+   podskupa zauzimaju 5,2 MB na disku, ali posetilac preuzima samo podskupove sa
+   znakovima koji su na stranici — engleska i srpska stranica nijedan.
 
    Licenca: SIL Open Font License — fonts/OFL.txt, uz same fajlove.
 -------------------------------------------------------------------- */
+
+@use 'fonts-jp';
 
 @font-face {
     font-family: 'Inter Tight';
@@ -57,7 +59,8 @@ html {
     font-size: 16px;
 }
 
-/* Japanski: latinica iz Inter Tight-a, CJK znakovi iz sistemskog fonta. */
+/* Japanski: latinica iz Inter Tight-a, CJK znakovi iz Noto Sans JP. Sistemski fontovi ostaju
+   kao rezerva ako podskup iz nekog razloga ne stigne. */
 html[lang="ja"] {
-    font-family: 'Inter Tight', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', Meiryo, sans-serif;
+    font-family: 'Inter Tight', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
 }
