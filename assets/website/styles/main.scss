@@ -95,6 +95,42 @@ body {
     }
 }
 
+/* Information na mobilnom ulazi kao popup — spusti se odozgo, a na „Back" se podigne nazad (F19 62:240).
+   Iznad 1024 Information nije stranica nego stanje nad listom (meni sa zonama), pa tamo ne klizi ništa.
+   Pomeraju se oba sloja stranice — header (fiksni sloj sa „Back") i sadržaj — istim pomerajem, punom
+   visinom prozora, da se kreću kao jedna ploča. Izlazak vodi page-transition kontroler (`is-leaving`),
+   jer bi Turbo inače zamenio dokument pre nego što se animacija odigra. */
+@keyframes information-drop {
+    from {
+        transform: translateY(-100dvh);
+    }
+}
+
+@keyframes information-lift {
+    to {
+        transform: translateY(-100dvh);
+    }
+}
+
+@media (max-width: 1023px) {
+    .page-information > header,
+    .page-information > .l-container {
+        animation: information-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .page-information.is-leaving > header,
+    .page-information.is-leaving > .l-container {
+        animation: information-lift 320ms cubic-bezier(0.65, 0, 0.35, 1) both;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-information > header,
+    .page-information > .l-container {
+        animation: none;
+    }
+}
+
 /* Responzivne slike (includes/picture.html.twig): <picture> ne pravi svoju kutiju — <img> učestvuje direktno
    u roditeljevom layoutu (flex kadar slajdera, okvir tizera), pa max-width/max-height 100% važe kao za goli <img>. */
 picture {

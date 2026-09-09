@@ -125,19 +125,20 @@
     {% if _info %}
         {# ── „Back" (samo Information, mobile) — na mestu logoa: R371 T728. Vraća listu kako je ostavljena (scroll-memory). #}
         <a href="{{ sulu_content_root_path() }}"
-           data-controller="scroll-memory"
-           data-action="scroll-memory#back"
+           data-controller="scroll-memory page-transition"
+           data-action="scroll-memory#back page-transition#leave"
            class="pointer-events-auto absolute right-[4px] bottom-[68px]
                   hover:underline focus-visible:underline
                   lg:hidden">{{ 'app.menu.back'|trans }}</a>
     {% endif %}
 
-    {# ── Beli overlay (samo mobile, 375×728 na T0) ──────────────── #}
-    {# Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni.
-       pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova. #}
+    {# ── Overlay menija (samo mobile, 375×728 na T0) ────────────── #}
+    {# PROVIDAN, po odluci vlasnika: u Figmi (F16 62:193) je ovo belo polje preko skoro celog ekrana, ali sajt
+       treba da se vidi kroz meni. Sloj i dalje postoji jer hvata klikove — sadržaj iza je uz to `inert`.
+       Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni. #}
     <div data-menu-target="overlay"
          hidden
-         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobile_hidden }}"></div>
+         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] lg:hidden{{ _mobile_hidden }}"></div>
 
     {% if _info %}
         {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information".
