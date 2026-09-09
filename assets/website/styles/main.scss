@@ -337,14 +337,10 @@ picture {
         grid-row: 1;
     }
 
+    /* Naslov i „Back" su jedan red: naslov je jedno polje sa oba pasusa, pa zauzima i mesto ranijeg podnaslova. */
     .project__title {
         grid-column: 2;
-        grid-row: 2;
-    }
-
-    .project__meta {
-        grid-column: 2;
-        grid-row: 3;
+        grid-row: 2 / 4;
     }
 
     .project__text {

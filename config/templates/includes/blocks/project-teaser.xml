@@ -27,23 +27,13 @@
                         </params>
                     </property>
 
-                    <property name="title" type="text_area" mandatory="true">
+                    <property name="title" type="text_editor" mandatory="true">
                         <meta>
                             <title lang="en">Title</title>
                             <title lang="sr">Naslov</title>
                             <title lang="ja">タイトル</title>
-                            <info_text lang="en">Shown only while the project is expanded. Line breaks are kept (Figma: three lines).</info_text>
-                            <info_text lang="sr">Vidi se samo kad je projekat raširen. Prelomi reda se čuvaju (Figma: tri reda).</info_text>
-                        </meta>
-                    </property>
-
-                    <property name="subtitle" type="text_line" mandatory="true">
-                        <meta>
-                            <title lang="en">Subtitle</title>
-                            <title lang="sr">Podnaslov</title>
-                            <title lang="ja">サブタイトル</title>
-                            <info_text lang="en">Shown only while the project is expanded.</info_text>
-                            <info_text lang="sr">Vidi se samo kad je projekat raširen.</info_text>
+                            <info_text lang="en">Shown only while the project is expanded. One empty line starts a new paragraph — that is the gap between the title and the line below it.</info_text>
+                            <info_text lang="sr">Vidi se samo kad je projekat raširen. Jedan prazan red počinje novi pasus — to je razmak između naslova i reda ispod njega.</info_text>
                         </meta>
                     </property>
 
@@ -52,8 +42,8 @@
                             <title lang="en">Description</title>
                             <title lang="sr">Dugi opis</title>
                             <title lang="ja">説明</title>
-                            <info_text lang="en">Optional. Always visible below the image; starts with the label (e.g. "1.2") typed here. Leave empty and the next image follows immediately.</info_text>
-                            <info_text lang="sr">Opciono. Uvek vidljiv ispod slike; oznaka (npr. „1.2") se kuca ovde. Ako je prazno, sledeća slika dolazi odmah.</info_text>
+                            <info_text lang="en">Optional. Stands ABOVE the image, its last line resting on the image top edge; starts with the label (e.g. "1.2") typed here. Leave empty and the image follows the previous one immediately.</info_text>
+                            <info_text lang="sr">Opciono. Stoji IZNAD slike, poslednjim redom naslonjen na njen vrh; oznaka (npr. „1.2") se kuca ovde. Ako je prazno, slika dolazi odmah posle prethodne.</info_text>
                         </meta>
                     </property>
 

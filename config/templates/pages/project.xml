@@ -30,6 +30,19 @@
             <tag name="sulu.rlp.part"/>
         </property>
 
+        <!-- Prikazani naslov. Zaseban od `title` jer `title` nosi `sulu.rlp.part` (iz njega se pravi URL) i ide
+             u <title> i og:title — HTML tamo ne sme. Prazan red u editoru pravi novi pasus; razmak između
+             pasusa (16px) je isti onaj koji je ranije delio naslov od podnaslova. -->
+        <property name="heading" type="text_editor">
+            <meta>
+                <title lang="en">Heading</title>
+                <title lang="sr">Naslov na stranici</title>
+                <title lang="ja">見出し</title>
+                <info_text lang="en">Shown as the heading. One empty line starts a new paragraph — that is the gap between the title and the line below it. Leave empty and the page title above is used.</info_text>
+                <info_text lang="sr">Prikazuje se kao naslov. Jedan prazan red počinje novi pasus — to je razmak između naslova i reda ispod njega. Ako je prazno, koristi se naslov stranice iznad.</info_text>
+            </meta>
+        </property>
+
         <property name="url" type="resource_locator" mandatory="true">
             <meta>
                 <title lang="en">Resourcelocator</title>
@@ -57,15 +70,6 @@
                     </params>
                 </property>
 
-                <property name="subtitle" type="text_line">
-                    <meta>
-                        <title lang="en">Subtitle</title>
-                        <title lang="sr">Podnaslov</title>
-                        <title lang="ja">サブタイトル</title>
-                        <info_text lang="en">Below the title, desktop only (Figma has no subtitle on mobile).</info_text>
-                        <info_text lang="sr">Ispod naslova, samo na desktopu (Figma na mobilnom nema podnaslov).</info_text>
-                    </meta>
-                </property>
 
                 <property name="body" type="text_editor">
                     <meta>

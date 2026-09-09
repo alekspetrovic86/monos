@@ -78,17 +78,25 @@
             </p>
         </div>
 
-        {# ── Naslov, podnaslov, Back ──────────────────────────────── #}
-        {# Naslov: tri reda (prelomi iz urednika); min-h 48 drži tekst ispod na istom mestu i sa kraćim naslovom. #}
-        <h1 class="project__title mx-[4px] -mt-[3px] min-h-[48px] max-w-[392px] whitespace-pre-line lg:mx-0 lg:mt-[32px]">{{ content.title }}</h1>
+        {# ── Naslov i Back ────────────────────────────────────────── #}
+        {# Naslov je JEDNO editor polje (`heading`): prazan red pravi novi pasus, a razmak između pasusa (16px,
+           .rich-text) je isti onaj koji je ranije delio naslov od podnaslova. min-h 48 drži tekst ispod na istom
+           mestu i sa kraćim naslovom. Ako `heading` nije popunjen, pada na `title` — on nosi prelome reda.
+           „Back" je u istom redu, poravnat uz DNO naslova (`items-end`), pa ostaje na T789 kao i pre.
+           pb 95: posle reda „Back" (T789–805) ostaje 95px vazduha do dna kadra 900 (F7) — i kad stranica skroluje. #}
+        <div class="project__title mx-[4px] -mt-[3px] flex items-end justify-between gap-[16px] lg:mx-0 lg:mt-[32px] lg:pb-[95px]">
+            <h1 class="rich-text min-h-[48px] max-w-[392px]">
+                {%- if content.heading|default -%}
+                    {{ content.heading|raw }}
+                {%- else -%}
+                    <p class="whitespace-pre-line">{{ content.title }}</p>
+                {%- endif -%}
+            </h1>
 
-        {# pb 95: posle reda „Back" (T789–805) ostaje 95px vazduha do dna kadra 900 (F7) — i kad stranica skroluje. #}
-        <div class="project__meta hidden lg:mt-[16px] lg:flex lg:justify-between lg:gap-[16px] lg:pb-[95px]">
-            <p class="max-w-[356px]">{{ content.subtitle|default('') }}</p>
             <a href="{{ _list_href }}"
                data-controller="scroll-memory"
                data-action="scroll-memory#back"
-               class="shrink-0 hover:underline focus-visible:underline">{{ 'app.project.back'|trans }}</a>
+               class="hidden shrink-0 hover:underline focus-visible:underline lg:block">{{ 'app.project.back'|trans }}</a>
         </div>
 
         {# ── Tekst ────────────────────────────────────────────────── #}
