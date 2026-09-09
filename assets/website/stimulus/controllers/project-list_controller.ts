@@ -39,13 +39,15 @@ export default class ProjectListController extends Controller<HTMLElement> {
         document.documentElement.classList.remove('project-list-ready');
     }
 
-    // Povratak sa projekta (scroll-memory:restore): stavka se raširi odmah, bez animacije i bez skrola —
-    // skrol vraća scroll-memory. Animacija podizanja liste pri učitavanju se preskače (CSS `project-list--restored`).
-    restore(event: CustomEvent<{ item: HTMLElement }>): void {
-        const item = event.detail?.item;
+    // Povratak na listu (scroll-memory:restore — Back sa projekta, Information, CLOSE): stavka se raširi odmah,
+    // bez animacije i bez skrola — skrol vraća scroll-memory. Animacija podizanja liste pri učitavanju se preskače
+    // (CSS `project-list--restored`) i kad ništa nije bilo rašireno (item = null) — lista se zatiče, ne stiže.
+    restore(event: CustomEvent<{ item: HTMLElement | null }>): void {
+        this.element.classList.add('project-list--restored');
+
+        const item = event.detail?.item ?? null;
         if (!item || !this.itemTargets.includes(item)) return;
 
-        this.element.classList.add('project-list--restored');
         this.itemTargets.forEach((candidate) => {
             candidate.toggleAttribute('data-expanded', candidate === item);
             this.sync(candidate);

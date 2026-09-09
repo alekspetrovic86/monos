@@ -11,12 +11,14 @@ import { ActionEvent, Controller } from '@hotwired/stimulus';
 //
 // Početno stanje zadaje server (values): naslovna je zatvorena; Information stranica je otvorena
 // sa podmenijem „information" (tri tekstualne zone su podmeni tog ključa — vidi header.html.twig).
+// Tamo je `toggle` LINK (CLOSE → lista, scroll-memory#carry), ne dugme: Information bez menija nema smisla,
+// pa i Esc vodi na listu — close() prati link umesto da gasi meni.
 // Nivoi menija su u HTML-u (Sulu navigacija) — kontroler zna samo za ključeve stavki i podmenija.
 export default class MenuController extends Controller<HTMLElement> {
     static targets = ['toggle', 'logoLabel', 'reset', 'overlay', 'nav', 'item', 'submenu', 'content'];
     static values = { open: Boolean, activeKey: String };
 
-    declare readonly toggleTarget: HTMLButtonElement;
+    declare readonly toggleTarget: HTMLElement;
     declare readonly logoLabelTarget: HTMLElement;
     declare readonly resetTarget: HTMLElement;
     declare readonly overlayTarget: HTMLElement;
@@ -57,6 +59,11 @@ export default class MenuController extends Controller<HTMLElement> {
 
     close(): void {
         if (!this.open) return;
+        // Information: CLOSE je link nazad na listu — Esc radi isto (menu bez zona ne postoji kao stanje).
+        if (this.toggleTarget instanceof HTMLAnchorElement) {
+            this.toggleTarget.click();
+            return;
+        }
         this.open = false;
         this.activeKey = null;
         this.render();
@@ -88,7 +95,7 @@ export default class MenuController extends Controller<HTMLElement> {
         const { labelOpen = 'CLOSE', labelClosed = 'Monos' } = this.logoLabelTarget.dataset;
         this.logoLabelTarget.textContent = this.open ? labelOpen : labelClosed;
         this.logoLabelTarget.classList.toggle('u-tracked', this.open);
-        this.toggleTarget.setAttribute('aria-expanded', String(this.open));
+        if (this.toggleTarget instanceof HTMLButtonElement) this.toggleTarget.setAttribute('aria-expanded', String(this.open));
 
         this.navTarget.hidden = !this.open;
         this.resetTarget.hidden = !this.open;
