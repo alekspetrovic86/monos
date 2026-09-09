@@ -44,7 +44,7 @@ final readonly class HomepageTeaserFixture implements DocumentFixtureInterface
      * raširene, a F1 sa opisom ispod prve slike se s tim ne slaže — F2/F15 su merodavni za stanje liste).
      * Treća i četvrta ga imaju — klik na treću pokazuje redosled slika → naslov → podnaslov → Enter → opis.
      */
-    private const DESCRIPTIONS = [
+    private const GROUP_TITLES = [
         '',
         '',
         '<p>1.2</p>'
@@ -91,7 +91,7 @@ final readonly class HomepageTeaserFixture implements DocumentFixtureInterface
                     'type' => 'project-teaser',
                     'image' => ['id' => $mediaId, 'displayOption' => null],
                     'title' => self::TITLE,
-                    'description' => self::DESCRIPTIONS[$index],
+                    'group_title' => self::GROUP_TITLES[$index],
                     'link' => ['provider' => 'page', 'href' => $project->getUuid(), 'locale' => $locale],
                 ];
             }

@@ -6,8 +6,8 @@
    Naslov je JEDNO editor polje: prazan red u njemu pravi novi pasus, a razmak između pasusa (16px, .rich-text)
    je isti onaj koji je ranije delio naslov od podnaslova. „Enter" se poravnava uz DNO tog bloka (`items-end`),
    pa ostaje u redu sa poslednjim pasusom bez obzira koliko ih ima.
-   Dugi opis stoji IZNAD slike, poslednjim redom naslonjen na njen vrh (bez razmaka), a od prethodne slike ga
-   deli 16px. Razmaci između stavki: slika → sledeća slika 2px (F2: prethodna do 22, sledeća od 24).
+   Naslov grupe (`group_title`) stoji IZNAD slike, poslednjim redom naslonjen na njen vrh (bez razmaka),
+   a od prethodne slike ga deli 16px. Razmaci između stavki: slika → sledeća slika 2px (F2: prethodna do 22, sledeća od 24).
    Slika je link na projekat: prvi klik širi (kontroler ga preseče), drugi klik ulazi — na mobilnom „Enter" u Figmi ne postoji.
    Bez JS-a: detalji su vidljivi (CSS ih krije samo do connect()-a), slika vodi pravo na projekat.
    Mirno stanje doslovno Figma: bez podvlačenja — podvlačenje samo na hover/focus-visible. Slika zadržava svoj format (h-auto).
@@ -24,12 +24,12 @@
          data-sizes-expanded="(min-width: 1024px) 540px, 375px"
          class="group mt-[2px] first:mt-0 lg:ml-[240px]">
 
-    {# Dugi opis (F1: L240 T928, 540 široko) — vidljiv u oba stanja. Oznaka „1.2" je deo teksta.
+    {# Naslov grupe projekata (F1: L240 T928, 540 široko) — vidljiv u oba stanja. Oznaka „1.2" je deo teksta.
        IZNAD slike i bez razmaka do nje: kraj teksta je naslonjen na vrh slike. Gornjih 16px se sudara sa
        `mt-[2px]` same stavke i pobeđuje (margine se sažimaju u veću), pa je od prethodne slike tačno 16.
        Ako opisa nema, slika dolazi odmah posle prethodne (2px). #}
-    {% if content.description|default %}
-        <div class="rich-text mx-[4px] mt-[16px] max-w-[600px] lg:mx-0 lg:w-[540px] lg:max-w-none">{{ content.description|raw }}</div>
+    {% if content.group_title|default %}
+        <div class="rich-text mx-[4px] mt-[16px] max-w-[600px] lg:mx-0 lg:w-[540px] lg:max-w-none">{{ content.group_title|raw }}</div>
     {% endif %}
 
     {# Okvir slike — širina je ono što se animira (480→540 / 292→375). #}
