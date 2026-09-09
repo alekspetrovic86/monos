@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 final readonly class SettingsSnippetFixture implements DocumentFixtureInterface
 {
+    use SkippableFixture;
+
     private const WEBSPACE = ProjectPagesFixture::WEBSPACE;
     private const LOCALES = ProjectPagesFixture::LOCALES;
     private const AREA = 'webspace_settings';
@@ -45,6 +47,10 @@ final readonly class SettingsSnippetFixture implements DocumentFixtureInterface
 
     public function load(DocumentManager $documentManager): void
     {
+        if ($this->fixturesDisabled()) {
+            return;
+        }
+
         $document = null;
 
         foreach (self::LOCALES as $locale) {
