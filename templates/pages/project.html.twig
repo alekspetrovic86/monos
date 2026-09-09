@@ -134,25 +134,27 @@
         </div>
 
         {# ── Fiksni linkovi ───────────────────────────────────────── #}
-        {# Prati kontejner kao header. Desktop: →Drawings L2 T314. Mobile: →Drawings R291 T728, Back R371 T728. #}
-        <nav aria-label="{{ 'app.project.nav'|trans }}"
-             class="pointer-events-none fixed inset-y-0 left-[var(--container-offset)] z-20 w-[min(100%,1440px)]">
+        {# Prati kontejner kao header. Desktop: →Drawings L2 T314. Mobile: →Drawings R291 T728, Back R371 T728.
+           Položaj je u `.project-link` (main.scss), a ne ovde, jer se na mobilnom natpisi MEŠAJU sa onim što
+           prolazi iza njih (tekst projekta se skroluje ispod). Za to svaki link mora sam da bude `fixed`:
+           omotač koji je i sam `fixed` pravi stacking context u kome mešanja nema — isto kao kod logoa.
+           Zato je <nav> ovde samo orijentir za čitače (`display: contents`): ne pravi kutiju, pa ne može ni
+           da postane peta stavka desktop grida (240 | 540 | 16 | 642 | 2) ni da zarobi mešanje. #}
+        <nav aria-label="{{ 'app.project.nav'|trans }}" class="contents">
             {% if _is_drawings %}
                 <a href="{{ sulu_content_path(_parent.content.url|default('/')) }}"
-                   class="pointer-events-auto absolute bottom-[68px] right-[84px] w-[84px] text-right
-                          hover:underline focus-visible:underline
-                          lg:top-[314px] lg:left-[2px] lg:right-auto lg:bottom-auto lg:w-auto lg:text-left">{{ 'app.project.images'|trans }}</a>
+                   class="project-link project-link--drawings
+                          hover:underline focus-visible:underline">{{ 'app.project.images'|trans }}</a>
             {% elseif _drawings %}
                 <a href="{{ sulu_content_path(_drawings.url) }}"
-                   class="pointer-events-auto absolute bottom-[68px] right-[84px] w-[84px] text-right
-                          hover:underline focus-visible:underline
-                          lg:top-[314px] lg:left-[2px] lg:right-auto lg:bottom-auto lg:w-auto lg:text-left">{{ 'app.project.drawings'|trans }}</a>
+                   class="project-link project-link--drawings
+                          hover:underline focus-visible:underline">{{ 'app.project.drawings'|trans }}</a>
             {% endif %}
 
             <a href="{{ _list_href }}"
                data-controller="scroll-memory"
                data-action="scroll-memory#back"
-               class="pointer-events-auto absolute bottom-[68px] right-[4px] w-[48px] text-right text-nav
+               class="project-link project-link--back text-nav
                       hover:underline focus-visible:underline lg:hidden">{{ 'app.project.back'|trans }}</a>
         </nav>
     </article>
