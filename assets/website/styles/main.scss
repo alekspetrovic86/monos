@@ -129,6 +129,37 @@ body {
     outline: none;
 }
 
+/* Logo / CLOSE. Jedini element menija van <header>-a — vidi header.html.twig. Zato mu polozaj mora ovde:
+   poravnat je uz desnu ivicu KONTEJNERA, ne prozora, istim velicinama kojima je poravnat i header
+   (levo `--container-offset`, sirina `min(100%, 1440px)`). Na 1440 i uze to je isti piksel kao `right: 2px`
+   od prozora; iznad 1440 kontejner staje pre desne ivice ekrana, pa formula tu pravi razliku.
+   z-index 60 ga drzi iznad bele ploce menija (header je z-50); na mesanje boja to ne utice. */
+.menu-toggle {
+    position: fixed;
+    right: calc(100% - var(--container-offset) - min(100%, 1440px) + 4px);
+    bottom: 68px;
+    z-index: 60;
+}
+
+@media (min-width: 1024px) {
+    .menu-toggle {
+        right: calc(100% - var(--container-offset) - min(100%, 1440px) + 2px);
+        top: 314px;
+        bottom: auto;
+    }
+}
+
+/* Na mobilnom natpis prelazi preko fotografija, pa se MESA sa onim sto je iza: nad belim je taman,
+   nad tamnom slikom svetao. Boja nije cisto belo nego inverzija tokena (255 - #191c1e = #e6e3e1),
+   pa `difference` nad belom stranom vraca tacno `--color-nav`, a nad crnim isti taj ton u svetlom.
+   Na desktopu natpis stoji na beloj strani — mesanje mu tamo nista ne donosi, pa ga nema. */
+@media (max-width: 1023px) {
+    .js .menu-toggle {
+        color: #e6e3e1;
+        mix-blend-mode: difference;
+    }
+}
+
 /* Meni na mobilnom se spusta odozgo i vraca nagore, isti pokret kao Information popup. Ploca su tri sloja
    koja se krecu zajedno: belo polje, navigacija uz njegovu donju ivicu i „Reset". Pomeraj je puna visina
    prozora, isto kao Information popup — polje nema fiksnu visinu (vezano je za dno ekrana, vidi header),
