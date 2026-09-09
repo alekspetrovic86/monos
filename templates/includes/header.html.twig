@@ -132,13 +132,17 @@
                   lg:hidden">{{ 'app.menu.back'|trans }}</a>
     {% endif %}
 
-    {# ── Beli overlay menija (samo mobile, 375×728 na T0) ───────── #}
-    {# pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova.
+    {# ── Beli overlay menija (samo mobile; u Figmi F16 375×728 na T0) ── #}
+    {# Donja ivica je `bottom-[84px]`, a NE fiksna visina 728: nav, Reset i CLOSE vise o dnu ekrana, pa bi
+       ploča fiksna od vrha bila u ravni s njima samo na tačno 812px visine. Na 844 (iPhone 14) nav ispada
+       16px ispod nje, a Reset 32px — pravo na fotografiju. 812 − 84 = 728, dakle na referentnoj visini je
+       ovo isti piksel kao u Figmi, a na svakoj drugoj prati Reset umesto da se razilazi s njim.
+       pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova.
        Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni.
        `menu-plate`: sa nav-om i Resetom čini ploču koja se na mobilnom spušta odozgo (main.scss). #}
     <div data-menu-target="overlay"
          hidden
-         class="menu-plate pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobile_hidden }}"></div>
+         class="menu-plate pointer-events-auto absolute inset-x-0 top-0 bottom-[84px] bg-paper lg:hidden{{ _mobile_hidden }}"></div>
 
     {% if _info %}
         {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information".

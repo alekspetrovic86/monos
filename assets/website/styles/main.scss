@@ -130,20 +130,22 @@ body {
 }
 
 /* Meni na mobilnom se spusta odozgo i vraca nagore, isti pokret kao Information popup. Ploca su tri sloja
-   koja se krecu zajedno: belo polje (375×728 na T0), navigacija uz njegovu donju ivicu i „Reset" — pomeraj je
-   zato visina polja, ne visina prozora. Logo/CLOSE ostaje na mestu: to je dugme koje se pritiska, ne sadrzaj.
+   koja se krecu zajedno: belo polje, navigacija uz njegovu donju ivicu i „Reset". Pomeraj je puna visina
+   prozora, isto kao Information popup — polje nema fiksnu visinu (vezano je za dno ekrana, vidi header),
+   pa bi fiksnih 728px ostavilo vrh polja da viri na svakom ekranu visem od 812.
+   Logo/CLOSE ostaje na mestu: to je dugme koje se pritiska, ne sadrzaj.
    Iznad 1024 nema ni belog polja ni klizanja — tamo je meni stalno stanje stranice, ne popup.
    Zatvaranje vodi menu kontroler (`menu-closing` na <body>): sloj mora ostati iscrtan dok animacija traje,
    pa `hidden` stize tek posle nje. Otvaranje ne ceka — animacija krene cim se sloj pojavi. */
 @keyframes menu-drop {
     from {
-        transform: translateY(-728px);
+        transform: translateY(-100dvh);
     }
 }
 
 @keyframes menu-lift {
     to {
-        transform: translateY(-728px);
+        transform: translateY(-100dvh);
     }
 }
 
