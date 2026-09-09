@@ -31,9 +31,9 @@ const onSlideLoaded = (lightbox: Lightbox, callback: (data: SlideLoaded) => void
 // mora biti TAČNO veličine slike — Panzoom contain računa prema roditelju.
 // „Esc" dugme na L2 T314 kao ostali elementi tog baseline-a.
 //
-// Kursor prati stanje: `zoom-in` dok je slika u osnovnoj veličini (klik ili točkić uvećava), `grab` kad je uvećana
-// (može da se pomera), `grabbing` dok se vuče. Panzoom-ov `cursor` je samo početna vrednost — dalje ga vode
-// panzoomchange (scale) i panzoomstart/panzoomend.
+// Kursor prati stanje kroz `data-cursor` na slici, a crta ga CSS (main.scss): „+" dok je slika u osnovnoj
+// veličini (klik ili točkić uvećava), `grab` kad je uvećana (može da se pomera), `grabbing` dok se vuče.
+// Stanje vode panzoomchange (scale) i panzoomstart/panzoomend.
 //
 // DESKTOP-ONLY: ispod 1024px se ne montira — na mobilnom se koristi nativni pinch-zoom (odluka vlasnika).
 export default class ImageZoomController extends Controller<HTMLElement> {
@@ -145,7 +145,8 @@ export default class ImageZoomController extends Controller<HTMLElement> {
             maxScale: ImageZoomController.MAX_SCALE,
             minScale: 1,
             contain: 'outside',
-            cursor: 'zoom-in',
+            // Prazno: Panzoom bi inace upisao kursor u inline stil i nadglasao CSS. Stanje nosi `data-cursor`.
+            cursor: '',
         });
 
         const wrapper = image.parentElement;
@@ -184,7 +185,7 @@ export default class ImageZoomController extends Controller<HTMLElement> {
     }
 
     private cursor(value: 'zoom-in' | 'grab' | 'grabbing'): void {
-        if (this.image) this.image.style.cursor = value;
+        if (this.image) this.image.dataset.cursor = value;
     }
 
     // Uklapanje u okvir: skala = min(okvir/slika po širini, po visini) — bez gornje granice, slika uvek ispuni

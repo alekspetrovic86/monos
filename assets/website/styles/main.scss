@@ -95,6 +95,14 @@ body {
     }
 }
 
+/* Nigde na sajtu nema okvira pregledača oko fokusa — fokus se u ovom dizajnu vidi kao podvlačenje
+   (`focus-visible:underline`), isto kao hover. Izuzetak su dve mete koje su čista slika i nemaju šta da
+   podvuku: polovine slajdera i slika tizera — na njima tastaturni fokus ostaje nevidljiv. */
+:focus,
+:focus-visible {
+    outline: none;
+}
+
 /* Responzivne slike (includes/picture.html.twig): <picture> ne pravi svoju kutiju — <img> učestvuje direktno
    u roditeljevom layoutu (flex kadar slajdera, okvir tizera), pa max-width/max-height 100% važe kao za goli <img>. */
 picture {
@@ -275,6 +283,21 @@ picture {
     margin: 0;
 }
 
+/* Kursor u expand view-u. „+" umesto lupe: isti crtež kao tipografija — 1px poteg, boja mastila, 15px krak,
+   vrh tačno u sredini (hotspot 12 12). Rezerva `zoom-in` je za pregledače koji odbiju SVG kursor.
+   Stanje postavlja image-zoom kontroler (`data-cursor`), zato što Panzoom inače upisuje kursor inline. */
+.glightbox-monos [data-cursor='zoom-in'] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M12 4.5v15M4.5 12h15' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E") 12 12, zoom-in;
+}
+
+.glightbox-monos [data-cursor='grab'] {
+    cursor: grab;
+}
+
+.glightbox-monos [data-cursor='grabbing'] {
+    cursor: grabbing;
+}
+
 /* „Esc" na L2 T314 kao ostali elementi tog baseline-a (Reset, →Drawings): 14/16, 500, bez okvira i pozadine.
    Mirno stanje bez podvlačenja — podvlačenje samo na hover i focus-visible. */
 .image-zoom__close {
@@ -294,4 +317,10 @@ picture {
 .image-zoom__close:hover,
 .image-zoom__close:focus-visible {
     text-decoration: underline;
+}
+
+/* GLightbox crta svoj okvir na `.gbtn.focused`, a tu klasu dodaje naš kontroler da bi Tab ostao u overlay-u.
+   Okvir se gasi ovde jer je specifičniji od globalnog pravila; afordansa fokusa ostaje podvlačenje iznad. */
+.glightbox-monos .gbtn.focused {
+    outline: none;
 }
