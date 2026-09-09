@@ -2,8 +2,8 @@ import { Controller } from '@hotwired/stimulus';
 import Swiper from 'swiper';
 
 // data-controller="project-slider" — slajder slika na stranici projekta (F7 16:2, F21 63:274).
-// Swiper, jedan slajd u kadru, kružno. Listanje: klik na LEVU polovinu slike = prethodna, na DESNU = sledeća
-// (dva providna dugmeta preko slike — rade i tastaturom). Prevlačenje prstom radi kao i inače.
+// Swiper, jedan slajd u kadru, kružno. Listanje na dva načina: klik na LEVU polovinu slike = prethodna,
+// na DESNU = sledeća (dva providna dugmeta preko slike — rade i tastaturom), ili prevlačenje prstom/mišem.
 // Brojač (target `counter`) je 1-based indeks tekućeg slajda, desno poravnat na desnu ivicu slike.
 // „Expand view" (target `expand`, opciono): href i data-image-zoom-src-value prate w2400 tekućeg slajda
 // (data-full na <img>; src/srcset slajda su umanjeni formati). Sam fullscreen radi image-zoom kontroler na tom linku.
@@ -25,6 +25,11 @@ export default class ProjectSliderController extends Controller<HTMLElement> {
             spaceBetween: 0,
             speed: 400,
             loop: count > 1,
+            // Swiper od v9 podrazumevano sluša gest na `.swiper-wrapper`. Providne polovine slike su
+            // BRAT tog elementa (oba su u `.project__frame`) i stoje iznad njega, pa dodir padne na dugme
+            // i nikad ne stigne do slušača — prevlačenje je zato bilo mrtvo. Na kontejneru gest bubbluje
+            // sa dugmeta do Swipera, pa rade oba načina listanja.
+            touchEventsTarget: 'container',
             // Klik posle prevlačenja ne sme da prelista još jednom.
             preventClicks: true,
             preventClicksPropagation: true,
