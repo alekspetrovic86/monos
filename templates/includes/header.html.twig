@@ -76,39 +76,6 @@
 <header data-action="keydown.esc@document->menu#close"
         class="pointer-events-none fixed inset-y-0 left-[var(--container-offset)] z-50 w-[min(100%,1440px)]">
 
-    {# ── Logo / CLOSE ───────────────────────────────────────────── #}
-    {# Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371). #}
-    {# Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). Oba natpisa su na span-u (data-label-*) da bi
-       kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
-    {% set _toggle_class = 'pointer-events-auto absolute cursor-pointer text-nav
-                   hover:underline focus-visible:underline
-                   right-[4px] bottom-[68px]
-                   lg:right-[2px] lg:bottom-auto lg:top-[314px]' ~ _mobile_hidden %}
-    {% if _info %}
-        {# Information: CLOSE je LINK na listu (koren jezika) — Information bez menija nema smisla (zone sede u kolonama
-           menija). scroll-memory#carry: lista ostaje na istom skrolu sa istom raširenom stavkom. Bez JS-a: obična navigacija. #}
-        <a href="{{ sulu_content_root_path() }}"
-           data-menu-target="toggle"
-           data-controller="scroll-memory"
-           data-action="scroll-memory#carry"
-           class="{{ _toggle_class }}">
-            <span data-menu-target="logoLabel"
-                  data-label-open="{{ 'app.menu.close'|trans }}"
-                  data-label-closed="Monos">{{ 'app.menu.close'|trans }}</span>
-        </a>
-    {% else %}
-        <button type="button"
-                data-menu-target="toggle"
-                data-action="menu#toggle"
-                aria-label="{{ 'app.menu.toggle'|trans }}"
-                aria-controls="menu-nav"
-                class="{{ _toggle_class }}">
-            <span data-menu-target="logoLabel"
-                  data-label-open="{{ 'app.menu.close'|trans }}"
-                  data-label-closed="Monos">Monos</span>
-        </button>
-    {% endif %}
-
     {# ── Reset ──────────────────────────────────────────────────── #}
     {# Desktop: L2 T314, 14px/500 tracked. Mobile: L4 T712, 10px/200 (u-fine). Koren TEKUĆEG jezika (/, /en, /ja). #}
     {# z-10: mobilni overlay (375×728) je kasniji sibling i bez ovoga se crta PREKO Reseta (y711–728). #}
@@ -246,3 +213,39 @@
         </div>
     {% endif %}
 </header>
+
+{# ── Logo / CLOSE ─────────────────────────────────────────────────────────────────────────────────
+   JEDINI element menija koji stoji VAN <header>-a — ovo je direktno dete <body>-ja, kao kod
+   archiveforspace.com. Razlog je `mix-blend-mode: difference` na mobilnom (main.scss): natpis mora da se
+   meša sa stranicom iza sebe, a `position: fixed` na headeru pravi stacking context u kome mešanja nema.
+   Izmereno: unutar headera natpis nad belim ostaje beo — dakle nevidljiv. Položaj i slojevitost su u
+   `.menu-toggle` (desna ivica KONTEJNERA, ne prozora; z-index iznad bele ploče menija).
+   Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371).
+   Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). Oba natpisa su na span-u (data-label-*) da bi
+   kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
+{% set _toggle_class = 'menu-toggle cursor-pointer text-nav
+               hover:underline focus-visible:underline' ~ _mobile_hidden %}
+{% if _info %}
+    {# Information: CLOSE je LINK na listu (koren jezika) — Information bez menija nema smisla (zone sede u kolonama
+       menija). scroll-memory#carry: lista ostaje na istom skrolu sa istom raširenom stavkom. Bez JS-a: obična navigacija. #}
+    <a href="{{ sulu_content_root_path() }}"
+       data-menu-target="toggle"
+       data-controller="scroll-memory"
+       data-action="scroll-memory#carry"
+       class="{{ _toggle_class }}">
+        <span data-menu-target="logoLabel"
+              data-label-open="{{ 'app.menu.close'|trans }}"
+              data-label-closed="Monos">{{ 'app.menu.close'|trans }}</span>
+    </a>
+{% else %}
+    <button type="button"
+            data-menu-target="toggle"
+            data-action="menu#toggle"
+            aria-label="{{ 'app.menu.toggle'|trans }}"
+            aria-controls="menu-nav"
+            class="{{ _toggle_class }}">
+        <span data-menu-target="logoLabel"
+              data-label-open="{{ 'app.menu.close'|trans }}"
+              data-label-closed="Monos">Monos</span>
+    </button>
+{% endif %}
