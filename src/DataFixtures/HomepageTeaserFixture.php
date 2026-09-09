@@ -19,6 +19,8 @@ use Sulu\Component\DocumentManager\DocumentManager;
  */
 final readonly class HomepageTeaserFixture implements DocumentFixtureInterface
 {
+    use SkippableFixture;
+
     private const WEBSPACE = ProjectPagesFixture::WEBSPACE;
     private const LOCALES = ProjectPagesFixture::LOCALES;
 
@@ -72,6 +74,10 @@ final readonly class HomepageTeaserFixture implements DocumentFixtureInterface
 
     public function load(DocumentManager $documentManager): void
     {
+        if ($this->fixturesDisabled()) {
+            return;
+        }
+
         $mediaIds = $this->media->mediaIds(self::IMAGES);
 
         foreach (self::LOCALES as $locale) {

@@ -23,6 +23,8 @@ use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
  */
 final class NavigationPagesFixture implements DocumentFixtureInterface
 {
+    use SkippableFixture;
+
     private const LOCALES = ProjectPagesFixture::LOCALES;
     private const CONTENTS_PATH = ProjectPagesFixture::CONTENTS_PATH;
     private const NAV_CONTEXT = 'main';
@@ -45,6 +47,10 @@ final class NavigationPagesFixture implements DocumentFixtureInterface
 
     public function load(DocumentManager $documentManager): void
     {
+        if ($this->fixturesDisabled()) {
+            return;
+        }
+
         $material = $this->page($documentManager, self::CONTENTS_PATH, 'material', '/material', 'Material', 'default', []);
 
         // „All" = interni link na naslovnu: navigacija dobija URL cilja (ContentMapper zamenjuje RL za interne linkove).

@@ -27,6 +27,8 @@ use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
  */
 final readonly class ProjectPagesFixture implements DocumentFixtureInterface
 {
+    use SkippableFixture;
+
     public const WEBSPACE = 'monos';
     public const LOCALES = ['sr', 'en', 'ja'];
     public const CONTENTS_PATH = '/cmf/' . self::WEBSPACE . '/contents';
@@ -181,6 +183,10 @@ final readonly class ProjectPagesFixture implements DocumentFixtureInterface
 
     public function load(DocumentManager $documentManager): void
     {
+        if ($this->fixturesDisabled()) {
+            return;
+        }
+
         foreach (self::PAGES as $nodeName => $page) {
             $project = $this->page(
                 $documentManager,

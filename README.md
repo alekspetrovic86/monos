@@ -36,20 +36,53 @@ učitava fixtures. Za rad na stilovima koristi `yarn encore dev --watch`.
 ## Produkcija
 
 **`sulu:build prod` je ZABRANJEN na produkciji.** Sulu-ov `prod` build target
-uključuje `fixtures`: učitao bi lorem projekte i prepisao `blocks` naslovne
-stranice (sr/en/ja) — sve što je urednik uneo bi nestalo. Fixture klase su zato
-registrovane samo u `dev` i `test` kontejneru (`config/services.yaml`), ali
-target se i dalje ne pokreće — koristi eksplicitne targete:
-
-```bash
-php bin/console sulu:build database phpcr phpcr_migrations system_collections security --env=prod
-```
-
-Provera da fixture nisu u prod kontejneru:
+uključuje `fixtures`. Naše fixture klase su zato registrovane samo u `dev` i
+`test` kontejneru (`config/services.yaml`) — u produkciji ih nema:
 
 ```bash
 php bin/console debug:container --env=prod | grep -i "App\\DataFixtures"   # ništa
 ```
+
+Produkcijski build:
+
+```bash
+composer build-clean-prod
+```
+
+Skripta prvo proveri tu činjenicu i STANE ako naša fixture klasa ipak dospe u
+prod kontejner, pa tek onda pusti build.
+
+**Ne pokušavaj da izbegneš `fixtures` builder.** Taj target pored naših
+dokumenata učitava i Sulu-ove ORM fixture — tipove medija, kolekcija i
+bezbednosti. Bez njih `system_collections` pukne sa
+`Collection Type with the ID 2 not found`. Provereno: `security`, `user` i
+`system_collections` svi zavise od `fixtures`, pa ih `--nodeps` obara.
+
+Takođe: `sulu:build` prima **jedan** target. Lista od više targeta pukne sa
+`Too many arguments to "sulu:build" command`.
+
+### Prazna osnova lokalno
+
+```bash
+composer build-clean
+```
+
+BRIŠE lokalnu bazu i gradi praznu osnovu: Sulu-ovi referentni podaci ostaju,
+naš lorem sadržaj se preskače. Radi preko `APP_FIXTURES=0`
+(`src/DataFixtures/SkippableFixture.php`).
+
+Bez tog prekidača `sulu:build dev --destroy` na praznoj bazi **padne**:
+`FixtureMedia` traži da Sulu korisnik već postoji, a u `dev` targetu se
+`fixtures` izvršava pre `user`-a.
+
+Povratak na test podatke:
+
+```bash
+php bin/console sulu:document:fixtures:load --no-interaction
+```
+
+`public/uploads` se pri tome ne čisti — brisanjem baze nestaju zapisi o
+medijima, a fajlovi ostaju na disku kao siročići.
 
 ## Jezici
 

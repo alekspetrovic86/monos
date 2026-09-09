@@ -131,6 +131,13 @@
             "Composer\\Config::disableProcessTimeout",
             "@php -S 127.0.0.1:8000 -t public config/router.php"
         ],
+        "build-clean": [
+            "APP_FIXTURES=0 php bin/console sulu:build dev --destroy --no-interaction"
+        ],
+        "build-clean-prod": [
+            "@php bin/console debug:container --env=prod | grep -q 'App\\\\DataFixtures' && { echo 'PREKID: App\\\\DataFixtures je u prod kontejneru'; exit 1; } || true",
+            "@php bin/console sulu:build prod --no-interaction --env=prod"
+        ],
         "bootstrap-test-environment": [
             "@php bin/adminconsole doctrine:database:drop --if-exists --force --env test",
             "@php bin/adminconsole doctrine:database:create --env test",
@@ -209,5 +216,9 @@
             "allow-contrib": true,
             "require": "7.3.*"
         }
+    },
+    "scripts-descriptions": {
+        "build-clean": "BRISE lokalnu bazu, pa isprazni sve dokumente — prazna osnova za rucni unos.",
+        "build-clean-prod": "Produkcijski build. Prvo proveri da nasi fixture nisu u prod kontejneru, pa stane ako jesu."
     }
 }
