@@ -1,0 +1,55 @@
+{# PROJECT TEASER — stavka liste projekata (F1 22:75 / F2 12:66 desktop 1440×900; F14 51:155 / F15 51:174 mobile 375×812).
+   Dva stanja, prekidač je `data-expanded` na <article> (postavlja project-list kontroler):
+     obična      slika 480 (mobile 292); ispod, ako postoji, dugi opis (razmak 14). Naslov/podnaslov/„Enter" se ne vide.
+     istaknuta   slika 540 (mobile 375 = puna širina), 48px (mobile 93) ispod naslov (3 reda, 392), 16px ispod podnaslov (356)
+                 i „Enter" desno poravnat na desnu ivicu slike (780 = 240 + 540). Dugi opis ostaje ISPOD toga.
+   Razmaci između stavki: slika → sledeća slika 2px (F2: prethodna do 22, sledeća od 24); tekst → sledeća slika 16px.
+   Slika je link na projekat: prvi klik širi (kontroler ga preseče), drugi klik ulazi — na mobilnom „Enter" u Figmi ne postoji.
+   Bez JS-a: detalji su vidljivi (CSS ih krije samo do connect()-a), slika vodi pravo na projekat.
+   Mirno stanje doslovno Figma: bez podvlačenja — podvlačenje samo na hover/focus-visible. Slika zadržava svoj format (h-auto).
+   Slika je umanjeni Sulu format (includes/picture.html.twig), ne original: obična 480/292 (2x 960/584), istaknuta
+   540/375 (2x 1080/750) — `sizes` prati stanje (project-list ga menja iz data-sizes / data-sizes-expanded). #}
+{% set _href = content.link|default('/') %}
+{% set _label = content.title|default('')|split("\n")|first|trim %}
+
+{# data-scroll-memory-id: po njemu scroll-memory vraća raširenu stavku pri povratku sa projekta. #}
+<article data-block="project-teaser"
+         data-project-list-target="item"
+         data-scroll-memory-id="{{ _href }}"
+         data-sizes="(min-width: 1024px) 480px, 292px"
+         data-sizes-expanded="(min-width: 1024px) 540px, 375px"
+         class="group mt-[2px] first:mt-0 lg:ml-[240px]">
+
+    {# Okvir slike — širina je ono što se animira (480→540 / 292→375). #}
+    <a href="{{ _href }}"
+       data-project-list-target="trigger"
+       data-action="project-list#activate"
+       aria-expanded="false"
+       aria-label="{{ _label|default('app.teaser.enter'|trans) }}"
+       class="block w-[min(292px,100%)] group-data-expanded:w-full lg:w-[480px] lg:group-data-expanded:w-[540px]">
+        {{ include('includes/picture.html.twig', {
+            image: content.image,
+            widths: [292, 375, 480, 540, 584, 750, 960, 1080],
+            sizes: '(min-width: 1024px) 480px, 292px',
+            class: 'block h-auto w-full',
+        }, with_context = false) }}
+    </a>
+
+    {# Detalji — samo u istaknutom stanju. pb 14 + mt 2 sledeće stavke = 16 do sledeće slike. #}
+    <div data-project-list-target="detail"
+         class="project-teaser__detail mx-[4px] pb-[14px] lg:mx-0 lg:w-[540px]">
+        <p class="mt-[93px] max-w-[392px] whitespace-pre-line lg:mt-[48px]">{{ content.title }}</p>
+
+        <div class="mt-[16px] flex justify-between gap-[16px]">
+            <p class="max-w-[356px]">{{ content.subtitle }}</p>
+            <a href="{{ _href }}"
+               class="hidden shrink-0 hover:underline focus-visible:underline lg:block">{{ 'app.teaser.enter'|trans }}</a>
+        </div>
+    </div>
+
+    {# Dugi opis (F1: L240 T928, 540 široko) — vidljiv u oba stanja. Oznaka „1.2" je deo teksta.
+       Obično: 14 ispod slike; istaknuto: 2 ispod detalja (14 + 2 = 16). Ako ga nema, sledeća slika dolazi odmah (2px). #}
+    {% if content.description|default %}
+        <div class="rich-text mx-[4px] mt-[14px] max-w-[600px] pb-[14px] group-data-expanded:mt-[2px] lg:mx-0 lg:w-[540px] lg:max-w-none">{{ content.description|raw }}</div>
+    {% endif %}
+</article>

@@ -4,53 +4,63 @@
           xmlns:xi="http://www.w3.org/2001/XInclude"
           xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
     <key>default</key>
+
     <view>pages/default</view>
-    <controller>Sulu\Bundle\WebsiteBundle\Controller\DefaultController::indexAction</controller>
-    <cacheLifetime>86400</cacheLifetime>
+    <!-- App kontroler: `in_preparation` → 404 (naziv ostaje u meniju, ruta nije javna). -->
+    <controller>App\Controller\DefaultController::indexAction</controller>
+    <cacheLifetime>604800</cacheLifetime>
+
     <meta>
-        <title lang="sr">Default</title>
         <title lang="en">Default</title>
     </meta>
+
     <properties>
         <property name="title" type="text_line" mandatory="true">
             <meta>
-                <title lang="sr">Naslov</title>
                 <title lang="en">Title</title>
             </meta>
             <params>
                 <param name="headline" value="true"/>
             </params>
+
             <tag name="sulu.rlp.part"/>
         </property>
+
         <property name="url" type="resource_locator" mandatory="true">
             <meta>
-                <title lang="sr">Putanja</title>
                 <title lang="en">Resourcelocator</title>
             </meta>
+
             <tag name="sulu.rlp"/>
         </property>
 
+        <!-- Ruta u pripremi: u meniju se vidi samo naziv — svetlije sivo, bez linka (header.html.twig). -->
+        <property name="in_preparation" type="checkbox">
+            <meta>
+                <title lang="en">In preparation</title>
+                <title lang="sr">U pripremi</title>
+                <title lang="ja">準備中</title>
+                <info_text lang="en">Shown in the menu by name only — greyed out, not a link.</info_text>
+                <info_text lang="sr">U meniju se vidi samo naziv — sivo, bez linka.</info_text>
+            </meta>
+        </property>
         <section name="content">
-			<meta>
-				<title lang="sr">Kontent</title>
-				<title lang="en">Content</title>
-			</meta>
-			<properties>
-				<block name="blocks" default-type="gallery" minOccurs="0">
-					<meta>
-						<title lang="sr">Blocks</title>
-						<title lang="en">Blocks</title>
-					</meta>
-					<types>
-                        <xi:include href="../includes/blocks/gallery.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/contact.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
-                        <xi:include href="../includes/blocks/comming-soon.xml"
-                                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
+            <meta>
+                <title lang="en">Content</title>
+                <title lang="sr">Sadržaj</title>
+            </meta>
+            <properties>
+                <block name="blocks" default-type="project-teaser" minOccurs="0">
+                    <meta>
+                        <title lang="en">Blocks</title>
+                        <title lang="sr">Blokovi</title>
+                    </meta>
+                    <types>
+                        <xi:include href="../includes/blocks/project-teaser.xml"
+                                    xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)xpointer(/sulu:properties/sulu:block/sulu:types/sulu:type)"/>
                     </types>
-				</block>
-			</properties>
-		</section>
+                </block>
+            </properties>
+        </section>
     </properties>
 </template>

@@ -5,25 +5,26 @@
  */
 
 // Vendor CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'swiper/css/bundle';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Tailwind with CSS Variables
+import './styles/tailwind.css';
+
+// Swiper (slajder na stranici projekta) — osnovni CSS, bez modula
+import 'swiper/css';
+
+// GLightbox (expand view na stranici projekta) — osnovni CSS; skin „monos" je u main.scss
+import 'glightbox/dist/css/glightbox.css';
 
 // Main SCSS
 import './styles/app.scss';
 
 // Bootstrap JS (optional – keep only if needed)
-import 'bootstrap';
-import "./stimulus/bootstrap";
+// import 'bootstrap';
 
 // Stimulus auto-loader
-import * as Turbo from "@hotwired/turbo";
-
-// Optional debugging
-window.Turbo = Turbo;
-
-// Enable Turbo navigation
-Turbo.session.drive = true;
+import './stimulus/bootstrap';
 
 // Your custom JS (site-specific logic)
 import './main.js';

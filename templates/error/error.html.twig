@@ -1,38 +1,44 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <section class="section-error">
-        <div class="section__title">
-            <h2>
-                {{ 'app.error'|trans }} {{ status_code }}
-            </h2>
 
-            {# Determine translation key based on status code with fallback #}
-            {% set key = 'app.http_' ~ status_code %}
-            {% set translated = key|trans({}, 'messages', app.request.locale) %}
-            {% if translated == key %}
-                {% set translated = 'app.http_default'|trans({}, 'messages', app.request.locale) %}
-            {% endif %}
+{# ── Resolve title & description via translation keys with fallback ── #}
+{% set titleKey = 'app.http_' ~ status_code %}
+{% set titleTrans = titleKey|trans({}, 'messages', app.request.locale) %}
+{% if titleTrans == titleKey %}
+    {% set titleTrans = 'app.http_default'|trans({}, 'messages', app.request.locale) %}
+{% endif %}
 
-            {# <div class="subtitle">{{ translated }}</div> #}
-            <h2 class="change-font-conthrax">
-                {{ translated }}
-            </h2>
+{% set descKey = 'app.error_desc_' ~ status_code %}
+{% set descTrans = descKey|trans({}, 'messages', app.request.locale) %}
+{% if descTrans == descKey %}
+    {% set descTrans = 'app.error_desc_default'|trans({}, 'messages', app.request.locale) %}
+{% endif %}
 
-            {# Show technical message only in dev/debug mode #}
-            {# {% if app.debug and exception is defined %}
-                <div class="description">
-                    {{ exception.message }}
-                </div>
-            {% endif %} #}
+{% set is5xx = status_code >= 500 %}
 
-            <div class="error-button">
-                <button type="button" class="btn btn-primary">
-                    <a href="{{ sulu_content_root_path('/') }}">
-                        <span>{{ 'app.return_home'|trans }}</span>
-                    </a>
-                </button>
-            </div>
-        </div>
-    </section>
+{# Monos: belo, crn tekst 14px/16px, bez zaobljenja i senki. Nema Figma dizajna
+   za ovu stranicu — tekst sedi na istoj osi kao header (desktop L2/T314,
+   mobile L4), a donji padding ostavlja mesto za mobilni meni na dnu. #}
+<section data-controller="error"
+         class="min-h-screen bg-paper text-ink
+                px-[4px] pt-[16px] pb-[116px]
+                lg:pl-[2px] lg:pr-[95px] lg:pt-[314px] lg:pb-[80px]">
+
+    <p class="u-tracked">{{ status_code }}</p>
+    <h1 class="mt-4">{{ titleTrans }}</h1>
+    <p class="mt-4 max-w-[320px]">{{ descTrans }}</p>
+
+    <div class="mt-8 flex gap-4">
+        <a href="{{ sulu_content_root_path('/') }}"
+           class="u-tracked hover:underline hover:underline-offset-2 focus-visible:underline focus-visible:underline-offset-2">{{ 'app.go_home'|trans }}</a>
+
+        {% if is5xx %}
+            <button type="button"
+                    class="err-refresh-btn u-tracked hover:underline hover:underline-offset-2 focus-visible:underline focus-visible:underline-offset-2 cursor-pointer">{{ 'app.try_again'|trans }}</button>
+        {% endif %}
+    </div>
+
+</section>
+
 {% endblock %}

@@ -1,139 +1,220 @@
-{# HEADER #}
-<header class="header" id="site-header">
-    <div class="nav-logo">
-        <a href="{{ sulu_content_root_path('/') }}" data-action="click->remove-scroll-memory#clear">Monos.</a>
-    </div>
+{# Monos header — logo + meni. Desktop: desno, baseline 314px. Mobile: dno. #}
+{# Ponašanje: menu_controller.ts (na <body>): toggle, select, close/Esc, inert sadržaja. #}
+{# Bez JS-a: nav, Reset i podmeniji su vidljivi (F2') — `hidden` postavlja kontroler, ne server. #}
+{# Mirno stanje je doslovno Figma (bez podvlačenja); podvlačenje samo na hover/focus-visible. #}
+{#
+   DVA NIVOA iz Sulu navigacije (kontekst „main", dubina 2):
+     nivo 1   stranice sa kontekstom „main" (Material, Press, Information …) + jezik (nije stranica, uvek poslednji)
+     nivo 2   deca stavke nivoa 1 — Material → „All" (interni link na naslovnu); kasnije Architecture, Interior…
+   Stavka sa decom je dugme koje otvara podmeni (najviše jedan otvoren); bez dece je link.
+   `in_preparation` (checkbox na stranici): naziv se vidi svetlije sivo i NIJE link — na oba nivoa.
 
-    <nav class="header__nav" aria-label="Primary">
-        <div class="d-block d-md-none text-end">
-            <div class="locales">
-                {% for localization in localizations %}
-                    {% if localization.locale != app.request.locale %}
+   INFORMATION (uključeno sa `information`): meni je otvoren, a tri tekstualne zone su podmeni sa ključem „information":
+     uvod      iznad navigacije   L796 T10, 642 široko (desna kolona kao na stranici projekta)
+     kontakt   u koloni podmenija T394 R1345 (isti flex slot kao deca Material-a)
+     pravno    dole               T666 R1345 (Terms of use, copyright, „Code by Seiora")
+   Klik na Material zamenjuje kontakt njegovom decom, kao svaki podmeni. Na mobilnom (F19) menija nema:
+   umesto logo/CLOSE stoji „Back", a zone su u toku stranice (pages/information.html.twig).
+#}
 
-                        {% if localization.locale == 'en' %}
-                            {% set label = 'en' %}
-                        {% elseif localization.locale == 'sr' %}
-                            {% set label = 'sr' %}
-                        {% endif %}
+{# Jezici: sve lokalizacije stranice osim aktivne. Van Sulu konteksta (error stranice)
+   `localizations` ne postoji — tada koren svake lokalizacije. #}
+{% set localeNames = { sr: 'Српски', en: 'English', ja: '日本語' } %}
+{% set currentLocale = app.request.locale|split('_')[0] %}
+{% set localeLinks = [] %}
+{% if localizations|default([]) is not empty %}
+    {% for localization in localizations %}
+        {% set code = localization.locale|split('_')[0] %}
+        {% if code != currentLocale %}
+            {% set localeLinks = localeLinks|merge([{ label: localeNames[code]|default(code|capitalize), href: localization.url }]) %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% for code, label in localeNames %}
+        {% if code != currentLocale %}
+            {% set localeLinks = localeLinks|merge([{ label: label, href: sulu_content_root_path(code) }]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
-                        <a href="{{ localization.url }}" class="footer__lang-link" data-action="click->remove-scroll-memory#clear">
-                            {{ label }}
-                        </a>
+{# Stavke iz Sulu stabla. `in_preparation` nije deo navigacionog upita, pa se čita po stranici (jedno lako učitavanje
+   po stavci — tri-četiri po zahtevu, iza HTTP keša). Van Sulu zahteva (error stranice) stabla nema. #}
+{% set navItems = [] %}
+{% if app.request.attributes.has('_sulu') %}
+    {% for node in sulu_navigation_root_tree('main', 2) %}
+        {% set flags = sulu_content_load(node.uuid, ['in_preparation']) %}
+        {% set children = [] %}
+        {% for child in node.children|default([]) %}
+            {% set childFlags = sulu_content_load(child.uuid, ['in_preparation']) %}
+            {% set children = children|merge([{
+                label: child.title,
+                href: sulu_content_path(child.url),
+                prep: childFlags.content.in_preparation|default(false),
+            }]) %}
+        {% endfor %}
+        {% set navItems = navItems|merge([{
+            key: node.uuid,
+            label: node.title,
+            href: sulu_content_path(node.url),
+            prep: flags.content.in_preparation|default(false),
+            current: node.uuid == uuid|default(''),
+            children: children,
+        }]) %}
+    {% endfor %}
+{% endif %}
 
+{% set _info = information|default(null) %}
+{# Information na mobilnom (F19): bez logo/CLOSE, Reset, nav i overlay-a — samo „Back". #}
+{% set _mobileHidden = _info ? ' max-lg:hidden' : '' %}
+
+{# Fiksiran, ali prati kontejner: levo = --container-offset, širina najviše 1440 (main.scss). #}
+<header data-action="keydown.esc@document->menu#close"
+        class="pointer-events-none fixed inset-y-0 left-[var(--container-offset)] z-50 w-[min(100%,1440px)]">
+
+    {# ── Logo / CLOSE ───────────────────────────────────────────── #}
+    {# Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371). #}
+    {# Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). Oba natpisa su na span-u (data-label-*) da bi
+       kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
+    <button type="button"
+            data-menu-target="toggle"
+            data-action="menu#toggle"
+            aria-label="{{ 'app.menu.toggle'|trans }}"
+            aria-controls="menu-nav"
+            class="pointer-events-auto absolute cursor-pointer text-nav
+                   hover:underline focus-visible:underline
+                   right-[4px] bottom-[68px]
+                   lg:right-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
+        <span data-menu-target="logoLabel"
+              data-label-open="{{ 'app.menu.close'|trans }}"
+              data-label-closed="Monos">Monos</span>
+    </button>
+
+    {# ── Reset ──────────────────────────────────────────────────── #}
+    {# Desktop: L2 T314, 14px/500 tracked. Mobile: L4 T712, 10px/200 (u-fine). Koren TEKUĆEG jezika (/, /en, /ja). #}
+    {# z-10: mobilni overlay (375×728) je kasniji sibling i bez ovoga se crta PREKO Reseta (y711–728). #}
+    <a href="{{ sulu_content_root_path() }}"
+       data-menu-target="reset"
+       class="pointer-events-auto absolute z-10 u-tracked
+              hover:underline focus-visible:underline
+              left-[4px] bottom-[84px]
+              lg:left-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
+        <span class="u-fine lg:hidden">{{ 'app.menu.reset_short'|trans }}</span>
+        <span class="hidden lg:inline">{{ 'app.menu.reset'|trans }}</span>
+    </a>
+
+    {% if _info %}
+        {# ── „Back" (samo Information, mobile) — na mestu logoa: R371 T728. Vraća listu kako je ostavljena (scroll-memory). #}
+        <a href="{{ sulu_content_root_path() }}"
+           data-controller="scroll-memory"
+           data-action="scroll-memory#back"
+           class="pointer-events-auto absolute right-[4px] bottom-[68px]
+                  hover:underline focus-visible:underline
+                  lg:hidden">{{ 'app.menu.back'|trans }}</a>
+    {% endif %}
+
+    {# ── Beli overlay (samo mobile, 375×728 na T0) ──────────────── #}
+    {# Ostaje `hidden` sa servera: bez JS-a ne sme da zazida sadržaj bez načina da se skloni.
+       pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova. #}
+    <div data-menu-target="overlay"
+         hidden
+         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobileHidden }}"></div>
+
+    {% if _info %}
+        {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information". #}
+        <div data-menu-target="submenu"
+             data-menu-submenu-key="information"
+             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] w-[642px] max-lg:hidden">
+            {{- content.intro_text|default('')|raw -}}
+        </div>
+    {% endif %}
+
+    {# ── Navigacija ─────────────────────────────────────────────── #}
+    {# Desktop: desna ivica 1345 (1440−95), T314, korak 16px.
+       Mobile: desna ivica 371, redovi T648/664/680/696 → dno 712 = 812−100.
+       Flex kolona sa razmakom 16px: podmeni je na desktopu ISPOD stavki (T394),
+       na mobilnom IZNAD (order-first, dno 632). Desna ivica ista kao nav. #}
+    <nav id="menu-nav"
+         data-menu-target="nav"
+         aria-label="{{ 'app.menu.nav'|trans }}"
+         class="pointer-events-auto absolute flex flex-col gap-[16px] text-right
+                right-[4px] bottom-[100px]
+                lg:right-[95px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
+
+        {# ── Nivo 1 ─────────────────────────────────────────────── #}
+        <div>
+            {% for item in navItems %}
+                {% if item.prep %}
+                    {# U pripremi: naziv se vidi, ponašanje ne postoji. Nijansa = ink token na 40% (nema sivog tokena). #}
+                    <span class="block text-ink/40">{{ item.label }}<span class="sr-only"> ({{ 'app.menu.in_preparation'|trans }})</span></span>
+                {% elseif item.children is not empty %}
+                    <button type="button"
+                            data-menu-target="item"
+                            data-menu-key-param="{{ item.key }}"
+                            data-action="menu#select"
+                            aria-controls="menu-submenu-{{ item.key }}"
+                            class="block w-full cursor-pointer text-right
+                                   hover:underline focus-visible:underline">{{ item.label }}</button>
+                {% else %}
+                    <a href="{{ item.href }}"
+                       {% if item.current %}aria-current="page"{% endif %}
+                       class="block hover:underline focus-visible:underline">{{ item.label }}</a>
+                {% endif %}
+            {% endfor %}
+            <button type="button"
+                    data-menu-target="item"
+                    data-menu-key-param="locale"
+                    data-action="menu#select"
+                    aria-controls="menu-submenu-locale"
+                    class="block w-full cursor-pointer text-right
+                           hover:underline focus-visible:underline">{{ currentLocale|capitalize }}</button>
+        </div>
+
+        {# ── Nivo 2 — podmeniji; sa JS-om otvoren je najviše jedan ── #}
+        {% if _info %}
+            {# Information: kontakt u slotu podmenija (T394 R1345) — podaci iz settings snippet-a + contact_text stranice. #}
+            <div id="menu-submenu-information"
+                 data-menu-target="submenu"
+                 data-menu-submenu-key="information"
+                 class="max-lg:hidden">
+                {% include 'includes/information/contact.html.twig' with {
+                    settings: _info.settings,
+                    text: content.contact_text|default(''),
+                } only %}
+            </div>
+        {% endif %}
+        {% for item in navItems|filter(item => item.children is not empty and not item.prep) %}
+            <div id="menu-submenu-{{ item.key }}"
+                 data-menu-target="submenu"
+                 data-menu-submenu-key="{{ item.key }}"
+                 class="order-first lg:order-none">
+                {% for child in item.children %}
+                    {% if child.prep %}
+                        <span class="block text-ink/40">{{ child.label }}<span class="sr-only"> ({{ 'app.menu.in_preparation'|trans }})</span></span>
+                    {% else %}
+                        <a href="{{ child.href }}" class="block hover:underline focus-visible:underline">{{ child.label }}</a>
                     {% endif %}
                 {% endfor %}
             </div>
-        </div>
-
-        {# ------------------- #}
-        {# Navigation tree      #}
-        {# ------------------- #}
-        {% set navTree = sulu_navigation_root_tree('main', 2, true) %}
-        {% set activeParent = null %}
-        {% set activeSecondLevel = null %}
-
-        {# ------------------- #}
-        {# Detect active child or grandchild #}
-        {# ------------------- #}
-        {% for parent in navTree %}
-            {% for child in parent.children %}
-                {% if sulu_navigation_is_active(request.resourceLocator, child.url) %}
-                    {% set activeParent = parent %}
-                    {% set activeSecondLevel = child %}
-                {% endif %}
-
-                {% if child.children is defined %}
-                    {% for grandchild in child.children %}
-                        {% if sulu_navigation_is_active(request.resourceLocator, grandchild.url) %}
-                            {% set activeParent = parent %}
-                            {% set activeSecondLevel = child %}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
         {% endfor %}
-
-        <div class="menu-wrapper">
-
-            {# ------------------- #}
-            {# MOBILE: Show second-level menu if child/grandchild active #}
-            {# ------------------- #}
-            {% if activeSecondLevel %}
-                <ul class="nav-mob-second d-block d-md-none">
-                    {% for item in activeParent.children %}
-                        {% set itemUrl = sulu_content_path(item.url, item.webspaceKey) %}
-                        {% set isActive = sulu_navigation_is_active(request.resourceLocator, item.url) %}
-                        <li class="nav-item-mob">
-                            <a href="{{ itemUrl }}" class="{{ isActive ? 'active nav-item-active' : '' }}" data-action="click->remove-scroll-memory#clear">
-                                {{ item.title|default }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-            {# ------------------- #}
-            {# MOBILE: Main nav always visible, mark parent active if any child/grandchild is active #}
-            {# ------------------- #}
-            <ul class="nav-mob-main d-block d-md-none">
-                {% for parent in navTree %}
-                    {% set parentUrl = sulu_content_path(parent.url, parent.webspaceKey) %}
-                    {% set isActiveParent = sulu_navigation_is_active(request.resourceLocator, parent.url) %}
-
-                    {# If any child or grandchild is active, parent becomes active #}
-                    {% for child in parent.children %}
-                        {% if sulu_navigation_is_active(request.resourceLocator, child.url) %}
-                            {% set isActiveParent = true %}
-                        {% endif %}
-                        {% if child.children is defined %}
-                            {% for grandchild in child.children %}
-                                {% if sulu_navigation_is_active(request.resourceLocator, grandchild.url) %}
-                                    {% set isActiveParent = true %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-
-                    <li class="nav-item-mob">
-                        <a href="{{ parentUrl }}" class="{{ isActiveParent ? 'active nav-item-active' : '' }}" data-action="click->remove-scroll-memory#clear">
-                            {{ parent.title|default }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-
-            {# ------------------- #}
-            {# DESKTOP #}
-            {# ------------------- #}
-            <ul class="nav-desk d-none d-md-flex">
-                {% for parent in sulu_navigation_root_tree('main', 2, true) %}
-                    {% set parentUrl = sulu_content_path(parent.url, parent.webspaceKey) %}
-
-                    {# Detect if parent itself is active #}
-                    {% set isActiveParent = sulu_navigation_is_active(request.resourceLocator, parent.url) %}
-
-                    {# Detect active child or grandchild #}
-                    {% for child in parent.children %}
-                        {% if sulu_navigation_is_active(request.resourceLocator, child.url) %}
-                            {% set isActiveParent = true %}
-                        {% endif %}
-
-                        {% if child.children is defined %}
-                            {% for grandchild in child.children %}
-                                {% if sulu_navigation_is_active(request.resourceLocator, grandchild.url) %}
-                                    {% set isActiveParent = true %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-
-                    <li class="nav-item">
-                        <a href="{{ parentUrl }}" class="{{ isActiveParent ? 'active nav-item-active' : '' }}" data-action="click->remove-scroll-memory#clear">
-                            {{ parent.title|default }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+        <div id="menu-submenu-locale"
+             data-menu-target="submenu"
+             data-menu-submenu-key="locale"
+             class="order-first lg:order-none">
+            {% for link in localeLinks %}
+                <a href="{{ link.href }}" class="block hover:underline focus-visible:underline">{{ link.label }}</a>
+            {% endfor %}
         </div>
     </nav>
+
+    {% if _info %}
+        {# ── Information: pravno dole — T666 R1345 (F5): Terms of use, copyright, „Code by Seiora" (+ legal_text). #}
+        <div data-menu-target="submenu"
+             data-menu-submenu-key="information"
+             class="pointer-events-auto absolute right-[95px] top-[666px] text-right max-lg:hidden">
+            {% include 'includes/information/legal.html.twig' with {
+                settings: _info.settings,
+                text: content.legal_text|default(''),
+            } only %}
+        </div>
+    {% endif %}
 </header>

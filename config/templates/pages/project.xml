@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<!-- project: stranica projekta. Figma F7/F8/F9/F10 (16:2, 17:21, 17:39, 17:52) desktop, F21–F23 (63:274, 63:285, 63:295) mobile.
+     Child naslovne. Stranica crteža (F11 17:67, F24 63:311) je child projekta sa ISTIM template-om, drugim slikama. -->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <key>project</key>
+
+    <view>pages/project</view>
+    <controller>Sulu\Bundle\WebsiteBundle\Controller\DefaultController::indexAction</controller>
+    <cacheLifetime>86400</cacheLifetime>
+
+    <meta>
+        <title lang="en">Project</title>
+        <title lang="sr">Projekat</title>
+        <title lang="ja">プロジェクト</title>
+    </meta>
+
+    <properties>
+        <!-- Kao u tizeru: tri reda naslova iz Figme su prelomi koje urednik sam kuca (text_area). -->
+        <property name="title" type="text_area" mandatory="true">
+            <meta>
+                <title lang="en">Title</title>
+                <title lang="sr">Naslov</title>
+                <title lang="ja">タイトル</title>
+                <info_text lang="en">Line breaks are kept (Figma: three lines).</info_text>
+                <info_text lang="sr">Prelomi reda se čuvaju (Figma: tri reda).</info_text>
+            </meta>
+
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="resource_locator" mandatory="true">
+            <meta>
+                <title lang="en">Resourcelocator</title>
+            </meta>
+
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <section name="content">
+            <meta>
+                <title lang="en">Content</title>
+                <title lang="sr">Sadržaj</title>
+            </meta>
+            <properties>
+                <property name="images" type="media_selection" mandatory="true">
+                    <meta>
+                        <title lang="en">Images</title>
+                        <title lang="sr">Slike</title>
+                        <title lang="ja">画像</title>
+                        <info_text lang="en">Slider. Click on the left half goes back, on the right half forward. Images keep their format, aligned to the bottom edge.</info_text>
+                        <info_text lang="sr">Slajder. Klik na levu polovinu vraća, na desnu ide dalje. Slike zadržavaju format, poravnate uz donju ivicu.</info_text>
+                    </meta>
+                    <params>
+                        <param name="types" value="image"/>
+                    </params>
+                </property>
+
+                <property name="subtitle" type="text_line">
+                    <meta>
+                        <title lang="en">Subtitle</title>
+                        <title lang="sr">Podnaslov</title>
+                        <title lang="ja">サブタイトル</title>
+                        <info_text lang="en">Below the title, desktop only (Figma has no subtitle on mobile).</info_text>
+                        <info_text lang="sr">Ispod naslova, samo na desktopu (Figma na mobilnom nema podnaslov).</info_text>
+                    </meta>
+                </property>
+
+                <property name="body" type="text_editor">
+                    <meta>
+                        <title lang="en">Text</title>
+                        <title lang="sr">Tekst</title>
+                        <title lang="ja">テキスト</title>
+                        <info_text lang="en">Right of the image on desktop — longer than the frame is cut and continued by "Read more". Below the image on mobile, scrolls behind it.</info_text>
+                        <info_text lang="sr">Desno od slike na desktopu — duži od kadra se seče i nastavlja kroz „Read more". Na mobilnom ispod slike, skroluje iza nje.</info_text>
+                    </meta>
+                </property>
+            </properties>
+        </section>
+    </properties>
+</template>

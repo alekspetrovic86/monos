@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+    /* Monos — cela paleta iz Figme su četiri boje. */
+    --color-ink:   #000000;   /* primarni tekst */
+    --color-paper: #ffffff;   /* pozadina */
+    --color-nav:   #191c1e;   /* logo, CLOSE, nav akcenat */
+
+    /* Jedan tekstualni stil. Nikad se ne skalira po viewportu. */
+    --text-base: 14px;
+    --text-base--line-height: 16px;
+    --text-fine: 10px;
+    --text-fine--line-height: 16px;
+
+    /* Bez zaobljenja bilo gde. */
+    --radius-none: 0px;
+}

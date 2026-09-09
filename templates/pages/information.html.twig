@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{# INFORMATION — Figma F5 12:109 (desktop 1440×900), F19 62:240 (mobile 375×812).
+
+   DESKTOP: ista lista kao naslovna (blokovi roditelja = naslovne), meni otvoren sa podmenijem „information".
+   Zone crta header.html.twig u fiksnom sloju menija (sve su podmeni ključa „information"):
+     uvod      L796 T10  642×176   iznad navigacije, desna kolona kao tekst projekta
+     kontakt   T394 R1345          slot podmenija (Material ga zamenjuje svojom decom)
+     pravno    T666 R1345          Terms of use · copyright · (prazno) · „Code by Seiora"
+   CLOSE/Esc zatvaraju meni zajedno sa zonama — ostaje gola lista; „Information" u meniju vraća sve.
+
+   MOBILE: menija i liste nema (F19) — „Back" na mestu logoa (R371 T728, header). Zone su u toku stranice:
+     uvod      L4 T48, 367 široko (18 redova u Figmi → kraj 336)
+     kontakt   32 ispod uvoda (T368)
+     pravno    uz dno: kraj na 712 = 812−100 (mt-auto); ako je teksta više, ide ispod i stranica skroluje.
+
+   „Code by Seiora" je u Figmi samo na mobilnom — kredit je legitiman (Seiora je izradila sajt), izostanak
+   na desktopu je previd dizajnera: ide na OBE širine (includes/information/legal.html.twig). #}
+
+{% set _settings = sulu_snippet_load_by_area('webspace_settings') %}
+{% set _home = sulu_content_load_parent(uuid, ['blocks']) %}
+
+{% block body_attributes %}data-controller="menu" data-menu-open-value="true" data-menu-active-key-value="information"{% endblock %}
+
+{% block header %}
+    {% include 'includes/header.html.twig' with { information: { settings: _settings } } %}
+{% endblock %}
+
+{% block content %}
+    {# ── Mobile: zone u toku ──────────────────────────────────── #}
+    {# max-w 600: ispod lg (tableti) tekstualne zone ne prelaze 600px — spec; na 375 je i dalje puna širina (367). #}
+    <div class="flex min-h-dvh max-w-[600px] flex-col px-[4px] pt-[48px] pb-[100px] lg:hidden">
+        <div class="rich-text rich-text--tight">{{ content.intro_text|default('')|raw }}</div>
+        <div class="mt-[32px]">
+            {% include 'includes/information/contact.html.twig' with { settings: _settings, text: content.contact_text|default('') } only %}
+        </div>
+        <div class="mt-auto pt-[32px]">
+            {% include 'includes/information/legal.html.twig' with { settings: _settings, text: content.legal_text|default('') } only %}
+        </div>
+    </div>
+
+    {# ── Desktop: lista naslovne iza menija — isti kontroleri i isto podizanje kao na naslovnoj ── #}
+    <div data-controller="project-list scroll-memory"
+         data-action="click->scroll-memory#store scroll-memory:restore->project-list#restore"
+         class="project-list hidden pt-[314px] lg:block">
+        {% include 'includes/blocks.html.twig' with { content: _home.content|default({}), view: _home.view|default({}) } only %}
+    </div>
+{% endblock %}

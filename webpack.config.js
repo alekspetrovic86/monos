@@ -48,6 +48,15 @@ Encore
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
 
+    .enablePostCssLoader()
+
+    // Disable optimization for production since @tailwindcss/postcss handles CSS optimization
+    // and nested CSS syntax causes issues with cssnano
+    .configureFilenames({
+        js: '[name].[contenthash:8].js',
+        css: '[name].[contenthash:8].css',
+    })
+
     // configure Babel
     // .configureBabel((config) => {
     //     config.plugins.push('@babel/a-babel-plugin');
@@ -62,12 +71,10 @@ Encore
     // enables Sass/SCSS support
     .enableSassLoader()
 
-    .enableTypeScriptLoader(tsConfig => {
-        tsConfig.transpileOnly = true; // faster builds
+    // TypeScript support
+    .enableTypeScriptLoader(function (tsConfig) {
+        tsConfig.transpileOnly = true;
     })
-
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
 
     // uncomment if you use React
     //.enableReactPreset()
@@ -82,6 +89,20 @@ Encore
         from: './assets/website/img',
         to: 'images/[path][name].[ext]',
     })
+    
+    // Configure watch mode to prevent infinite recompilation loops
+    .configureWatchOptions(watchOptions => {
+        watchOptions.ignored = ['**/node_modules/**', '**/public/build/**', '**/.env.local.php'];
+    })
 ;
 
-module.exports = Encore.getWebpackConfig();
+// Override webpack config to disable CSS minification for Tailwind v4
+const config = Encore.getWebpackConfig();
+if (Encore.isProduction()) {
+    // Remove CSS minimizer plugin since @tailwindcss/postcss already handles optimization
+    config.optimization.minimizer = config.optimization.minimizer.filter(
+        plugin => !plugin.constructor.name.includes('CssMinimizerPlugin')
+    );
+}
+
+module.exports = config;

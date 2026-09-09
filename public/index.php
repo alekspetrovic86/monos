@@ -39,7 +39,7 @@ if ($_SERVER['APP_DEBUG']) {
 }
 
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
-    Request::setTrustedProxies(\explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO);
+    Request::setTrustedProxies(\explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO); // @phpstan-ignore-line argument.type
 }
 
 if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
@@ -48,21 +48,22 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
 
 $suluContext = SuluKernel::CONTEXT_WEBSITE;
 
-if (\preg_match('/^\/admin(\/|$)/', $_SERVER['REQUEST_URI'])) {
+if (\preg_match('/^\/admin(\/|$)/', $_SERVER['REQUEST_URI'])) {  // @phpstan-ignore-line argument.type
     $suluContext = SuluKernel::CONTEXT_ADMIN;
 }
 
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG'], $suluContext);
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG'], $suluContext); // @phpstan-ignore-line argument.type
 
 // Comment this line if you want to use the "varnish" http
 // caching strategy. See http://sulu.readthedocs.org/en/latest/cookbook/caching-with-varnish.html
 if ('dev' !== $_SERVER['APP_ENV'] && SuluKernel::CONTEXT_WEBSITE === $suluContext) {
+    /** @var Sulu\Bundle\HttpCacheBundle\Cache\SuluHttpCache $kernel */
     $kernel = $kernel->getHttpCache();
 }
 
 // When using the HttpCache, you need to call the method in your front controller
 // instead of relying on the configuration parameter
-// https://symfony.com/doc/3.4/reference/configuration/framework.html#http-method-override
+// https://symfony.com/doc/6.4/reference/configuration/framework.html#http-method-override
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);

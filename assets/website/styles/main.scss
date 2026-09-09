@@ -1,20 +1,278 @@
-@use './abstracts/bootstrap-override';
 @use './abstracts/fonts';
 
-@use './base/typography';
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    border-radius: 0;
+}
 
-@use './layout/header';
-@use './layout/footer';
-@use './layout/sidebar';
+body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+}
 
-@use './components/buttons';
-@use './components/nav';
+/* Varijanta sa trackingom — „Reset", „CLOSE" */
+.u-tracked {
+    letter-spacing: 0.14px;
+}
 
-@use './blocks/block-hero';
-@use './blocks/block-projects';
-@use './blocks/block-gallery';
-@use './blocks/block-contact';
-@use './blocks/block-comming-soon';
+/* Sitni stil — brojač, „RESET" na mobilnom */
+.u-fine {
+    font-size: 10px;
+    line-height: 16px;
+    font-weight: 200;
+}
 
-@use './pages/error-page';
-@use './pages/imprint-page';
+/* Progresivno poboljšanje menija. Bez JS-a nav, Reset i podmeniji su vidljivi (Figma F2').
+   Sa JS-om su sakriveni od prvog crtanja do connect() menu kontrolera, koji doda `menu-ready`
+   na <html> i od tada upravlja `hidden` atributom (preflight: display:none !important). */
+.js:not(.menu-ready) [data-menu-target="nav"],
+.js:not(.menu-ready) [data-menu-target="reset"],
+.js:not(.menu-ready) [data-menu-target="submenu"] {
+    display: none;
+}
+
+/* Kontejner: sav sadržaj u najviše 1440px, poravnat skroz levo. Iznad 1440 leva margina raste
+   kao četvrtina viška i staje na 160 — na 1920 je 120, na 2560 je 160. */
+:root {
+    --container-max: 1440px;
+    --container-offset: clamp(0px, calc((100vw - var(--container-max)) * 0.25), 160px);
+}
+
+.l-container {
+    max-width: var(--container-max);
+    margin-left: var(--container-offset);
+}
+
+/* Lista projekata (naslovna). Pri učitavanju krene malo niže i podigne se na položaj iz F1 —
+   samo pomeraj, bez poskakivanja i bez efekata. Bez JS-a nema animacije. */
+@keyframes project-list-rise {
+    from {
+        transform: translateY(48px);
+    }
+    to {
+        transform: none;
+    }
+}
+
+.js .project-list {
+    animation: project-list-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Povratak sa projekta („Back"): lista se vraća u zatečeno stanje, bez podizanja. */
+.js .project-list--restored {
+    animation: none;
+}
+
+/* Detalji stavke (naslov, podnaslov, „Enter"): bez JS-a vidljivi; sa JS-om sakriveni od prvog
+   crtanja do connect()-a project-list kontrolera, koji od tada upravlja `hidden` atributom. */
+.js:not(.project-list-ready) .project-teaser__detail {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .project-list {
+        animation: none;
+    }
+}
+
+/* Responzivne slike (includes/picture.html.twig): <picture> ne pravi svoju kutiju — <img> učestvuje direktno
+   u roditeljevom layoutu (flex kadar slajdera, okvir tizera), pa max-width/max-height 100% važe kao za goli <img>. */
+picture {
+    display: contents;
+}
+
+/* Rich text iz urednika (dugi opis projekta). Pasusi razdvojeni jednim praznim redom. */
+.rich-text p + p {
+    margin-top: 16px;
+}
+
+.rich-text a:hover,
+.rich-text a:focus-visible {
+    text-decoration: underline;
+}
+
+/* Rich text bez razmaka između pasusa (Figma: prelom reda, ne prazan red) — zone Information stranice. */
+.rich-text--tight p + p {
+    margin-top: 0;
+}
+
+/* ── Stranica projekta (F7–F11 desktop, F21–F24 mobile) ────────────────────────────────────────────
+   Desktop: grid 240 | 540 | 16 | 642 (= 1438). Tekst desno zauzima sve redove; četvrti red (1fr) upija
+   višak visine da naslov i podnaslov ostanu na T725/T789 bez obzira na dužinu teksta.
+   Mobile: običan tok — stage (slika + brojač) je sticky na vrhu, tekst skroluje iza njega. */
+@media (min-width: 1024px) {
+    .project {
+        display: grid;
+        grid-template-columns: 240px 540px 16px 642px;
+        grid-template-rows: auto auto auto 1fr;
+    }
+
+    .project__stage {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .project__title {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .project__meta {
+        grid-column: 2;
+        grid-row: 3;
+    }
+
+    .project__text {
+        grid-column: 4;
+        grid-row: 1 / 5;
+    }
+}
+
+/* Kadar slike je 4:5 od svoje širine: 540 → 675 (dno na 677), 375 → 469 (dno na 517).
+   round() drži celobrojnu visinu da tekst ispod ne padne na polupiksel; bez round() (stariji browseri)
+   ostaje 125cqw. Slika je poravnata po DNU kadra — drugi format raste naviše, dno ostaje. */
+.project__stage {
+    container-type: inline-size;
+}
+
+.project__frame {
+    height: 125cqw;
+    height: round(up, 125cqw, 1px);
+}
+
+.project__slide {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.project__image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Polovine slike: leva = prethodna, desna = sledeća. Postoje samo sa JS-om. */
+.project__half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    display: none;
+    width: 50%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.js .project__half {
+    display: block;
+}
+
+.project__half--prev {
+    left: 0;
+}
+
+.project__half--next {
+    right: 0;
+}
+
+/* Tekst: pasusi bez razmaka (Figma — prelom reda, ne prazan red), za razliku od opisa u listi. */
+.project__rich p + p {
+    margin-top: 0;
+}
+
+/* Kadar teksta na desktopu: 19 redova = 304px, red „Expand view / Read more" ispod na T314.
+   Sa JS-om se seče (nastavak ide kroz „Read more"); bez JS-a samo drži minimum, tekst se čita ceo. */
+@media (min-width: 1024px) {
+    .project__excerpt {
+        min-height: 304px;
+    }
+
+    .js .project__excerpt {
+        height: 304px;
+        overflow: hidden;
+    }
+}
+
+/* ── Expand view (F12 17:80 / F13 17:93) — image-zoom kontroler, GLightbox skin „monos" ─────────────────────────
+   Bela pozadina. Okvir slike: od leve margine (container-offset + 240) do desne ivice viewporta, 2px gore i dole
+   (1440×900 → 1200×896). Slika je uz levu ivicu okvira, vertikalno centrirana; veličinu joj zadaje kontroler
+   (uklapanje u okvir), a omotač .gslide-media je tačno njene veličine — Panzoom contain računa prema roditelju.
+   GLightbox-ove podrazumevane granice (100vw/100vh, min-width 200) se poništavaju. Desktop-only (kontroler). */
+.glightbox-monos .goverlay {
+    background: var(--color-paper);
+}
+
+.glightbox-monos .gloader {
+    display: none;
+}
+
+.glightbox-monos .gslide,
+.glightbox-monos .gslide-inner-content {
+    height: 100%;
+}
+
+.glightbox-monos .gslide-inner-content {
+    position: relative;
+}
+
+.glightbox-monos .ginner-container {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    bottom: 2px;
+    left: calc(var(--container-offset) + 240px);
+    width: auto;
+    height: auto;
+    max-width: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.glightbox-monos .gslide-media {
+    overflow: hidden;
+}
+
+.glightbox-monos .gslide-image img {
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    min-width: 0;
+    margin: 0;
+}
+
+/* „Esc" na L2 T314 kao ostali elementi tog baseline-a (Reset, →Drawings): 14/16, 500, bez okvira i pozadine.
+   Mirno stanje bez podvlačenja — podvlačenje samo na hover i focus-visible. */
+.image-zoom__close {
+    position: absolute;
+    top: 314px;
+    left: calc(var(--container-offset) + 2px);
+    z-index: 99999;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-ink);
+    font: inherit;
+    line-height: 16px;
+    cursor: pointer;
+}
+
+.image-zoom__close:hover,
+.image-zoom__close:focus-visible {
+    text-decoration: underline;
+}

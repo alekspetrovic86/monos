@@ -1,46 +1,84 @@
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|split('_')[0] }}">
-	<head>
-		{% set webspaceSettings = sulu_snippet_load_by_area('webspace_settings') %}
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link href="{{ asset('website/img/favicon.png') }}" rel="icon"/>
+    <head>
+        <meta charset="utf-8">
+        {# Progresivno poboljšanje: `.js` na <html> pre prvog crtanja — bez JS-a meni je otvoren (F2'). #}
+        <script>document.documentElement.classList.add('js')</script>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block meta %}
+            {% set _seoBase = extension.seo|default({}) %}
+            {# Naslov projekta je text_area (prelomi iz urednika) — u <title> prelomi postaju razmaci. #}
+            {% set _pageTitle = _seoBase.title|default(content.title|default(''))|replace({"\n": " ", "\r": ""}) %}
+            {% set _seo = _seoBase|merge({'title': _pageTitle ? _pageTitle ~ ' | Monos' : 'Monos'}) %}
+            {{ include('@SuluWebsite/Extension/seo.html.twig', {
+                seo: _seo,
+                content: content|default([]),
+                localizations: localizations|default([]),
+                shadowBaseLocale: shadowBaseLocale|default(),
+            }) }}
+        {% endblock %}
 
-		<title>{{ extension.seo.title|default ?: content.title|default ?: 'Monos.' }}</title>
+        {# ── PWA / Browser meta ── #}
+        {# Favicon: slovo „M" u Inter 500, crno na belom, bez zaobljenja (Monos nema logo — u Figmi je čist tekst). #}
+        <link rel="icon" href="/favicon.ico" sizes="32x32">
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="theme-color" content="#FFFFFF">
 
-		{% block meta %}
-			{% include "@SuluWebsite/Extension/seo.html.twig" with {
-				"seo": extension.seo|default([]),
-				"content": content|default([]),
-				"localizations": localizations|default([]),
-				"shadowBaseLocale": shadowBaseLocale|default(),
-			} %}
-		{% endblock %}
+        {# ── Open Graph ── #}
+        {% set ogTitle       = extension.seo.title|default(content.title|default('Monos'))|replace({"\n": " ", "\r": ""}) %}
+        {% set ogDescription = extension.seo.description|default(content.excerpt|default('')) %}
+        {% set ogImage       = extension.excerpt.images[0].thumbnails['seo_og']|default('') %}
+        {% if ogImage and ogImage starts with '/' %}
+            {% set ogImage = app.request.schemeAndHttpHost ~ ogImage %}
+        {% endif %}
+        {% set ogUrl         = app.request.uri %}
+        {% set ogLocale      = app.request.locale|replace({'-': '_'}) %}
+        <meta property="og:type"        content="website">
+        <meta property="og:site_name"   content="Monos">
+        <meta property="og:url"         content="{{ ogUrl }}">
+        <meta property="og:title"       content="{{ ogTitle }}">
+        <meta property="og:description" content="{{ ogDescription }}">
+        <meta property="og:locale"      content="{{ ogLocale }}">
+        {% if ogImage %}<meta property="og:image" content="{{ ogImage }}">{% endif %}
 
-		{% block style %}
+        {# ── Twitter / X Card ── #}
+        <meta name="twitter:card"        content="summary_large_image">
+        <meta name="twitter:title"       content="{{ ogTitle }}">
+        <meta name="twitter:description" content="{{ ogDescription }}">
+        {% if ogImage %}<meta name="twitter:image" content="{{ ogImage }}">{% endif %}
+
+        {# ── JSON-LD Organization ── #}
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Monos",
+            "url": "{{ app.request.schemeAndHttpHost }}",
+            "sameAs": []
+        }
+        </script>
+
+        {% block style %}
             {{ encore_entry_link_tags('website') }}
         {% endblock %}
 
-		{% block javascripts %}
+        {% block javascripts %}
             {{ encore_entry_script_tags('website') }}
         {% endblock %}
+    </head>
+    {# menu kontroler je na <body>: header (toggle/nav) i sadržaj (inert pod mobilnim overlayem) su mu targeti.
+       Stranica projekta (F7–F11) nema meni — prazni i `header` i `body_attributes`. #}
+    <body {% block body_attributes %}data-controller="menu"{% endblock %}>
+        {% block header %}
+            {% include 'includes/header.html.twig' %}
+        {% endblock %}
 
-	</head>
-	<body data-controller="remove-scroll-memory">
-		{% block header %}
-			{% include 'includes/header.html.twig' %}
-		{% endblock %}
-
-		{% block content %}{% endblock %}
-
-		{% block footer %}
-			{% include 'includes/footer.html.twig' with {
-				"footerInfo": webspaceSettings.content ?? '',
-			} %}
-		{% endblock %}
-
-		<div class="global-loader" data-controller="loader"></div>
-	</body>
+        {# l-container: najviše 1440px, skroz levo; iznad 1440 leva margina (main.scss). #}
+        <div data-menu-target="content" class="l-container">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
 </html>
-
