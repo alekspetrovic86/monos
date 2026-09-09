@@ -27,10 +27,25 @@
         <link rel="manifest" href="/site.webmanifest">
         <meta name="theme-color" content="#FFFFFF">
 
+        {# ── hreflang x-default ── #}
+        {# Sulu-ov SEO dodatak (gore) već ispisuje `alternate` za sr/en/ja i `canonical`. Ne ispisuje
+           `x-default` — njime se kaže pretraživaču koju verziju da posluži kad nijedan jezik ne odgovara.
+           Srpski je podrazumevani (na korenu), pa on nosi tu ulogu. #}
+        {% if localizations.sr.url|default %}
+            <link rel="alternate" href="{{ localizations.sr.url }}" hreflang="x-default">
+        {% endif %}
+
         {# ── Open Graph ── #}
         {% set og_title = extension.seo.title|default(content.title|default('Monos'))|replace({'\n': ' ', '\r': ''}) %}
         {% set og_description = extension.seo.description|default(content.excerpt|default('')) %}
+        {# Slika za deljenje: prvo excerpt slika same stranice, pa podrazumevana iz settings snippet-a.
+           Bez ovog drugog koraka stranica bez excerpt slike deli se BEZ ikakve slike — link na WhatsApp-u
+           ili Instagramu ostaje prazan. Podrazumevana se postavlja u adminu, pa ne zavisi od koda. #}
         {% set og_image = extension.excerpt.images[0].thumbnails['seo_og']|default('') %}
+        {% if not og_image %}
+            {% set _og_settings = sulu_snippet_load_by_area('webspace_settings') %}
+            {% set og_image = _og_settings.content.og_image.thumbnails['seo_og']|default('') %}
+        {% endif %}
         {% if og_image and og_image starts with '/' %}
             {% set og_image = app.request.schemeAndHttpHost ~ og_image %}
         {% endif %}

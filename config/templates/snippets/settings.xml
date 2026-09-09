@@ -87,6 +87,18 @@
                     </meta>
                 </property>
 
+                <property name="og_image" type="single_media_selection" colspan="6">
+                    <meta>
+                        <title lang="en">Default share image</title>
+                        <title lang="sr">Podrazumevana slika za deljenje</title>
+                        <info_text lang="en">Used when a page has no excerpt image. Shown when a link is shared (WhatsApp, Instagram, X). Upload 1200×630.</info_text>
+                        <info_text lang="sr">Koristi se kad stranica nema excerpt sliku. Vidi se kad se link podeli (WhatsApp, Instagram, X). Postaviti 1200×630.</info_text>
+                    </meta>
+                    <params>
+                        <param name="types" value="image"/>
+                    </params>
+                </property>
+
                 <!-- text_editor, ne text_line: kredit nosi link (npr. reč „Seiora" vodi na sajt izrađivača). -->
                 <property name="credit" type="text_editor" colspan="6">
                     <meta>
