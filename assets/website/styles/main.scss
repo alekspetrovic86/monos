@@ -56,6 +56,11 @@ body {
 :root {
     --container-max: 1440px;
     --container-offset: clamp(0px, calc((100vw - var(--container-max)) * 0.25), 160px);
+
+    /* Rastojanje od desne ivice prozora do desne ivice kontejnera. Koriste ga elementi koji su `fixed`
+       (logo, linkovi projekta) da bi ostali poravnati uz KONTEJNER, ne uz prozor — iznad 1440 to nije isto.
+       `100%` se racuna na mestu upotrebe; svi korisnici su `fixed`, pa im je to sirina prozora. */
+    --container-right: calc(100% - var(--container-offset) - min(100%, var(--container-max)));
 }
 
 .l-container {
@@ -129,6 +134,54 @@ body {
     outline: none;
 }
 
+/* „→Drawings" / „←Images" i „Back" na stranici projekta. Svaki je sam `fixed` — vidi project.html.twig:
+   omotac koji je i sam `fixed` zarobio bi mesanje boja. Vrednosti su iste kao pre premestanja, samo su desni
+   odmaci sada mereni od desne ivice KONTEJNERA. z-index 20 je isti koji je nosio raniji omotac. */
+.project-link {
+    position: fixed;
+    bottom: 68px;
+    z-index: 20;
+    text-align: right;
+}
+
+.project-link--drawings {
+    right: calc(var(--container-right) + 84px);
+    width: 84px;
+}
+
+.project-link--back {
+    right: calc(var(--container-right) + 4px);
+    width: 48px;
+}
+
+@media (min-width: 1024px) {
+    /* Desktop: „→Drawings" prelazi na levu marginu, na isti baseline kao logo i nav. */
+    .project-link--drawings {
+        top: 314px;
+        right: auto;
+        bottom: auto;
+        left: calc(var(--container-offset) + 2px);
+        width: auto;
+        text-align: left;
+    }
+}
+
+/* Na mobilnom tekst projekta se skroluje ISPOD ovih natpisa, pa se i oni mesaju sa onim sto prolazi iza —
+   isto kao logo. Izvorna boja je inverzija boje mirovanja, da `difference` nad belom stranom vrati tacno
+   tu boju: „Drawings" nasledjuje `--color-ink` (#000 → izvor belo), „Back" nosi `--color-nav` (#191c1e →
+   izvor #e6e3e1). Na desktopu natpisi stoje na beloj margini — tamo mesanja nema. */
+@media (max-width: 1023px) {
+    .js .project-link--drawings {
+        color: var(--color-paper);
+        mix-blend-mode: difference;
+    }
+
+    .js .project-link--back {
+        color: #e6e3e1;
+        mix-blend-mode: difference;
+    }
+}
+
 /* Logo / CLOSE. Jedini element menija van <header>-a — vidi header.html.twig. Zato mu polozaj mora ovde:
    poravnat je uz desnu ivicu KONTEJNERA, ne prozora, istim velicinama kojima je poravnat i header
    (levo `--container-offset`, sirina `min(100%, 1440px)`). Na 1440 i uze to je isti piksel kao `right: 2px`
@@ -136,14 +189,14 @@ body {
    z-index 60 ga drzi iznad bele ploce menija (header je z-50); na mesanje boja to ne utice. */
 .menu-toggle {
     position: fixed;
-    right: calc(100% - var(--container-offset) - min(100%, 1440px) + 4px);
+    right: calc(var(--container-right) + 4px);
     bottom: 68px;
     z-index: 60;
 }
 
 @media (min-width: 1024px) {
     .menu-toggle {
-        right: calc(100% - var(--container-offset) - min(100%, 1440px) + 2px);
+        right: calc(var(--container-right) + 2px);
         top: 314px;
         bottom: auto;
     }
