@@ -26,16 +26,18 @@
 
    Mirno stanje doslovno Figma: bez podvlačenja, podvlačenje samo na hover/focus-visible. #}
 
-{% set _images = content.images|default([]) %}
-{% set _parent = sulu_content_load_parent(uuid, ['url']) %}
-{% set _isDrawings = _parent.template|default('') == 'project' %}
-{% set _drawings = _isDrawings ? null : sulu_navigation_tree(uuid)|filter(item => item.template|default('') == 'project')|first %}
-{% set _listHref = sulu_content_root_path() %}
-
 {% block body_attributes %}{% endblock %}
 {% block header %}{% endblock %}
 
 {% block content %}
+    {# Promenljive su UNUTAR bloka: Sulu preview (i `?partial=true`) renderuje samo `content` kroz Template::renderBlock,
+       pa se vrh šablona ne izvršava — `set` iznad bloka tamo ne postoji. Redosled je bitan (_isDrawings ← _parent, _drawings ← _isDrawings). #}
+    {% set _images = content.images|default([]) %}
+    {% set _parent = sulu_content_load_parent(uuid, ['url']) %}
+    {% set _isDrawings = _parent.template|default('') == 'project' %}
+    {% set _drawings = _isDrawings ? null : sulu_navigation_tree(uuid)|filter(item => item.template|default('') == 'project')|first %}
+    {% set _listHref = sulu_content_root_path() %}
+
     {# project-slider je na korenu: slajder je u stage-u, a „Expand view" (target expand) u koloni teksta. #}
     <article class="project" data-controller="project-slider">
 

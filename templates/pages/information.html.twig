@@ -18,8 +18,8 @@
    „Code by Seiora" je u Figmi samo na mobilnom — kredit je legitiman (Seiora je izradila sajt), izostanak
    na desktopu je previd dizajnera: ide na OBE širine (includes/information/legal.html.twig). #}
 
+{# `_settings` koriste i `header` i `content` blok — zato ostaje iznad blokova (vidi napomenu u bloku content). #}
 {% set _settings = sulu_snippet_load_by_area('webspace_settings') %}
-{% set _home = sulu_content_load_parent(uuid, ['blocks']) %}
 
 {% block body_attributes %}data-controller="menu" data-menu-open-value="true" data-menu-active-key-value="information"{% endblock %}
 
@@ -28,6 +28,11 @@
 {% endblock %}
 
 {% block content %}
+    {# `_home` je UNUTAR bloka: Sulu preview (i `?partial=true`) renderuje samo `content` kroz Template::renderBlock,
+       pa `set` iznad bloka tamo ne postoji. `_settings` mora i u `header` blok, pa nije premešten — preview Information
+       stranice zato i dalje pada na prvoj upotrebi `_settings` (l. 41) dok se ne odluči kako da se deli među blokovima. #}
+    {% set _home = sulu_content_load_parent(uuid, ['blocks']) %}
+
     {# ── Mobile: zone u toku ──────────────────────────────────── #}
     {# max-w 600: ispod lg (tableti) tekstualne zone ne prelaze 600px — spec; na 375 je i dalje puna širina (367). #}
     <div class="flex min-h-dvh max-w-[600px] flex-col px-[4px] pt-[48px] pb-[100px] lg:hidden">
