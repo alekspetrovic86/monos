@@ -31,12 +31,12 @@
 
 {% block content %}
     {# Promenljive su UNUTAR bloka: Sulu preview (i `?partial=true`) renderuje samo `content` kroz Template::renderBlock,
-       pa se vrh šablona ne izvršava — `set` iznad bloka tamo ne postoji. Redosled je bitan (_isDrawings ← _parent, _drawings ← _isDrawings). #}
+       pa se vrh šablona ne izvršava — `set` iznad bloka tamo ne postoji. Redosled je bitan (_is_drawings ← _parent, _drawings ← _is_drawings). #}
     {% set _images = content.images|default([]) %}
     {% set _parent = sulu_content_load_parent(uuid, ['url']) %}
-    {% set _isDrawings = _parent.template|default('') == 'project' %}
-    {% set _drawings = _isDrawings ? null : sulu_navigation_tree(uuid)|filter(item => item.template|default('') == 'project')|first %}
-    {% set _listHref = sulu_content_root_path() %}
+    {% set _is_drawings = _parent.template|default('') == 'project' %}
+    {% set _drawings = _is_drawings ? null : sulu_navigation_tree(uuid)|filter(item => item.template|default('') == 'project')|first %}
+    {% set _list_href = sulu_content_root_path() %}
 
     {# project-slider je na korenu: slajder je u stage-u, a „Expand view" (target expand) u koloni teksta. #}
     <article class="project" data-controller="project-slider">
@@ -56,8 +56,8 @@
                                 sizes: '(min-width: 1024px) 540px, 100vw',
                                 loading: loop.first ? '' : 'lazy',
                                 class: 'project__image',
-                                attr: { 'data-full': image.thumbnails['w2400.webp'] },
-                            }, with_context = false) }}
+                                attr: {'data-full': image.thumbnails['w2400.webp']},
+                            }, with_context: false) }}
                         </div>
                     {% endfor %}
                 </div>
@@ -85,7 +85,7 @@
         {# pb 95: posle reda „Back" (T789–805) ostaje 95px vazduha do dna kadra 900 (F7) — i kad stranica skroluje. #}
         <div class="project__meta hidden lg:mt-[16px] lg:flex lg:justify-between lg:gap-[16px] lg:pb-[95px]">
             <p class="max-w-[356px]">{{ content.subtitle|default('') }}</p>
-            <a href="{{ _listHref }}"
+            <a href="{{ _list_href }}"
                data-controller="scroll-memory"
                data-action="scroll-memory#back"
                class="shrink-0 hover:underline focus-visible:underline">{{ 'app.project.back'|trans }}</a>
@@ -137,7 +137,7 @@
         {# Prati kontejner kao header. Desktop: →Drawings L2 T314. Mobile: →Drawings R291 T728, Back R371 T728. #}
         <nav aria-label="{{ 'app.project.nav'|trans }}"
              class="pointer-events-none fixed inset-y-0 left-[var(--container-offset)] z-20 w-[min(100%,1440px)]">
-            {% if _isDrawings %}
+            {% if _is_drawings %}
                 <a href="{{ sulu_content_path(_parent.content.url|default('/')) }}"
                    class="pointer-events-auto absolute bottom-[68px] right-[84px] w-[84px] text-right
                           hover:underline focus-visible:underline
@@ -149,7 +149,7 @@
                           lg:top-[314px] lg:left-[2px] lg:right-auto lg:bottom-auto lg:w-auto lg:text-left">{{ 'app.project.drawings'|trans }}</a>
             {% endif %}
 
-            <a href="{{ _listHref }}"
+            <a href="{{ _list_href }}"
                data-controller="scroll-memory"
                data-action="scroll-memory#back"
                class="pointer-events-auto absolute bottom-[68px] right-[4px] w-[48px] text-right text-nav

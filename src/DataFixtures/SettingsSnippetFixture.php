@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *
  * Ponovljiv: snippet se traži po PHPCR putanji, prepisuje i ponovo postavlja kao podrazumevani za area.
  */
-final class SettingsSnippetFixture implements DocumentFixtureInterface
+final readonly class SettingsSnippetFixture implements DocumentFixtureInterface
 {
     private const WEBSPACE = ProjectPagesFixture::WEBSPACE;
     private const LOCALES = ProjectPagesFixture::LOCALES;
@@ -39,7 +39,7 @@ final class SettingsSnippetFixture implements DocumentFixtureInterface
 
     public function __construct(
         #[Autowire(service: 'sulu_snippet.default_snippet.manager')]
-        private readonly DefaultSnippetManagerInterface $defaultSnippetManager,
+        private DefaultSnippetManagerInterface $defaultSnippetManager,
     ) {
     }
 
@@ -51,7 +51,7 @@ final class SettingsSnippetFixture implements DocumentFixtureInterface
             try {
                 $document = $documentManager->find(self::PATH, $locale);
             } catch (DocumentNotFoundException) {
-                $document = $document ?? $documentManager->create('snippet');
+                $document ??= $documentManager->create('snippet');
             }
             \assert($document instanceof SnippetDocument);
 
@@ -71,8 +71,6 @@ final class SettingsSnippetFixture implements DocumentFixtureInterface
             $documentManager->publish($document, $locale);
             $documentManager->flush();
         }
-
-        \assert($document instanceof SnippetDocument);
 
         // Podrazumevani snippet za area (po webspace-u, ne po lokalizaciji).
         $this->defaultSnippetManager->save(self::WEBSPACE, self::AREA, $document->getUuid(), self::LOCALES[0]);

@@ -17,7 +17,7 @@ use Sulu\Component\DocumentManager\DocumentManager;
  * (ili preko `sulu:build dev`, koji zove isto sa --append).
  * Ide POSLE ProjectPagesFixture — „Enter" svakog tizera vodi na odgovarajuću stranicu projekta.
  */
-final class HomepageTeaserFixture implements DocumentFixtureInterface
+final readonly class HomepageTeaserFixture implements DocumentFixtureInterface
 {
     private const WEBSPACE = ProjectPagesFixture::WEBSPACE;
     private const LOCALES = ProjectPagesFixture::LOCALES;
@@ -64,7 +64,7 @@ final class HomepageTeaserFixture implements DocumentFixtureInterface
     ];
 
     public function __construct(
-        private readonly FixtureMedia $media,
+        private FixtureMedia $media,
     ) {
     }
 

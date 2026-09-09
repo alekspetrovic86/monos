@@ -1,18 +1,18 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
 {% block content %}
 
 {# ── Resolve title & description via translation keys with fallback ── #}
-{% set titleKey = 'app.http_' ~ status_code %}
-{% set titleTrans = titleKey|trans({}, 'messages', app.request.locale) %}
-{% if titleTrans == titleKey %}
-    {% set titleTrans = 'app.http_default'|trans({}, 'messages', app.request.locale) %}
+{% set title_key = 'app.http_' ~ status_code %}
+{% set title_trans = title_key|trans({}, 'messages', app.request.locale) %}
+{% if title_trans == title_key %}
+    {% set title_trans = 'app.http_default'|trans({}, 'messages', app.request.locale) %}
 {% endif %}
 
-{% set descKey = 'app.error_desc_' ~ status_code %}
-{% set descTrans = descKey|trans({}, 'messages', app.request.locale) %}
-{% if descTrans == descKey %}
-    {% set descTrans = 'app.error_desc_default'|trans({}, 'messages', app.request.locale) %}
+{% set desc_key = 'app.error_desc_' ~ status_code %}
+{% set desc_trans = desc_key|trans({}, 'messages', app.request.locale) %}
+{% if desc_trans == desc_key %}
+    {% set desc_trans = 'app.error_desc_default'|trans({}, 'messages', app.request.locale) %}
 {% endif %}
 
 {% set is5xx = status_code >= 500 %}
@@ -26,8 +26,8 @@
                 lg:pl-[2px] lg:pr-[95px] lg:pt-[314px] lg:pb-[80px]">
 
     <p class="u-tracked">{{ status_code }}</p>
-    <h1 class="mt-4">{{ titleTrans }}</h1>
-    <p class="mt-4 max-w-[320px]">{{ descTrans }}</p>
+    <h1 class="mt-4">{{ title_trans }}</h1>
+    <p class="mt-4 max-w-[320px]">{{ desc_trans }}</p>
 
     <div class="mt-8 flex gap-4">
         <a href="{{ sulu_content_root_path('/') }}"

@@ -23,7 +23,6 @@ use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
  */
 final class NavigationPagesFixture implements DocumentFixtureInterface
 {
-    private const WEBSPACE = ProjectPagesFixture::WEBSPACE;
     private const LOCALES = ProjectPagesFixture::LOCALES;
     private const CONTENTS_PATH = ProjectPagesFixture::CONTENTS_PATH;
     private const NAV_CONTEXT = 'main';
@@ -86,7 +85,7 @@ final class NavigationPagesFixture implements DocumentFixtureInterface
             try {
                 $document = $documentManager->find($path, $locale);
             } catch (DocumentNotFoundException) {
-                $document = $document ?? $documentManager->create('page');
+                $document ??= $documentManager->create('page');
                 $created = true;
             }
             \assert($document instanceof PageDocument);
@@ -115,8 +114,6 @@ final class NavigationPagesFixture implements DocumentFixtureInterface
 
             $created = false;
         }
-
-        \assert($document instanceof PageDocument);
 
         return $document;
     }

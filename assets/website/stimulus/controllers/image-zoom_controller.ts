@@ -2,6 +2,17 @@ import { Controller } from '@hotwired/stimulus';
 import GLightbox from 'glightbox';
 import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
 
+// GLightbox-ov `index.d.ts` tipizira `on` kao `(eventName, callback: () => void)`, iako isti fajl definiše
+// `Payload<T>` mapu i biblioteka stvarno prosleđuje podatke handleru. Ta mapa nije eksportovana (`export = GLightbox`
+// izvozi samo funkciju), pa se ovde opisuje jedino ono što koristimo, i to na jednom mestu.
+type Lightbox = ReturnType<typeof GLightbox>;
+type SlideLoaded = { slideNode?: Element };
+
+const onSlideLoaded = (lightbox: Lightbox, callback: (data: SlideLoaded) => void): void => {
+    const on = lightbox.on as unknown as (event: 'slide_after_load', cb: (data: SlideLoaded) => void) => void;
+    on('slide_after_load', callback);
+};
+
 // data-controller="image-zoom" — „Expand view" (F12 17:80 / F13 17:93): slika preko celog ekrana sa dubinskim zoom-om.
 //
 // Samostalan: radi nad bilo kojom slikom čiji URL prima kroz data-image-zoom-src-value (w2400 — tek se ovde
@@ -49,7 +60,7 @@ export default class ImageZoomController extends Controller<HTMLElement> {
         if (this.panzoom && !this.zoomed(this.scale())) this.panzoom.zoomToPoint(2, event);
     };
 
-    private lightbox: ReturnType<typeof GLightbox> | null = null;
+    private lightbox: Lightbox | null = null;
     private panzoom: PanzoomObject | null = null;
     private image: HTMLImageElement | null = null;
 
@@ -73,7 +84,7 @@ export default class ImageZoomController extends Controller<HTMLElement> {
         this.lightbox?.close();
     }
 
-    private build(): ReturnType<typeof GLightbox> {
+    private build(): Lightbox {
         const lightbox = GLightbox({
             elements: [],
             skin: 'monos',
@@ -91,8 +102,8 @@ export default class ImageZoomController extends Controller<HTMLElement> {
         });
 
         lightbox.on('open', () => this.addClose());
-        lightbox.on('slide_after_load', (data: { slideNode: HTMLElement }) => {
-            this.attach(data.slideNode.querySelector('img'));
+        onSlideLoaded(lightbox, (data) => {
+            this.attach(data.slideNode?.querySelector('img') ?? null);
         });
         lightbox.on('close', () => {
             this.detach();

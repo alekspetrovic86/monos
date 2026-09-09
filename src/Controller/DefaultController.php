@@ -21,7 +21,10 @@ class DefaultController extends SuluDefaultController
     public function indexAction(StructureInterface $structure, $preview = false, $partial = false): Response
     {
         if (!$preview && $structure->hasProperty('in_preparation') && $structure->getPropertyValue('in_preparation')) {
-            $url = $structure->hasTag('sulu.rlp') ? $structure->getPropertyValueByTagName('sulu.rlp') : $structure->getUuid();
+            // getPropertyValueByTagName vraca mixed — Sulu compat sloj nije tipiziran. Kad rlp nije
+            // upotrebljiv string, UUID je uvek dostupan identifikator za poruku izuzetka.
+            $rlp = $structure->hasTag('sulu.rlp') ? $structure->getPropertyValueByTagName('sulu.rlp') : null;
+            $url = \is_string($rlp) ? $rlp : $structure->getUuid();
 
             throw new NotFoundHttpException(\sprintf('Page "%s" is in preparation.', $url));
         }

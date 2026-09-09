@@ -23,40 +23,40 @@
 
 {# Jezici: sve lokalizacije stranice osim aktivne. Van Sulu konteksta (error stranice)
    `localizations` ne postoji — tada koren svake lokalizacije. #}
-{% set localeNames = { sr: 'Српски', en: 'English', ja: '日本語' } %}
-{% set currentLocale = app.request.locale|split('_')[0] %}
-{% set localeLinks = [] %}
+{% set locale_names = {sr: 'Српски', en: 'English', ja: '日本語'} %}
+{% set current_locale = app.request.locale|split('_')[0] %}
+{% set locale_links = [] %}
 {% if localizations|default([]) is not empty %}
     {% for localization in localizations %}
         {% set code = localization.locale|split('_')[0] %}
-        {% if code != currentLocale %}
-            {% set localeLinks = localeLinks|merge([{ label: localeNames[code]|default(code|capitalize), href: localization.url }]) %}
+        {% if code != current_locale %}
+            {% set locale_links = locale_links|merge([{label: locale_names[code]|default(code|capitalize), href: localization.url}]) %}
         {% endif %}
     {% endfor %}
 {% else %}
-    {% for code, label in localeNames %}
-        {% if code != currentLocale %}
-            {% set localeLinks = localeLinks|merge([{ label: label, href: sulu_content_root_path(code) }]) %}
+    {% for code, label in locale_names %}
+        {% if code != current_locale %}
+            {% set locale_links = locale_links|merge([{label: label, href: sulu_content_root_path(code)}]) %}
         {% endif %}
     {% endfor %}
 {% endif %}
 
 {# Stavke iz Sulu stabla. `in_preparation` nije deo navigacionog upita, pa se čita po stranici (jedno lako učitavanje
    po stavci — tri-četiri po zahtevu, iza HTTP keša). Van Sulu zahteva (error stranice) stabla nema. #}
-{% set navItems = [] %}
+{% set nav_items = [] %}
 {% if app.request.attributes.has('_sulu') %}
     {% for node in sulu_navigation_root_tree('main', 2) %}
         {% set flags = sulu_content_load(node.uuid, ['in_preparation']) %}
         {% set children = [] %}
         {% for child in node.children|default([]) %}
-            {% set childFlags = sulu_content_load(child.uuid, ['in_preparation']) %}
+            {% set child_flags = sulu_content_load(child.uuid, ['in_preparation']) %}
             {% set children = children|merge([{
                 label: child.title,
                 href: sulu_content_path(child.url),
-                prep: childFlags.content.in_preparation|default(false),
+                prep: child_flags.content.in_preparation|default(false),
             }]) %}
         {% endfor %}
-        {% set navItems = navItems|merge([{
+        {% set nav_items = nav_items|merge([{
             key: node.uuid,
             label: node.title,
             href: sulu_content_path(node.url),
@@ -70,7 +70,7 @@
 
 {% set _info = information|default(null) %}
 {# Information na mobilnom (F19): bez logo/CLOSE, Reset, nav i overlay-a — samo „Back". #}
-{% set _mobileHidden = _info ? ' max-lg:hidden' : '' %}
+{% set _mobile_hidden = _info ? ' max-lg:hidden' : '' %}
 
 {# Fiksiran, ali prati kontejner: levo = --container-offset, širina najviše 1440 (main.scss). #}
 <header data-action="keydown.esc@document->menu#close"
@@ -80,10 +80,10 @@
     {# Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371). #}
     {# Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). Oba natpisa su na span-u (data-label-*) da bi
        kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
-    {% set _toggleClass = 'pointer-events-auto absolute cursor-pointer text-nav
+    {% set _toggle_class = 'pointer-events-auto absolute cursor-pointer text-nav
                    hover:underline focus-visible:underline
                    right-[4px] bottom-[68px]
-                   lg:right-[2px] lg:bottom-auto lg:top-[314px]' ~ _mobileHidden %}
+                   lg:right-[2px] lg:bottom-auto lg:top-[314px]' ~ _mobile_hidden %}
     {% if _info %}
         {# Information: CLOSE je LINK na listu (koren jezika) — Information bez menija nema smisla (zone sede u kolonama
            menija). scroll-memory#carry: lista ostaje na istom skrolu sa istom raširenom stavkom. Bez JS-a: obična navigacija. #}
@@ -91,7 +91,7 @@
            data-menu-target="toggle"
            data-controller="scroll-memory"
            data-action="scroll-memory#carry"
-           class="{{ _toggleClass }}">
+           class="{{ _toggle_class }}">
             <span data-menu-target="logoLabel"
                   data-label-open="{{ 'app.menu.close'|trans }}"
                   data-label-closed="Monos">{{ 'app.menu.close'|trans }}</span>
@@ -102,7 +102,7 @@
                 data-action="menu#toggle"
                 aria-label="{{ 'app.menu.toggle'|trans }}"
                 aria-controls="menu-nav"
-                class="{{ _toggleClass }}">
+                class="{{ _toggle_class }}">
             <span data-menu-target="logoLabel"
                   data-label-open="{{ 'app.menu.close'|trans }}"
                   data-label-closed="Monos">Monos</span>
@@ -117,7 +117,7 @@
        class="pointer-events-auto absolute z-10 u-tracked
               hover:underline focus-visible:underline
               left-[4px] bottom-[84px]
-              lg:left-[2px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
+              lg:left-[2px] lg:bottom-auto lg:top-[314px]{{ _mobile_hidden }}">
         <span class="u-fine lg:hidden">{{ 'app.menu.reset_short'|trans }}</span>
         <span class="hidden lg:inline">{{ 'app.menu.reset'|trans }}</span>
     </a>
@@ -137,7 +137,7 @@
        pointer-events-auto: prekriva sadržaj, pa ga i štiti od klikova. #}
     <div data-menu-target="overlay"
          hidden
-         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobileHidden }}"></div>
+         class="pointer-events-auto absolute inset-x-0 top-0 h-[728px] bg-paper lg:hidden{{ _mobile_hidden }}"></div>
 
     {% if _info %}
         {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information".
@@ -159,11 +159,11 @@
          aria-label="{{ 'app.menu.nav'|trans }}"
          class="pointer-events-auto absolute flex flex-col gap-[16px] text-right
                 right-[4px] bottom-[100px]
-                lg:right-[95px] lg:bottom-auto lg:top-[314px]{{ _mobileHidden }}">
+                lg:right-[95px] lg:bottom-auto lg:top-[314px]{{ _mobile_hidden }}">
 
         {# ── Nivo 1 ─────────────────────────────────────────────── #}
         <div>
-            {% for item in navItems %}
+            {% for item in nav_items %}
                 {% if item.prep %}
                     {# U pripremi: naziv se vidi, ponašanje ne postoji. Nijansa = ink token na 40% (nema sivog tokena). #}
                     <span class="block text-ink/40">{{ item.label }}<span class="sr-only"> ({{ 'app.menu.in_preparation'|trans }})</span></span>
@@ -189,7 +189,7 @@
                     data-action="menu#select"
                     aria-controls="menu-submenu-locale"
                     class="block w-full cursor-pointer text-right
-                           hover:underline focus-visible:underline">{{ currentLocale|capitalize }}</button>
+                           hover:underline focus-visible:underline">{{ current_locale|capitalize }}</button>
         </div>
 
         {# ── Nivo 2 — podmeniji; sa JS-om otvoren je najviše jedan ── #}
@@ -199,13 +199,13 @@
                  data-menu-target="submenu"
                  data-menu-submenu-key="information"
                  class="max-lg:hidden">
-                {% include 'includes/information/contact.html.twig' with {
+                {{ include('includes/information/contact.html.twig', {
                     settings: _info.settings,
                     text: content.contact_text|default(''),
-                } only %}
+                }, false) }}
             </div>
         {% endif %}
-        {% for item in navItems|filter(item => item.children is not empty and not item.prep) %}
+        {% for item in nav_items|filter(item => item.children is not empty and not item.prep) %}
             <div id="menu-submenu-{{ item.key }}"
                  data-menu-target="submenu"
                  data-menu-submenu-key="{{ item.key }}"
@@ -223,7 +223,7 @@
              data-menu-target="submenu"
              data-menu-submenu-key="locale"
              class="order-first lg:order-none">
-            {% for link in localeLinks %}
+            {% for link in locale_links %}
                 <a href="{{ link.href }}" class="block hover:underline focus-visible:underline">{{ link.label }}</a>
             {% endfor %}
         </div>
@@ -234,10 +234,10 @@
         <div data-menu-target="submenu"
              data-menu-submenu-key="information"
              class="pointer-events-auto absolute right-[95px] top-[666px] text-right max-lg:hidden">
-            {% include 'includes/information/legal.html.twig' with {
+            {{ include('includes/information/legal.html.twig', {
                 settings: _info.settings,
                 text: content.legal_text|default(''),
-            } only %}
+            }, false) }}
         </div>
     {% endif %}
 </header>

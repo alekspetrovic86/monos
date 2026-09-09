@@ -11,7 +11,7 @@
     <p>{{ s.contact_name }}</p>
 {% endif %}
 {% if s.contact_phone|default %}
-    <p><a href="tel:{{ s.contact_phone|replace({ ' ': '' }) }}" class="hover:underline focus-visible:underline">{{ s.contact_phone }}</a></p>
+    <p><a href="tel:{{ s.contact_phone|replace({' ': ''}) }}" class="hover:underline focus-visible:underline">{{ s.contact_phone }}</a></p>
 {% endif %}
 {% for email in [s.contact_email|default(''), s.contact_email_secondary|default('')]|filter(email => email) %}
     <p><a href="mailto:{{ email }}" class="hover:underline focus-visible:underline">{{ email }}</a></p>

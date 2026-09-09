@@ -10,7 +10,7 @@
    Slika je umanjeni Sulu format (includes/picture.html.twig), ne original: obična 480/292 (2x 960/584), istaknuta
    540/375 (2x 1080/750) — `sizes` prati stanje (project-list ga menja iz data-sizes / data-sizes-expanded). #}
 {% set _href = content.link|default('/') %}
-{% set _label = content.title|default('')|split("\n")|first|trim %}
+{% set _label = content.title|default('')|split('\n')|first|trim %}
 
 {# data-scroll-memory-id: po njemu scroll-memory vraća raširenu stavku pri povratku sa projekta. #}
 <article data-block="project-teaser"
@@ -32,7 +32,7 @@
             widths: [292, 375, 480, 540, 584, 750, 960, 1080],
             sizes: '(min-width: 1024px) 480px, 292px',
             class: 'block h-auto w-full',
-        }, with_context = false) }}
+        }, with_context: false) }}
     </a>
 
     {# Detalji — samo u istaknutom stanju. pb 14 + mt 2 sledeće stavke = 16 do sledeće slike. #}

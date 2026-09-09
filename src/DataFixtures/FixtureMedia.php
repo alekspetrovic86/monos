@@ -59,7 +59,7 @@ final class FixtureMedia
      */
     public function mediaIds(array $files): array
     {
-        return \array_map(fn (string $file): int => $this->mediaId($file), $files);
+        return \array_map($this->mediaId(...), $files);
     }
 
     public function mediaId(string $fileName): int

@@ -25,7 +25,7 @@ use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
  *
  * Ponovljiv: stranica se traži po PHPCR putanji, pa se prepisuje. `sulu:document:fixtures:load --append`.
  */
-final class ProjectPagesFixture implements DocumentFixtureInterface
+final readonly class ProjectPagesFixture implements DocumentFixtureInterface
 {
     public const WEBSPACE = 'monos';
     public const LOCALES = ['sr', 'en', 'ja'];
@@ -99,7 +99,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
         . 'ultricies. Pellentesque maximus vitae turpis ac tempus. Nam dignissim placerat consequat. Sed scelerisque '
         . 'quis velit in congue.'
         . '</p>'
-        .         '<p>'
+        . '<p>'
         . 'Nunc porttitor id lorem in pellentesque. Nulla neque velit, facilisis gravida ante non, convallis volutpat '
         . 'lacus. Proin ante augue, consequat sollicitudin ornare sed, iaculis eget odio. Phasellus sem ipsum, mollis '
         . 'ac ante vel, mattis tempor orci. Quisque nisi elit, tincidunt at imperdiet eu, vehicula a lorem. Nam pretium '
@@ -107,7 +107,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
         . 'ipsum orci. Nulla quis justo ultrices turpis hendrerit condimentum eget nec eros. Donec varius ut ante eget '
         . 'convallis. Nunc tincidunt libero sed ultrices bibendum.'
         . '</p>'
-        .         '<p>'
+        . '<p>'
         . 'Nulla facilisi. Proin in faucibus tellus. Nunc hendrerit semper est, eu sodales elit convallis ac. Aenean '
         . 'egestas eu neque vel ultrices. Proin turpis massa, aliquet quis fringilla porta, ultricies quis quam. Morbi '
         . 'vestibulum arcu orci, non vulputate lectus pharetra quis. Sed porta orci vitae nibh gravida, non lobortis '
@@ -115,7 +115,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
         . 'justo. Aliquam blandit risus id semper scelerisque. Pellentesque congue imperdiet enim, eu blandit purus '
         . 'vestibulum in.'
         . '</p>'
-        .         '<p>'
+        . '<p>'
         . 'Nunc at facilisis velit, euismod dictum enim. Fusce velit quam, molestie ac erat et, faucibus pharetra '
         . 'felis. Nam auctor tempus urna et aliquam. Cras consectetur tempor nisi a iaculis. Nam eu orci pellentesque, '
         . 'facilisis tortor in, sagittis erat. Duis nec mauris gravida, rutrum tortor sed, convallis est. Duis tellus '
@@ -123,7 +123,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
         . 'lobortis metus. Mauris nec neque facilisis, luctus dui eu, tristique nisl. Aenean posuere eu mi eget '
         . 'consectetur. Morbi egestas dignissim mattis.'
         . '</p>'
-        .         '<p>'
+        . '<p>'
         . 'Ut semper tempus sem, a venenatis leo vehicula vitae. Nam sit amet nunc dictum, pulvinar felis a, hendrerit '
         . 'ipsum. Suspendisse et lorem accumsan, vehicula nisl nec, congue tortor. Aliquam eget felis dictum, congue '
         . 'augue vitae, commodo augue. Sed maximus commodo mauris, id vehicula ipsum. Fusce et turpis risus. Donec at '
@@ -155,7 +155,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
         . 'ultricies. Pellentesque maximus vitae turpis ac tempus. Nam dignissim placerat consequat. Sed scelerisque '
         . 'quis velit in congue.'
         . '</p>'
-        .         '<p>'
+        . '<p>'
         . 'Nunc porttitor id lorem in pellentesque. Nulla neque velit, facilisis gravida ante non, convallis volutpat '
         . 'lacus. Proin ante augue, consequat sollicitudin ornare sed, iaculis eget odio. Phasellus sem ipsum, mollis '
         . 'ac ante vel, mattis tempor orci. Quisque nisi elit, tincidunt at imperdiet eu, vehicula a lorem. Nam pretium '
@@ -173,7 +173,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
         . '</p>';
 
     public function __construct(
-        private readonly FixtureMedia $media,
+        private FixtureMedia $media,
     ) {
     }
 
@@ -232,7 +232,7 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
             try {
                 $document = $documentManager->find($path, $locale);
             } catch (DocumentNotFoundException) {
-                $document = $document ?? $documentManager->create('page');
+                $document ??= $documentManager->create('page');
                 $created = true;
             }
             \assert($document instanceof PageDocument);
@@ -259,8 +259,6 @@ final class ProjectPagesFixture implements DocumentFixtureInterface
             $documentManager->publish($document, $locale);
             $documentManager->flush();
         }
-
-        \assert($document instanceof PageDocument);
 
         return $document;
     }

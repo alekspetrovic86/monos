@@ -25,7 +25,7 @@
        blokove izolovano (renderBlock), pa se `set` sa vrha šablona ne izvrši.
        Snippet je keširan — drugi poziv ne ide u bazu. #}
     {% set _settings = sulu_snippet_load_by_area('webspace_settings') %}
-    {% include 'includes/header.html.twig' with { information: { settings: _settings } } %}
+    {{ include('includes/header.html.twig', {information: {settings: _settings}}) }}
 {% endblock %}
 
 {% block content %}
@@ -41,10 +41,10 @@
     <div class="flex min-h-dvh max-w-[600px] flex-col px-[4px] pt-[48px] pb-[100px] lg:hidden">
         <div class="rich-text rich-text--tight">{{ content.intro_text|default('')|raw }}</div>
         <div class="mt-[32px]">
-            {% include 'includes/information/contact.html.twig' with { settings: _settings, text: content.contact_text|default('') } only %}
+            {{ include('includes/information/contact.html.twig', {settings: _settings, text: content.contact_text|default('')}, false) }}
         </div>
         <div class="mt-auto pt-[32px]">
-            {% include 'includes/information/legal.html.twig' with { settings: _settings, text: content.legal_text|default('') } only %}
+            {{ include('includes/information/legal.html.twig', {settings: _settings, text: content.legal_text|default('')}, false) }}
         </div>
     </div>
 
@@ -54,6 +54,6 @@
          data-scroll-memory-key-value="{{ sulu_content_root_path() }}"
          data-action="click->scroll-memory#store scroll-memory:restore->project-list#restore"
          class="project-list hidden pt-[314px] lg:block">
-        {% include 'includes/blocks.html.twig' with { content: _home.content|default({}), view: _home.view|default({}) } only %}
+        {{ include('includes/blocks.html.twig', {content: _home.content|default({}), view: _home.view|default({})}, false) }}
     </div>
 {% endblock %}
