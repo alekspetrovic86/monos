@@ -1,5 +1,5 @@
 {# Pravna zona Information stranice — sadržaj bez omotača (desktop T666 R1345, mobile uz dno L4).
-   Redovi: „Terms of use", copyright, prazan red, kredit „Code by Seiora" (F19; na desktopu ga je dizajner propustio —
+   Redovi: copyright pa odmah ispod kredit „Code by Seiora" (F19; na desktopu ga je dizajner propustio —
    vlasnik potvrdio da ide na obe širine). `text` = legal_text stranice, ispod svega.
    Mirno stanje bez podvlačenja — podvlačenje samo hover/focus-visible.
    Širina: 238 (F5 L1107 R1345; F19 L4 R242). Omotač u header-u je shrink-to-fit sa desnim sidrom, pa bez max-w dug
@@ -10,16 +10,14 @@
    Odstupanje od 1px je nevidljivo; prelom nije. #}
 <div class="max-w-[239px] lg:ml-auto">
 
-{% if s.terms_link|default %}
-    <p><a href="{{ s.terms_link }}" class="hover:underline focus-visible:underline">{{ 'app.information.terms'|trans }}</a></p>
-{% endif %}
 {% if s.copyright|default %}
     <p>{{ s.copyright }}</p>
 {% endif %}
 {# Kredit je rich text (može da nosi link), pa ide u omotač kao i `text` ispod — `<p>` iz editora
-   ne sme da završi unutar `<p>`. `--tight`: pasusi bez razmaka, kao ostale zone Information stranice. #}
+   ne sme da završi unutar `<p>`. `--tight`: pasusi bez razmaka, kao ostale zone Information stranice.
+   Bez gornjeg razmaka: kredit stoji ODMAH ispod copyright reda (odluka vlasnika). #}
 {% if s.credit|default %}
-    <div class="rich-text rich-text--tight mt-[16px]">{{ s.credit|raw }}</div>
+    <div class="rich-text rich-text--tight">{{ s.credit|raw }}</div>
 {% endif %}
 {% if text|default %}
     <div class="rich-text rich-text--tight mt-[16px]">{{ text|raw }}</div>

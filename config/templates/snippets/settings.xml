@@ -72,12 +72,6 @@
                     </meta>
                 </property>
 
-                <property name="terms_link" type="link">
-                    <meta>
-                        <title lang="en">Terms of use link</title>
-                        <title lang="sr">Link ka uslovima korišćenja</title>
-                    </meta>
-                </property>
 
                 <property name="copyright" type="text_line" colspan="6">
                     <meta>
