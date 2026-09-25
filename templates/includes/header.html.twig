@@ -145,7 +145,7 @@
                             data-menu-key-param="{{ item.key }}"
                             data-action="menu#select"
                             aria-controls="menu-submenu-{{ item.key }}"
-                            class="block w-full cursor-pointer text-right
+                            class="block w-full text-right
                                    hover:underline focus-visible:underline">{{ item.label }}</button>
                 {% else %}
                     {# Information (šablon `information`): odredište crta istu listu — nosi njeno stanje (scroll-memory#carry). #}
@@ -160,7 +160,7 @@
                     data-menu-key-param="locale"
                     data-action="menu#select"
                     aria-controls="menu-submenu-locale"
-                    class="block w-full cursor-pointer text-right
+                    class="block w-full text-right
                            hover:underline focus-visible:underline">{{ current_locale|capitalize }}</button>
         </div>
 
@@ -223,7 +223,7 @@
    Desktop: L1390 T314 (desna ivica 1438). Mobile: L323 T728 (desna ivica 371).
    Otvoreno: tekst „CLOSE" + .u-tracked (ls 0.14). Oba natpisa su na span-u (data-label-*) da bi
    kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
-{% set _toggle_class = 'menu-toggle cursor-pointer text-nav
+{% set _toggle_class = 'menu-toggle text-nav
                hover:underline focus-visible:underline' ~ _mobile_hidden %}
 {% if _info %}
     {# Information: CLOSE je LINK na listu (koren jezika) — Information bez menija nema smisla (zone sede u kolonama
