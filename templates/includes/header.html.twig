@@ -113,10 +113,16 @@
 
     {% if _info %}
         {# ── Information: uvod iznad navigacije — L796 T10, 642 široko (F5). Podmeni „information".
-           Ispod 1440 kolona se skuplja da stane (kao tekst projekta): širina = min(642, 100% − 798), na 1280 je 482. #}
+           Ispod 1440 kolona se skuplja da stane (kao tekst projekta): širina = min(642, 100% − 798), na 1280 je 482.
+
+           Visina je ograničena na 304px i tekst se skroluje ako je duži. 304 nije proizvoljno: od T10 do
+           T314, gde počinje prvi red menija („CLOSE", „Reset", „Material"), i to je isti okvir koji
+           stranica projekta već koristi na istom mestu (L796 T10, 642×304, 19 redova). Bez toga je duži
+           uvod prelazio PREKO menija — izmereno: 39 redova je išlo do 634, dakle 320px preko nav bloka.
+           `overscroll-contain`: skrol uvoda ne prelazi na stranicu kad se dođe do kraja. #}
         <div data-menu-target="submenu"
              data-menu-submenu-key="information"
-             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] w-[min(642px,calc(100%_-_798px))] max-lg:hidden">
+             class="rich-text rich-text--tight pointer-events-auto absolute left-[796px] top-[10px] max-h-[304px] w-[min(642px,calc(100%_-_798px))] overflow-y-auto overscroll-contain max-lg:hidden">
             {{- content.intro_text|default('')|raw -}}
         </div>
     {% endif %}
