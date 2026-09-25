@@ -34,6 +34,21 @@ a {
     letter-spacing: 0.14px;
 }
 
+/* Traka skrola: tanka linija u boji mastila, bez vidljive podloge iza nje (`transparent` za kanal).
+   Koristi je jedina skrolabilna kutija na sajtu — uvodni tekst na Information stranici.
+
+   NAMERNO samo standardna svojstva, bez `::-webkit-scrollbar`. Chrome od 121 poništava te pseudo-elemente
+   čim je zadato `scrollbar-width` ili `scrollbar-color`, pa bi kombinacija davala različitu debljinu po
+   pregledačima — tanko po Chrome/Firefox meri, a ono što upišemo u `::-webkit-scrollbar` samo u starijem
+   Safariju. Jedan sistem je predvidljiviji od dva.
+
+   Debljinu time bira pregledač (`thin`), ne mi. Ako zatreba baš hairline, prelazi se na
+   `::-webkit-scrollbar` i ova dva svojstva se moraju ukloniti — inače nemaju efekta. */
+.u-scroll-fine {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink) transparent;
+}
+
 /* Sitni stil — brojač, „RESET" na mobilnom */
 .u-fine {
     font-size: 10px;
