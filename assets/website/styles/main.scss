@@ -34,7 +34,9 @@ a {
     letter-spacing: 0.14px;
 }
 
-/* Traka skrola: tanka linija u boji mastila, bez vidljive podloge iza nje (`transparent` za kanal).
+/* Traka skrola: tanka SIVA linija, bez vidljive podloge iza nje (`transparent` za kanal) — kao u modernim
+   pregledačima. Siva nije nova boja: to je mastilo na 40%, ista nijansa kojom se crtaju stavke menija
+   „u pripremi" (`text-ink/40`), pa paleta ostaje na četiri boje.
    Koristi je jedina skrolabilna kutija na sajtu — uvodni tekst na Information stranici.
 
    NAMERNO samo standardna svojstva, bez `::-webkit-scrollbar`. Chrome od 121 poništava te pseudo-elemente
@@ -46,7 +48,7 @@ a {
    `::-webkit-scrollbar` i ova dva svojstva se moraju ukloniti — inače nemaju efekta. */
 .u-scroll-fine {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-ink) transparent;
+    scrollbar-color: color-mix(in srgb, var(--color-ink) 40%, transparent) transparent;
 }
 
 /* Sitni stil — brojač, „RESET" na mobilnom */
