@@ -13,10 +13,18 @@ body {
     color: var(--color-ink);
     font-size: 14px;
     line-height: 16px;
-    font-weight: 500;
+    font-weight: 600;
     /* Tracking 10 sa zvanične kartice = 10/1000 em = 0.14px na 14px. Ranije ga je nosila samo `.u-tracked`. */
     letter-spacing: 0.14px;
     -webkit-font-smoothing: antialiased;
+}
+
+/* Kursor: nigde ruka. Klikljiv tekst se prepoznaje po PODVLAČENJU na hover — pravilo koje već važi
+   svuda na sajtu — pa ruka ništa ne dodaje, a sajtu daje osećaj veb aplikacije umesto štampane strane.
+   Pregledač na <a> sam stavlja `pointer`, zato se ovde gasi. Dugmad podrazumevano ionako imaju strelicu;
+   njima je samo uklonjena `cursor-pointer` klasa iz šablona. */
+a {
+    cursor: default;
 }
 
 /* Varijanta sa trackingom — „Reset", „CLOSE". Otkad je tracking sa zvanične kartice globalan (body),
@@ -401,7 +409,6 @@ picture {
     padding: 0;
     border: 0;
     background: none;
-    cursor: pointer;
 }
 
 .js .project__half {
@@ -513,7 +520,6 @@ picture {
     color: var(--color-ink);
     font: inherit;
     line-height: 16px;
-    cursor: pointer;
 }
 
 .image-zoom__close:hover,
