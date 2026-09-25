@@ -208,10 +208,14 @@
     </nav>
 
     {% if _info %}
-        {# ── Information: pravno dole — T666 R1345 (F5): Terms of use, copyright, „Code by Seiora" (+ legal_text). #}
+        {# ── Information: pravno dole — R1345 (F5): copyright, „Code by Seiora" (+ legal_text).
+           T698, ne T666 iz Figme: F5 je imao i red „Terms of use" koji je uklonjen, pa je blok kraći za
+           32px (red + prazan red). Sidro je spušteno za tačno toliko da „Code by Seiora" ostane na
+           y714, gde je i bio — ta linija se ne pomera, copyright sada sedi odmah iznad nje na 698.
+           Na mobilnom se ništa nije menjalo: tamo je zona vezana za DNO, pa se skratila naviše. #}
         <div data-menu-target="submenu"
              data-menu-submenu-key="information"
-             class="pointer-events-auto absolute right-[95px] top-[666px] text-right max-lg:hidden">
+             class="pointer-events-auto absolute right-[95px] top-[698px] text-right max-lg:hidden">
             {{ include('includes/information/legal.html.twig', {
                 settings: _info.settings,
                 text: content.legal_text|default(''),
