@@ -33,7 +33,6 @@
 "app.project.esc": "Esc"
 "app.menu.back": "戻る"
 "app.menu.in_preparation": "準備中"
-"app.information.terms": "利用規約"
 
 # ── Header (Task 13R). Dva prikaza istog pojma (desktop/mobilni); japanski nema velika slova, pa je vrednost ista.
 "app.menu.reset": "リセット"

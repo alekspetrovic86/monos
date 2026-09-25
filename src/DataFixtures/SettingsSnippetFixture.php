@@ -71,9 +71,6 @@ final readonly class SettingsSnippetFixture implements DocumentFixtureInterface
             $document->setStructureType('settings');
             $document->getStructure()->bind([
                 ...self::DATA,
-                // Uslovi korišćenja još nemaju stranicu — spoljni link na koren dok ne dobiju svoju rutu.
-                // `link` tip traži i locale u vrednosti (Link::getViewData).
-                'terms_link' => ['provider' => 'external', 'href' => 'https://monos.rs/', 'locale' => $locale],
                 'og_image' => ['id' => $this->media->mediaId(self::OG_IMAGE), 'displayOption' => null],
             ]);
 
