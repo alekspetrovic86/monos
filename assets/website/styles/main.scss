@@ -63,11 +63,16 @@ a {
     transition: width 0.4s ease;
 }
 
-/* Kontejner: sav sadržaj u najviše 1440px, poravnat skroz levo. Iznad 1440 leva margina raste
-   kao četvrtina viška i staje na 160 — na 1920 je 120, na 2560 je 160. */
+/* Kontejner: sav sadržaj u najviše 1440px, poravnat SKROZ LEVO na svakoj širini.
+   Iznad 1440 se praznina otvara samo DESNO — sadržaj se ne pomera.
+   Ranije je leva margina rasla kao četvrtina viška do 160px (na 1920 je bila 120, na 2560 160), pa je
+   sadržaj plutao udesno sa veličinom ekrana. Vlasnik je to pojednostavio: uvek počinje od leve ivice.
+   Token ostaje jer ga koriste `fixed` elementi (logo, linkovi projekta, okvir expand view-a) da bi se
+   poravnali uz kontejner — sada je nula, pa se sve to svodi na levu ivicu prozora. Povratak na staro
+   ponašanje je izmena ove jedne vrednosti. */
 :root {
     --container-max: 1440px;
-    --container-offset: clamp(0px, calc((100vw - var(--container-max)) * 0.25), 160px);
+    --container-offset: 0px;
 
     /* Rastojanje od desne ivice prozora do desne ivice kontejnera. Koriste ga elementi koji su `fixed`
        (logo, linkovi projekta) da bi ostali poravnati uz KONTEJNER, ne uz prozor — iznad 1440 to nije isto.
