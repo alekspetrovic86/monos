@@ -47,10 +47,13 @@ export default class MenuController extends Controller<HTMLElement> {
     // Mora se poklapati sa trajanjem `menu-lift` u main.scss.
     private static readonly EXIT = 320;
 
+    // „Back" sa Information vraća na listu SA otvorenim menijem — njime se i došlo tamo.
+    private static readonly RETURN_KEY = 'menu:return';
+
     private closeTimer = 0;
 
     connect(): void {
-        this.open = this.openValue;
+        this.open = this.openValue || this.returning();
         this.activeKey = this.open ? this.restKey : null;
         this.render();
         document.documentElement.classList.add('menu-ready');
@@ -82,6 +85,25 @@ export default class MenuController extends Controller<HTMLElement> {
         this.render();
         // Fokus se vraća na dugme koje je meni otvorilo.
         this.toggleTarget.focus();
+    }
+
+    // „Back" na Information (mobilni): natpis kaže povratak, ne zatvaranje — pa se lista otvara sa
+    // menijem, onakvim kakav je bio kad se otišlo. Na desktopu je na tom mestu „CLOSE" i tamo se meni
+    // zaista gasi; ovo je `lg:hidden`, pa ga ne dodiruje.
+    keepOpen(): void {
+        sessionStorage.setItem(MenuController.RETURN_KEY, '1');
+    }
+
+    // Marker traje do PRAVOG crtanja: Turbo prvo pokaže keširani snapshot, pa tek onda sveže renderovanu
+    // stranicu — isto kao u scroll-memory kontroleru.
+    private returning(): boolean {
+        if (sessionStorage.getItem(MenuController.RETURN_KEY) !== '1') return false;
+
+        if (!document.documentElement.hasAttribute('data-turbo-preview')) {
+            sessionStorage.removeItem(MenuController.RETURN_KEY);
+        }
+
+        return true;
     }
 
     // Klik na Material / En (stavke sa podmenijem). Ista stavka drugi put → zatvara svoj podmeni i vraća

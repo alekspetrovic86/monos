@@ -90,10 +90,12 @@
     </a>
 
     {% if _info %}
-        {# ── „Back" (samo Information, mobile) — na mestu logoa: R371 T728. Vraća listu kako je ostavljena (scroll-memory). #}
+        {# ── „Back" (samo Information, mobile) — na mestu logoa: R371 T728. Vraća listu kako je ostavljena:
+           skrol i raširenu stavku (scroll-memory), a meni OTVOREN (menu#keepOpen) — natpis kaže povratak,
+           a do Information se i došlo kroz meni. Na desktopu je na tom mestu „CLOSE" i tamo se meni gasi. #}
         <a href="{{ sulu_content_root_path() }}"
            data-controller="scroll-memory"
-           data-action="scroll-memory#back"
+           data-action="scroll-memory#back menu#keepOpen"
            class="pointer-events-auto absolute right-[4px] bottom-[68px]
                   hover:underline focus-visible:underline
                   lg:hidden">{{ 'app.menu.back'|trans }}</a>
