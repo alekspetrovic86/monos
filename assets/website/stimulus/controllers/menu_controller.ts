@@ -53,9 +53,17 @@ export default class MenuController extends Controller<HTMLElement> {
     private closeTimer = 0;
 
     connect(): void {
-        this.open = this.openValue || this.returning();
+        const vracanje = this.returning();
+        this.open = this.openValue || vracanje;
         this.activeKey = this.open ? this.restKey : null;
+
+        // Povratak zatiče meni otvoren — ne otvara ga pred korisnikom, nego je već tu.
+        // Klasa se NE skida odmah: `menu-drop` je animacija, a ne prelaz, pa bi skidanje klase vratilo
+        // `animation` sa `none` na `menu-drop` i time je POKRENULO. Zato ostaje do prvog dodira korisnika
+        // (`toggle`), gde se skida pre promene stanja da bi zatvaranje normalno odigralo.
+        if (vracanje) this.element.classList.add('menu-instant');
         this.render();
+
         document.documentElement.classList.add('menu-ready');
         this.desktop.addEventListener('change', this.onViewportChange);
     }
@@ -68,6 +76,8 @@ export default class MenuController extends Controller<HTMLElement> {
     }
 
     toggle(): void {
+        // Prvi dodir posle povratka vraća animacije — vidi `menu-instant` u connect().
+        this.element.classList.remove('menu-instant');
         this.open = !this.open;
         this.activeKey = this.open ? this.restKey : null;
         this.render();

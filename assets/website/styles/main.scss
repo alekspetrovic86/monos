@@ -281,7 +281,13 @@ a {
         animation: menu-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
-    .js .menu-closing .menu-plate {
+    /* Povratak sa Information: meni je zatečen otvoren, pa se ne spušta pred korisnikom. Klasu drži
+   kontroler samo koliko traje jedan preračun rasporeda. */
+.js .menu-instant .menu-plate {
+    animation: none;
+}
+
+.js .menu-closing .menu-plate {
         animation: menu-lift 320ms cubic-bezier(0.65, 0, 0.35, 1) both;
     }
 }
