@@ -89,18 +89,6 @@
         <span class="hidden lg:inline">{{ 'app.menu.reset'|trans }}</span>
     </a>
 
-    {% if _info %}
-        {# ── „Back" (samo Information, mobile) — na mestu logoa: R371 T728. Vraća listu kako je ostavljena:
-           skrol i raširenu stavku (scroll-memory), a meni OTVOREN (menu#keepOpen) — natpis kaže povratak,
-           a do Information se i došlo kroz meni. Na desktopu je na tom mestu „CLOSE" i tamo se meni gasi. #}
-        <a href="{{ sulu_content_root_path() }}"
-           data-controller="scroll-memory"
-           data-action="scroll-memory#back menu#keepOpen"
-           class="pointer-events-auto absolute right-[4px] bottom-[68px]
-                  hover:underline focus-visible:underline
-                  lg:hidden">{{ 'app.menu.back'|trans }}</a>
-    {% endif %}
-
     {# ── Beli overlay menija (samo mobile; u Figmi F16 375×728 na T0) ── #}
     {# Donja ivica je `bottom-[84px]`, a NE fiksna visina 728: nav, Reset i CLOSE vise o dnu ekrana, pa bi
        ploča fiksna od vrha bila u ravni s njima samo na tačno 812px visine. Na 844 (iPhone 14) nav ispada
@@ -237,6 +225,22 @@
    kontroler samo menjao tekst, a prevod ostao u Twig-u. „Monos" je ime studija, ne prevodi se. #}
 {% set _toggle_class = 'menu-toggle text-nav
                hover:underline focus-visible:underline' ~ _mobile_hidden %}
+
+{# ── „Back" (samo Information, mobile) — stoji TAČNO na mestu logoa (R371 T728) i nikad se ne vide
+   zajedno: logo je tu `max-lg:hidden`, a ovaj `lg:hidden`. Zato preuzima isti `.menu-toggle`, pa sa njim
+   dobija položaj uz desnu ivicu kontejnera, sloj iznad ploče menija i MEŠANJE boja — natpis menja boju
+   prema onome što prolazi iza njega dok se tekst uvoda skroluje.
+   I on mora biti VAN <header>-a, iz istog razloga kao logo: `position: fixed` na headeru pravi stacking
+   context u kome `mix-blend-mode` nema sa čim da se meša.
+   Vraća listu kako je ostavljena (scroll-memory) i sa OTVORENIM menijem (menu#keepOpen) — natpis kaže
+   povratak, a do Information se i došlo kroz meni. Na desktopu je tu „CLOSE" i tamo se meni gasi. #}
+{% if _info %}
+    <a href="{{ sulu_content_root_path() }}"
+       data-controller="scroll-memory"
+       data-action="scroll-memory#back menu#keepOpen"
+       class="menu-toggle text-nav hover:underline focus-visible:underline
+              lg:hidden">{{ 'app.menu.back'|trans }}</a>
+{% endif %}
 {% if _info %}
     {# Information: CLOSE je LINK na listu (koren jezika) — Information bez menija nema smisla (zone sede u kolonama
        menija). scroll-memory#carry: lista ostaje na istom skrolu sa istom raširenom stavkom. Bez JS-a: obična navigacija. #}
